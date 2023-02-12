@@ -1,0 +1,40 @@
+{
+    "name": "delivery-management-system",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "setup": "npm i && cd frontend && npm i && cd .. && cd backend && npm i",
+        "start": "concurrently --names \"Backend,Frontend\" -c \"bgBlue.bold,bgGreen.bold\" \"npm run server:dev\" \"npm run app:dev\"",
+        "prepare": "husky install",
+        "app:dev": "cd frontend && npm run dev",
+        "app:build": "cd frontend && npm run build",
+        "app:start": "cd frontend && npm run start",
+        "server:dev": "cd backend && npm run start:dev",
+        "server:start": "cd backend && npm run start",
+        "server:build": "cd backend && npm run build",
+        "server:prod": "cd backend && npm run start:prod",
+        "lint": "eslint .",
+        "format": "prettier --write ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/maruffahmed/Delivery-management-system.git"
+    },
+    "author": "Md Maruf Ahmed",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/maruffahmed/Delivery-management-system/issues"
+    },
+    "homepage": "https://github.com/maruffahmed/Delivery-management-system#readme",
+    "dependencies": {
+        "concurrently": "^7.6.0"
+    },
+    "devDependencies": {
+        "eslint": "^8.25.0",
+        "eslint-config-prettier": "^8.5.0",
+        "husky": "^8.0.3",
+        "prettier": "^2.7.1"
+    }
+}
+
