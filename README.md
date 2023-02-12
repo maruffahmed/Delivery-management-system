@@ -26,7 +26,7 @@ By this command your app and server will be run concurrently
 npm start
 ```
 
-An server will be run at http://localhost:5000
+An server will be run at http://localhost:5000 <br/>
 And frontend server will be run at http://localhost:3000
 
 ## Built With 🏗️👷🏻
