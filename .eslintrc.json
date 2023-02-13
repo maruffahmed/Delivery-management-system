@@ -10,6 +10,5 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "rules": {},
-    "ignorePatterns": ["**/frotnend/build/*"]
+    "rules": {}
 }
