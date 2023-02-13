@@ -15,7 +15,8 @@
         "server:build": "cd backend && npm run build",
         "server:prod": "cd backend && npm run start:prod",
         "lint": "eslint .",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
     },
     "repository": {
         "type": "git",
