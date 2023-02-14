@@ -18,6 +18,16 @@ Run the followning command to install all the packages:
 npm run setup
 ```
 
+#### Setup environment variable
+
+Set the following environment variable to `backend` directory. Also, an example file is given with the name of `.env example`:
+
+```
+DATABASE_URL="file:./dev.db"
+```
+
+You can set the avobe environment variable as it is for development server.
+
 ### Database migration 💿
 
 Run the followning command to migrate the prisma schema:
