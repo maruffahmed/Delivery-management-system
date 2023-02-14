@@ -15,4 +15,20 @@ model User {
   email    String  @unique
   name     String?
   password String
+  roles    Roles[]
+}
+
+model Roles {
+  id                Int             @id @default(autoincrement())
+  user              User            @relation(fields: [userId], references: [id])
+  userId            Int
+  role              RoleDescription @relation(fields: [roleDescriptionId], references: [id])
+  roleDescriptionId Int
+}
+
+model RoleDescription {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+  roles       Roles[]
 }

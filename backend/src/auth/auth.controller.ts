@@ -1,7 +1,14 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Request,
+  UseGuards,
+  ValidationPipe,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
-import { User } from '@prisma/client';
+import { CreateUserDto } from 'src/users/dto/users.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -13,8 +20,8 @@ export class AuthController {
     return this.authService.login(req.user);
   }
 
-  @Post('register')
-  async register(@Body() registerDto: User) {
-    return this.authService.register(registerDto);
+  @Post('merchant/register')
+  async merchantRegister(@Body(ValidationPipe) registerDto: CreateUserDto) {
+    return this.authService.merchantRegister(registerDto);
   }
 }

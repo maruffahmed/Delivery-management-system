@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
+import { RolesService } from 'src/roles/roles.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private rolesService: RolesService,
   ) {}
 
   async validateUser(email: string, pass: string): Promise<any> {
@@ -32,9 +34,39 @@ export class AuthService {
     };
   }
 
-  async register(user: Prisma.UserCreateInput) {
+  async merchantRegister(data: Prisma.UserCreateInput) {
+    const _user = await this.usersService.createUser(data);
+
+    const role = await this.rolesService.roleDetail({
+      name: 'Merchant',
+    });
+
+    await this.rolesService.createRole({
+      user: { connect: { id: _user.id } },
+      role: {
+        connect: {
+          id: role.id,
+        },
+      },
+    });
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userInfo } = await this.usersService.createUser(user);
-    return userInfo;
+    const { password, ...user } = await this.usersService.user(
+      {
+        id: _user.id,
+      },
+      {
+        include: {
+          roles: {
+            select: {
+              id: true,
+              role: true,
+            },
+          },
+        },
+      },
+    );
+
+    return user;
   }
 }
