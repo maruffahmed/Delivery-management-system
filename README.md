@@ -18,6 +18,16 @@ Run the followning command to install all the packages:
 npm run setup
 ```
 
+### Database migration ⚙️
+
+Run the followning command to migrate the prisma schema:
+
+```
+npm run prisma:migrate
+```
+
+You only have to run this for only one time at the beginning of project setup
+
 #### Run 🏃🏻‍♂️
 
 By this command your app and server will be run concurrently

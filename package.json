@@ -14,6 +14,7 @@
         "server:start": "cd backend && npm run start",
         "server:build": "cd backend && npm run build",
         "server:prod": "cd backend && npm run start:prod",
+        "prisma:migrate": "cd backend && npx prisma migrate dev --name Init",
         "lint": "eslint .",
         "format": "prettier --write .",
         "format:check": "prettier --check ."
