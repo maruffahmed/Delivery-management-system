@@ -18,7 +18,7 @@ Run the followning command to install all the packages:
 npm run setup
 ```
 
-### Database migration ⚙️
+### Database migration 💿
 
 Run the followning command to migrate the prisma schema:
 
