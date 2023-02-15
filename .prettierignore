@@ -6,7 +6,6 @@ frontend/node_modules
 frontend/build
 frontend/.cache
 frontend/coverage
-frontend/styles
 frontend/public/build
 frontend/cypress/e2e/1-getting-started
 frontend/cypress/e2e/2-advanced-examples
