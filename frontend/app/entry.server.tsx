@@ -3,7 +3,11 @@ import type { EntryContext } from '@remix-run/node'
 import { Response } from '@remix-run/node'
 import { RemixServer } from '@remix-run/react'
 import isbot from 'isbot'
-import { renderToPipeableStream } from 'react-dom/server'
+import { renderToPipeableStream, renderToString } from 'react-dom/server'
+import createEmotionCache from './createEmotionCache'
+import createEmotionServer from '@emotion/server/create-instance'
+import { ServerStyleContext } from './context'
+import { CacheProvider } from '@emotion/react'
 
 const ABORT_DELAY = 5000
 
@@ -13,19 +17,46 @@ export default function handleRequest(
     responseHeaders: Headers,
     remixContext: EntryContext,
 ) {
-    return isbot(request.headers.get('user-agent'))
-        ? handleBotRequest(
-              request,
-              responseStatusCode,
-              responseHeaders,
-              remixContext,
-          )
-        : handleBrowserRequest(
-              request,
-              responseStatusCode,
-              responseHeaders,
-              remixContext,
-          )
+    const cache = createEmotionCache()
+    const { extractCriticalToChunks } = createEmotionServer(cache)
+
+    const html = renderToString(
+        <ServerStyleContext.Provider value={null}>
+            <CacheProvider value={cache}>
+                <RemixServer context={remixContext} url={request.url} />
+            </CacheProvider>
+        </ServerStyleContext.Provider>,
+    )
+
+    const chunks = extractCriticalToChunks(html)
+
+    const markup = renderToString(
+        <ServerStyleContext.Provider value={chunks.styles}>
+            <CacheProvider value={cache}>
+                <RemixServer context={remixContext} url={request.url} />
+            </CacheProvider>
+        </ServerStyleContext.Provider>,
+    )
+
+    responseHeaders.set('Content-Type', 'text/html')
+    return new Response(`<!DOCTYPE html>${markup}`, {
+        status: responseStatusCode,
+        headers: responseHeaders,
+    })
+
+    // return isbot(request.headers.get('user-agent'))
+    //     ? handleBotRequest(
+    //           request,
+    //           responseStatusCode,
+    //           responseHeaders,
+    //           remixContext,
+    //       )
+    //     : handleBrowserRequest(
+    //           request,
+    //           responseStatusCode,
+    //           responseHeaders,
+    //           remixContext,
+    //       )
 }
 
 function handleBotRequest(

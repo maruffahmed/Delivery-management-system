@@ -57,7 +57,7 @@ function login() {
                     </p>
                     <p className="mt-1">
                         <Link
-                            to="/"
+                            to="/register"
                             className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
                         >
                             Create account
