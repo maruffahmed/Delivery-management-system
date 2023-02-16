@@ -2,7 +2,7 @@ import { PassThrough } from 'stream'
 import type { EntryContext } from '@remix-run/node'
 import { Response } from '@remix-run/node'
 import { RemixServer } from '@remix-run/react'
-import isbot from 'isbot'
+// import isbot from 'isbot'
 import { renderToPipeableStream, renderToString } from 'react-dom/server'
 import createEmotionCache from './createEmotionCache'
 import createEmotionServer from '@emotion/server/create-instance'
@@ -59,6 +59,7 @@ export default function handleRequest(
     //       )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function handleBotRequest(
     request: Request,
     responseStatusCode: number,
@@ -100,6 +101,7 @@ function handleBotRequest(
     })
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function handleBrowserRequest(
     request: Request,
     responseStatusCode: number,
