@@ -1,5 +1,6 @@
 import type { MetaFunction } from '@remix-run/node'
 import { Form, Link } from '@remix-run/react'
+import Input from '~/components/input'
 
 export const meta: MetaFunction = () => ({
     title: 'Login',
@@ -24,23 +25,16 @@ function login() {
             <div className="flex md:w-1/2 justify-center py-10 items-center bg-white">
                 <Form className="w-3/4 lg:w-2/4">
                     <label className="block text-sm">
-                        <span className="text-gray-700 dark:text-gray-400">
+                        <span className="text-gray-500 dark:text-gray-400">
                             Email
                         </span>
-                        <input
-                            className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                            placeholder="jane@gmail.com"
-                        />
+                        <Input type="email" placeholder="jane@gmail.com" />
                     </label>
                     <label className="block mt-4 text-sm">
-                        <span className="text-gray-700 dark:text-gray-400">
+                        <span className="text-gray-500 dark:text-gray-400">
                             Password
                         </span>
-                        <input
-                            className="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                            placeholder="***************"
-                            type="password"
-                        />
+                        <Input type="password" placeholder="Enter password" />
                     </label>
 
                     {/* <!-- You should use a button here, as the anchor is only used for the example  --> */}
