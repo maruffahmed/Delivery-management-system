@@ -10,7 +10,7 @@ async function main() {
       email: 'admin@gmail.com',
       name: 'Admin',
       phone: '01789393745',
-      password: '123456',
+      password: '$2b$10$btodHpHti0d4gEB2zd1LdueFA1lJLISmdvNxOVuvQda5DfJDnHD1u',
       roles: {
         create: {
           role: {
@@ -31,7 +31,7 @@ async function main() {
       email: 'maruf@gmail.com',
       name: 'Maruf Ahmed',
       phone: '01789393745',
-      password: '123456',
+      password: '$2b$10$btodHpHti0d4gEB2zd1LdueFA1lJLISmdvNxOVuvQda5DfJDnHD1u',
       roles: {
         create: {
           role: {

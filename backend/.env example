@@ -1,1 +1,3 @@
-DATABASE_URL="file:./dev.db"
+DATABASE_URL = "file:./dev.db"
+JWT_SECRET = 'ANYTHING_YOU_LIKE'
+BCRYPT_SALT_OR_ROUNDS = "10"

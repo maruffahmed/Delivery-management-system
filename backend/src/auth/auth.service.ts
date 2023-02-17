@@ -3,9 +3,11 @@ import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
 import { RolesService } from 'src/roles/roles.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
+  readonly saltRounds = process.env.BCRYPT_SALT_OR_ROUNDS;
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
@@ -14,7 +16,9 @@ export class AuthService {
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.user({ email });
-    if (user && user.password === pass) {
+    const isMatch = await bcrypt.compare(pass, user.password);
+
+    if (user && isMatch) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return result;
@@ -35,10 +39,17 @@ export class AuthService {
   }
 
   async merchantRegister(data: Prisma.UserCreateInput) {
-    const _user = await this.usersService.createUser(data);
+    const { password } = data;
+    // Encrypt the password
+    const hash = await bcrypt.hash(password, parseInt(this.saltRounds));
+
+    const _user = await this.usersService.createUser({
+      ...data,
+      password: hash,
+    });
 
     const role = await this.rolesService.roleDetail({
-      name: 'Merchant',
+      name: 'merchant',
     });
 
     await this.rolesService.createRole({
@@ -51,7 +62,7 @@ export class AuthService {
     });
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...user } = await this.usersService.user(
+    const { password: pass, ...user } = await this.usersService.user(
       {
         id: _user.id,
       },
