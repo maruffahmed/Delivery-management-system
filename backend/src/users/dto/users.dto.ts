@@ -1,20 +1,24 @@
 import { User } from '@prisma/client';
-import { IsString, Length, IsEmail } from 'class-validator';
+import { IsString, Length, IsEmail, IsNotEmpty } from 'class-validator';
 
 export class CreateUserDto implements User {
   id: number;
 
-  @IsString({ message: 'Name is required' })
+  @IsNotEmpty()
+  @IsString({ message: 'Name must be a string' })
   name: string;
 
-  @IsString({ message: 'A unique email is required' })
+  @IsNotEmpty()
+  @IsString({ message: 'Email address must be a string' })
   @IsEmail({}, { message: 'Invalid email address' })
   email: string;
 
-  @IsString({ message: 'Phone number is required' })
+  @IsNotEmpty()
+  @IsString({ message: 'Phone number must be a string' })
   phone: string;
 
-  @IsString({ message: 'Password is required' })
+  @IsNotEmpty()
+  @IsString({ message: 'Password must be a string' })
   @Length(6)
   password: string;
 }

@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma, User } from '@prisma/client';
 import { RolesService } from 'src/roles/roles.service';
 import * as bcrypt from 'bcrypt';
+import { ConflictException } from '@nestjs/common/exceptions';
 
 @Injectable()
 export class AuthService {
@@ -49,46 +50,58 @@ export class AuthService {
     };
   }
 
-  async merchantRegister(data: Prisma.UserCreateInput) {
-    const { password } = data;
-    // Encrypt the password
-    const hash = await bcrypt.hash(password, parseInt(this.saltRounds));
+  async merchantRegister(
+    data: Prisma.UserCreateInput,
+  ): Promise<Omit<User, 'password'>> {
+    try {
+      const { password } = data;
+      // Encrypt the password
+      const hash = await bcrypt.hash(password, parseInt(this.saltRounds));
 
-    const _user = await this.usersService.createUser({
-      ...data,
-      password: hash,
-    });
+      const _user = await this.usersService.createUser({
+        ...data,
+        password: hash,
+      });
 
-    const role = await this.rolesService.roleDetail({
-      name: 'merchant',
-    });
+      const role = await this.rolesService.roleDetail({
+        name: 'merchant',
+      });
 
-    await this.rolesService.createRole({
-      user: { connect: { id: _user.id } },
-      role: {
-        connect: {
-          id: role.id,
+      await this.rolesService.createRole({
+        user: { connect: { id: _user.id } },
+        role: {
+          connect: {
+            id: role.id,
+          },
         },
-      },
-    });
+      });
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password: pass, ...user } = await this.usersService.user(
-      {
-        id: _user.id,
-      },
-      {
-        include: {
-          roles: {
-            select: {
-              id: true,
-              role: true,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: pass, ...user } = await this.usersService.user(
+        {
+          id: _user.id,
+        },
+        {
+          include: {
+            roles: {
+              select: {
+                id: true,
+                role: true,
+              },
             },
           },
         },
-      },
-    );
+      );
 
-    return user;
+      return user;
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        // The .code property can be accessed in a type-safe manner
+        if (e.code === 'P2002') {
+          throw new ConflictException('Email address already exist');
+        }
+      }
+      throw new BadRequestException();
+    }
   }
 }
