@@ -15,11 +15,9 @@ import {
     useColorModeValue,
     Stack,
     useColorMode,
-    Center,
     Heading,
     Container,
     HStack,
-    Divider,
     IconButton,
     Drawer,
     DrawerContent,
@@ -27,7 +25,6 @@ import {
     DrawerCloseButton,
     DrawerHeader,
     DrawerBody,
-    DrawerFooter,
 } from '@chakra-ui/react'
 import { CloseIcon, HamburgerIcon, MoonIcon, SunIcon } from '@chakra-ui/icons'
 
