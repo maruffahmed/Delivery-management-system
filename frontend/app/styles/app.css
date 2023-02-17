@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
 
 /*
 ! tailwindcss v3.2.6 | MIT License | https://tailwindcss.com
@@ -918,6 +918,10 @@ html {
     display: block;
 }
 
+.inline {
+    display: inline;
+}
+
 .flex {
     display: flex;
 }
@@ -1122,6 +1126,10 @@ html {
 .text-white {
     --tw-text-opacity: 1;
     color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.outline {
+    outline-style: solid;
 }
 
 .transition-colors {

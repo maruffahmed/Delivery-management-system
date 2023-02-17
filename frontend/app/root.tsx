@@ -11,7 +11,7 @@ import styles from './styles/app.css'
 import { ServerStyleContext, ClientStyleContext } from './context'
 import { useContext, useEffect } from 'react'
 import { withEmotionCache } from '@emotion/react'
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 
 export const links: LinksFunction = () => {
     return [{ rel: 'stylesheet', href: styles }]
@@ -71,10 +71,17 @@ const Document = withEmotionCache(
     },
 )
 
+const theme = extendTheme({
+    fonts: {
+        heading: `'Open Sans', sans-serif`,
+        body: `'Raleway', sans-serif`,
+    },
+})
+
 export default function App() {
     return (
         <Document>
-            <ChakraProvider>
+            <ChakraProvider theme={theme}>
                 <Outlet />
             </ChakraProvider>
         </Document>
