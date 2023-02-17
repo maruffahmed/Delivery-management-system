@@ -1,9 +1,12 @@
-import Nav from '~/components/Navbar'
+import { Outlet } from '@remix-run/react'
+import Layout from '~/components/Layout'
 
 function Dashboard() {
     return (
         <>
-            <Nav />
+            <Layout>
+                <Outlet />
+            </Layout>
         </>
     )
 }

@@ -6,12 +6,13 @@ import {
     Outlet,
     Scripts,
     ScrollRestoration,
+    useCatch,
 } from '@remix-run/react'
 import styles from './styles/app.css'
 import { ServerStyleContext, ClientStyleContext } from './context'
 import { useContext, useEffect } from 'react'
 import { withEmotionCache } from '@emotion/react'
-import { ChakraProvider, extendTheme } from '@chakra-ui/react'
+import { baseTheme, ChakraProvider, extendTheme } from '@chakra-ui/react'
 
 export const links: LinksFunction = () => {
     return [{ rel: 'stylesheet', href: styles }]
@@ -25,10 +26,14 @@ export const meta: MetaFunction = () => ({
 
 interface DocumentProps {
     children: React.ReactNode
+    title?: string
 }
 
 const Document = withEmotionCache(
-    ({ children }: DocumentProps, emotionCache) => {
+    (
+        { children, title = `Remix: So great, it's funny!` }: DocumentProps,
+        emotionCache,
+    ) => {
         const serverStyleData = useContext(ServerStyleContext)
         const clientStyleData = useContext(ClientStyleContext)
 
@@ -51,6 +56,7 @@ const Document = withEmotionCache(
             <html lang="en">
                 <head>
                     <Meta />
+                    <title>{title}</title>
                     <Links />
                     {serverStyleData?.map(({ key, ids, css }) => (
                         <style
@@ -76,6 +82,9 @@ const theme = extendTheme({
         heading: `'Open Sans', sans-serif`,
         body: `'Raleway', sans-serif`,
     },
+    colors: {
+        primary: baseTheme.colors.red,
+    },
 })
 
 export default function App() {
@@ -84,6 +93,32 @@ export default function App() {
             <ChakraProvider theme={theme}>
                 <Outlet />
             </ChakraProvider>
+        </Document>
+    )
+}
+
+export function CatchBoundary() {
+    const caught = useCatch()
+
+    return (
+        <Document title={`${caught.status} ${caught.statusText}`}>
+            <div className="error-container">
+                <h1>
+                    {caught.status} {caught.statusText}
+                </h1>
+            </div>
+        </Document>
+    )
+}
+
+// 60
+export function ErrorBoundary({ error }: { error: Error }) {
+    return (
+        <Document title="Uh-oh!">
+            <div className="error-container">
+                <h1>App Error</h1>
+                <pre>{error.message}</pre>
+            </div>
         </Document>
     )
 }

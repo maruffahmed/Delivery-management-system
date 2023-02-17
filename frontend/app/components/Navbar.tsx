@@ -4,7 +4,6 @@ import {
     Box,
     Flex,
     Avatar,
-    Link,
     Button,
     Menu,
     MenuButton,
@@ -14,7 +13,7 @@ import {
     useDisclosure,
     useColorModeValue,
     Stack,
-    useColorMode,
+    // useColorMode,
     Heading,
     Container,
     HStack,
@@ -25,8 +24,10 @@ import {
     DrawerCloseButton,
     DrawerHeader,
     DrawerBody,
+    Link,
 } from '@chakra-ui/react'
-import { CloseIcon, HamburgerIcon, MoonIcon, SunIcon } from '@chakra-ui/icons'
+import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
+import { Link as RemixLink } from '@remix-run/react'
 
 const Links = ['Dashboard', 'Parcels', 'Payments', 'Coupon']
 
@@ -46,7 +47,7 @@ const NavLink = ({ children }: { children: ReactNode }) => (
 )
 
 export default function Nav() {
-    const { colorMode, toggleColorMode } = useColorMode()
+    // const { colorMode, toggleColorMode } = useColorMode()
     const { isOpen, onOpen, onClose } = useDisclosure()
     return (
         <>
@@ -63,7 +64,11 @@ export default function Nav() {
                         justifyContent={'space-between'}
                     >
                         <Flex align="center">
-                            <Stack direction="row" spacing={2}>
+                            <Stack
+                                direction="row"
+                                align="center"
+                                spacing={{ md: 0, base: 2 }}
+                            >
                                 <IconButton
                                     variant="outline"
                                     size={'md'}
@@ -78,14 +83,24 @@ export default function Nav() {
                                     display={{ md: 'none' }}
                                     onClick={isOpen ? onClose : onOpen}
                                 />
-                                <HStack spacing={8} alignItems={'center'}>
+                                <HStack alignItems={'center'}>
                                     <Box>
-                                        <Heading fontWeight="extrabold">
+                                        <Link
+                                            as={RemixLink}
+                                            to="/"
+                                            fontWeight="extrabold"
+                                            fontSize="4xl"
+                                            mb="0"
+                                            _hover={{ textDecoration: 'unset' }}
+                                        >
                                             RED
-                                            <Text color="red" display="inline">
+                                            <Text
+                                                color="primary.500"
+                                                display="inline"
+                                            >
                                                 X
                                             </Text>
-                                        </Heading>
+                                        </Link>
                                     </Box>
                                 </HStack>
                             </Stack>
@@ -103,13 +118,13 @@ export default function Nav() {
                                         <NavLink key={link}>{link}</NavLink>
                                     ))}
                                     <Button
-                                        colorScheme="red"
+                                        colorScheme="primary"
                                         fontWeight="normal"
                                     >
                                         Create Parcel
                                     </Button>
                                 </HStack>
-                                <Button
+                                {/* <Button
                                     onClick={toggleColorMode}
                                     bg="transparent"
                                 >
@@ -118,7 +133,7 @@ export default function Nav() {
                                     ) : (
                                         <SunIcon />
                                     )}
-                                </Button>
+                                </Button> */}
 
                                 <Menu>
                                     <MenuButton
