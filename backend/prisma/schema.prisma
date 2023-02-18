@@ -49,6 +49,7 @@ model Shops {
 
 model PickUpPoints {
   id       Int     @id @default(autoincrement())
+  name     String
   address  String
   area     String
   phone    String

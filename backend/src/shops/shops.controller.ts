@@ -12,7 +12,7 @@ import {
 import { ParseIntPipe } from '@nestjs/common/pipes';
 import { Shops } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { UserShopGuard } from 'src/guard/userShop.guard';
+import { UserShopGuard } from 'src/shops/guard/userShop.guard';
 import { CreateShopsDto, UpdateShopsDto } from './dto/shops.dto';
 import { ShopsService } from './shops.service';
 
@@ -20,6 +20,7 @@ import { ShopsService } from './shops.service';
 export class ShopsController {
   constructor(private shopsService: ShopsService) {}
 
+  // GET /shops
   @Get()
   @UseGuards(JwtAuthGuard)
   async getShops(@Request() req): Promise<Shops[]> {
@@ -30,12 +31,14 @@ export class ShopsController {
     });
   }
 
-  @Get(':id')
+  // GET /shops/1
+  @Get(':shopId')
   @UseGuards(JwtAuthGuard, UserShopGuard)
-  async getShop(@Param('id', ParseIntPipe) id: number): Promise<Shops> {
+  async getShop(@Param('shopId', ParseIntPipe) id: number): Promise<Shops> {
     return this.shopsService.shop({ id });
   }
 
+  // POST /shops
   @Post()
   @UseGuards(JwtAuthGuard)
   async createShop(
@@ -52,10 +55,11 @@ export class ShopsController {
     });
   }
 
-  @Patch(':id')
+  // PATCH /shops/1
+  @Patch(':shopId')
   @UseGuards(JwtAuthGuard, UserShopGuard)
   async updateShop(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('shopId', ParseIntPipe) id: number,
     @Body(ValidationPipe) updateShopDto: UpdateShopsDto,
   ): Promise<Shops> {
     return this.shopsService.updateShop({

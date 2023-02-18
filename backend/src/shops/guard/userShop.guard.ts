@@ -9,7 +9,7 @@ export class UserShopGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const { user, params } = context.switchToHttp().getRequest();
-    const { id: shopId } = params;
+    const { shopId } = params;
     const shop = await this.prisma.shops.findUnique({
       where: { id: parseInt(shopId) },
     });

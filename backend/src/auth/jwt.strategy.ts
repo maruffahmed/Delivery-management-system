@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { jwtConstants } from './constants';
 import { UsersService } from 'src/users/users.service';
+import { UnauthorizedException } from '@nestjs/common/exceptions';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -15,8 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userInfo } = await this.usersService.user(
+    const user = await this.usersService.user(
       {
         email: payload.email,
       },
@@ -30,6 +30,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         },
       },
     );
+    if (!user) throw new UnauthorizedException();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userInfo } = user;
     return userInfo;
   }
 }

@@ -50,6 +50,7 @@ async function main() {
           productSubType: 't-shirt',
           pickUpPoints: {
             create: {
+              name: 'Maruf Ahmed',
               address: 'House #22, Road #9, Sector #10, Uttara, Dhaka',
               area: 'Sector 10, Uttara, Dhaka',
               phone: '01789393745',
