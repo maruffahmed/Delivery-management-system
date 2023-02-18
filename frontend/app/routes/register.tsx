@@ -133,6 +133,7 @@ function Register() {
                             <Select
                                 placeholder="Choose product type"
                                 name="productType"
+                                focusBorderColor="primary.500"
                             >
                                 <option value="book">Book</option>
                                 <option value="electronics">Electronics</option>
@@ -149,6 +150,7 @@ function Register() {
                             <Select
                                 placeholder="Choose sub Category type"
                                 name="subProductType"
+                                focusBorderColor="primary.500"
                             >
                                 <option value="history">History</option>
                                 <option value="computers">Computers</option>
