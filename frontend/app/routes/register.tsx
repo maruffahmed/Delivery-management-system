@@ -1,150 +1,250 @@
+import {
+    Button,
+    FormControl,
+    FormErrorMessage,
+    FormLabel,
+    Input,
+    InputGroup,
+    InputRightElement,
+    Link,
+    Select,
+    Text,
+} from '@chakra-ui/react'
+import React from 'react'
 import type { MetaFunction } from '@remix-run/node'
-import { Form } from '@remix-run/react'
-import Input from '~/components/input'
+import { Form, Link as RemixLink } from '@remix-run/react'
+import LoginRegLeftSide from '~/components/common/loginRegLeftSide'
 
 export const meta: MetaFunction = () => ({
     title: 'Register',
 })
-function login() {
+function Register() {
+    const [show, setShow] = React.useState(false)
+    const handleClick = () => setShow(!show)
+
+    const [pass, setPass] = React.useState('')
+    const [confirmPass, setConfirmPass] = React.useState('')
+
+    console.log('Confirm password', pass === confirmPass)
+
     return (
         <div className="h-screen md:flex">
-            <div className="relative overflow-hidden md:flex w-1/2 bg-gradient-to-tr from-blue-800 to-purple-700 i justify-around items-center hidden">
-                <div>
-                    <h1 className="text-white font-bold text-4xl font-sans">
-                        Add your information
-                    </h1>
-                    <p className="text-white mt-1">
-                        Please tell a bit about you and your business
-                    </p>
-                </div>
-                <div className="absolute -bottom-32 -left-40 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
-                <div className="absolute -bottom-40 -left-20 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
-                <div className="absolute -top-40 -right-0 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
-                <div className="absolute -top-20 -right-20 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
-            </div>
+            <LoginRegLeftSide
+                title="Add your information"
+                subtitle="Please tell a bit about you and your business"
+            />
+
             <div className="flex md:w-1/2 justify-center items-center bg-white overflow-auto overflow-y-scroll">
                 <Form className="w-3/4 lg:w-3/4 pt-32 pb-20">
-                    <p className="text-gray-700 mt-1 font-bold mb-3">
+                    <Text className="text-gray-700 mt-1 font-bold mb-3">
                         Personal Inforamtion
-                    </p>
+                    </Text>
                     <div className="flex justify-between gap-6 mb-3">
-                        <label className="block text-sm w-full">
-                            <span className="text-gray-500 dark:text-gray-400">
-                                Full Name
-                            </span>
-                            <Input type="text" placeholder="Maruf Ahmed" />
-                        </label>
-                        <label className="block text-sm w-full">
-                            <span className="text-gray-500 dark:text-gray-400">
-                                Email
-                            </span>
-                            <Input type="email" placeholder="maruf@gmail.com" />
-                        </label>
+                        <FormControl isInvalid={false} isRequired>
+                            <FormLabel>Full Name</FormLabel>
+                            <Input
+                                type="text"
+                                name="fullName"
+                                placeholder="Maruf Ahmed"
+                                focusBorderColor="primary.500"
+                            />
+                            <FormErrorMessage>
+                                Name is required.
+                            </FormErrorMessage>
+                        </FormControl>
+                        <FormControl isInvalid={false} isRequired>
+                            <FormLabel>Email</FormLabel>
+                            <Input
+                                type="email"
+                                name="userEmail"
+                                placeholder="jane@gmail.com"
+                                focusBorderColor="primary.500"
+                            />
+                            <FormErrorMessage>
+                                Email is required.
+                            </FormErrorMessage>
+                        </FormControl>
                     </div>
 
                     <div className="flex justify-between gap-6 mb-3">
-                        <label className="block text-sm w-full">
-                            <span className="text-gray-500 dark:text-gray-400">
-                                Phone Number
-                            </span>
-                            <Input type="tel" placeholder="+8801234678910" />
-                        </label>
+                        <FormControl isInvalid={false} isRequired>
+                            <FormLabel>Phone Number</FormLabel>
+                            <Input
+                                type="tel"
+                                name="userPhone"
+                                placeholder="+8801234678910"
+                                focusBorderColor="primary.500"
+                            />
+                            <FormErrorMessage>
+                                Phone number is required.
+                            </FormErrorMessage>
+                        </FormControl>
                     </div>
 
-                    <p className="text-gray-700 font-bold mt-6">
+                    <Text className="text-gray-700 font-bold mt-6">
                         Shop Information
-                    </p>
-                    <small className="text-gray-700 mb-3 block">
+                    </Text>
+                    <Text as="small" className="text-gray-700 mb-3 block">
                         If you have more thant one busines, you can create
                         multiple shops later
-                    </small>
+                    </Text>
                     <div className="flex justify-between gap-6 mb-3">
-                        <label className="block text-sm w-full">
-                            <span className="text-gray-500 dark:text-gray-400">
-                                Shop Name
-                            </span>
-                            <Input type="text" placeholder="Shop Name" />
-                        </label>
-                        <label className="block text-sm w-full">
-                            <span className="text-gray-500 dark:text-gray-400">
-                                Shop Email
-                            </span>
-                            <Input type="email" placeholder="Email address" />
-                        </label>
+                        <FormControl isInvalid={false} isRequired>
+                            <FormLabel>Shop Name</FormLabel>
+                            <Input
+                                type="text"
+                                name="shopName"
+                                placeholder="Shop Name"
+                                focusBorderColor="primary.500"
+                            />
+                            <FormErrorMessage>
+                                Shop name is required.
+                            </FormErrorMessage>
+                        </FormControl>
+                        <FormControl isInvalid={false} isRequired>
+                            <FormLabel>Shop Email</FormLabel>
+                            <Input
+                                type="email"
+                                name="shopEmail"
+                                placeholder="Email address"
+                                focusBorderColor="primary.500"
+                            />
+                            <FormErrorMessage>
+                                Shop email is required.
+                            </FormErrorMessage>
+                        </FormControl>
                     </div>
                     <div className="flex justify-between gap-6 mb-3">
-                        <label className="block text-sm w-full">
-                            <span className="text-gray-500 dark:text-gray-400">
-                                Shop Address
-                            </span>
-                            <Input type="text" placeholder="Shop Address" />
-                        </label>
-                        <label className="block text-sm w-full">
-                            <span className="text-gray-500 dark:text-gray-400">
-                                Product Type
-                            </span>
-                            <select
-                                name=""
-                                id=""
-                                className="block w-full mt-1 text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input text-gray-300"
+                        <FormControl isInvalid={false} isRequired>
+                            <FormLabel>Shop Address</FormLabel>
+                            <Input
+                                type="text"
+                                name="shopAddress"
+                                placeholder="Shop Address"
+                                focusBorderColor="primary.500"
+                            />
+                            <FormErrorMessage>
+                                Shop address is required.
+                            </FormErrorMessage>
+                        </FormControl>
+
+                        <FormControl isInvalid={false} isRequired>
+                            <FormLabel>Product Type</FormLabel>
+                            <Select
+                                placeholder="Choose product type"
+                                name="productType"
                             >
-                                <option value="">Choose product type</option>
-                            </select>
-                        </label>
+                                <option value="book">Book</option>
+                                <option value="electronics">Electronics</option>
+                            </Select>
+                            <FormErrorMessage>
+                                Product type is required.
+                            </FormErrorMessage>
+                        </FormControl>
                     </div>
 
                     <div className="flex justify-between gap-6 mb-3">
-                        <label className="block text-sm w-full">
-                            <span className="text-gray-500 dark:text-gray-400">
-                                Product Sub Category Type
-                            </span>
-                            <select
-                                name=""
-                                id=""
-                                className="block w-full mt-1 text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input text-gray-300"
+                        <FormControl isInvalid={false} isRequired>
+                            <FormLabel>Product Sub Category Type</FormLabel>
+                            <Select
+                                placeholder="Choose sub Category type"
+                                name="subProductType"
                             >
-                                <option value="">
-                                    Choose sub Category type
-                                </option>
-                            </select>
-                        </label>
+                                <option value="history">History</option>
+                                <option value="computers">Computers</option>
+                            </Select>
+                            <FormErrorMessage>
+                                Sub product type is required.
+                            </FormErrorMessage>
+                        </FormControl>
                     </div>
 
                     <p className="text-gray-700 font-bold mt-6 mb-3">
                         Create Password
                     </p>
                     <div className="flex justify-between gap-6 mb-3">
-                        <label className="block text-sm w-full">
-                            <span className="text-gray-500 dark:text-gray-400">
-                                Password
-                            </span>
-                            <Input
-                                type="password"
-                                placeholder="Enter Password"
-                            />
-                        </label>
-                        <label className="block text-sm w-full">
-                            <span className="text-gray-500 dark:text-gray-400">
-                                Confirm Password
-                            </span>
-                            <Input
-                                type="password"
-                                placeholder="Confirm Password"
-                            />
-                        </label>
+                        <FormControl isInvalid={false} isRequired>
+                            <FormLabel>Password</FormLabel>
+                            <InputGroup size="md">
+                                <Input
+                                    type={show ? 'text' : 'password'}
+                                    name="password"
+                                    placeholder="Enter password"
+                                    focusBorderColor="primary.500"
+                                    onChange={(e) => setPass(e.target.value)}
+                                />
+                                <InputRightElement width="4.5rem">
+                                    <Button
+                                        h="1.75rem"
+                                        size="sm"
+                                        onClick={handleClick}
+                                        variant="outline"
+                                        fontWeight="normal"
+                                    >
+                                        {show ? 'Hide' : 'Show'}
+                                    </Button>
+                                </InputRightElement>
+                            </InputGroup>
+                            <FormErrorMessage>
+                                Password is required.
+                            </FormErrorMessage>
+                        </FormControl>
+
+                        <FormControl
+                            isInvalid={pass !== confirmPass}
+                            isRequired
+                        >
+                            <FormLabel>Confirm Password</FormLabel>
+                            <InputGroup size="md">
+                                <Input
+                                    type={show ? 'text' : 'password'}
+                                    name="confirmPassword"
+                                    placeholder="Confirm Password"
+                                    focusBorderColor="primary.500"
+                                    onChange={(e) =>
+                                        setConfirmPass(e.target.value)
+                                    }
+                                />
+                                <InputRightElement width="4.5rem">
+                                    <Button
+                                        h="1.75rem"
+                                        size="sm"
+                                        onClick={handleClick}
+                                        variant="outline"
+                                        fontWeight="normal"
+                                    >
+                                        {show ? 'Hide' : 'Show'}
+                                    </Button>
+                                </InputRightElement>
+                            </InputGroup>
+                            <FormErrorMessage>
+                                {pass !== confirmPass
+                                    ? "Password didn't match"
+                                    : 'Please confirm your password'}
+                            </FormErrorMessage>
+                        </FormControl>
                     </div>
 
                     {/* <!-- You should use a button here, as the anchor is only used for the example  --> */}
-                    <button
+                    <Button
                         type="submit"
-                        className="block w-full px-4 py-2 mt-8 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                        variant="solid"
+                        colorScheme="primary"
+                        w="full"
+                        mt="5"
                     >
                         Sign up
-                    </button>
+                    </Button>
+                    <Text mt="5">
+                        Already have account?{' '}
+                        <Link as={RemixLink} to="/login" color="primary.700">
+                            Login
+                        </Link>
+                    </Text>
                 </Form>
             </div>
         </div>
     )
 }
 
-export default login
+export default Register

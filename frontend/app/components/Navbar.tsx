@@ -25,6 +25,7 @@ import {
     DrawerHeader,
     DrawerBody,
     Link,
+    MenuGroup,
 } from '@chakra-ui/react'
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
 import { Link as RemixLink } from '@remix-run/react'
@@ -145,16 +146,35 @@ export default function Nav() {
                                     >
                                         <Avatar
                                             size={'sm'}
-                                            src={
-                                                'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-                                            }
+                                            name="Maruf Ahmed"
                                         />
                                     </MenuButton>
                                     <MenuList>
-                                        <MenuItem>Link 1</MenuItem>
-                                        <MenuItem>Link 2</MenuItem>
+                                        <MenuGroup title="Profile">
+                                            <MenuItem>My Shops</MenuItem>
+                                            <MenuItem>
+                                                Manage Pickup Location
+                                            </MenuItem>
+                                            <MenuItem>Shop Settings</MenuItem>
+                                            <MenuItem>Coverage Area</MenuItem>
+                                        </MenuGroup>
                                         <MenuDivider />
-                                        <MenuItem>Link 3</MenuItem>
+                                        <MenuGroup title="Help">
+                                            <MenuItem>Tutorial</MenuItem>
+                                            <MenuItem>FAQ</MenuItem>
+                                        </MenuGroup>
+                                        <MenuDivider />
+                                        <MenuGroup>
+                                            <Link
+                                                as={RemixLink}
+                                                to="/login"
+                                                _hover={{
+                                                    textDecoration: 'unset',
+                                                }}
+                                            >
+                                                <MenuItem>Logout</MenuItem>
+                                            </Link>
+                                        </MenuGroup>
                                     </MenuList>
                                 </Menu>
                             </Stack>

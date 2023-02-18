@@ -1,65 +1,95 @@
 import type { MetaFunction } from '@remix-run/node'
-import { Form, Link } from '@remix-run/react'
-import Input from '~/components/input'
+import React from 'react'
+import { Form, Link as RemixLink } from '@remix-run/react'
+import {
+    FormControl,
+    FormLabel,
+    FormErrorMessage,
+    Input,
+    InputRightElement,
+    Button,
+    InputGroup,
+    Text,
+    Link,
+} from '@chakra-ui/react'
+import LoginRegLeftSide from '~/components/common/loginRegLeftSide'
 
 export const meta: MetaFunction = () => ({
     title: 'Login',
 })
-function login() {
+function Login() {
+    const [show, setShow] = React.useState(false)
+    const handleClick = () => setShow(!show)
     return (
         <div className="h-screen md:flex">
-            <div className="relative overflow-hidden md:flex w-1/2 bg-gradient-to-tr from-blue-800 to-purple-700 i justify-around items-center hidden">
-                <div>
-                    <h1 className="text-white font-bold text-4xl font-sans">
-                        Welcome!
-                    </h1>
-                    <p className="text-white mt-1">
-                        Enter your email and password to login to the dashboard
-                    </p>
-                </div>
-                <div className="absolute -bottom-32 -left-40 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
-                <div className="absolute -bottom-40 -left-20 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
-                <div className="absolute -top-40 -right-0 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
-                <div className="absolute -top-20 -right-20 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
-            </div>
+            <LoginRegLeftSide
+                title="Welcome!"
+                subtitle="Enter your email and password to login to the dashboard"
+            />
+
             <div className="flex md:w-1/2 justify-center py-10 items-center bg-white">
                 <Form className="w-3/4 lg:w-2/4">
                     <label className="block text-sm">
-                        <span className="text-gray-500 dark:text-gray-400">
-                            Email
-                        </span>
-                        <Input type="email" placeholder="jane@gmail.com" />
+                        <FormControl isInvalid={false} isRequired>
+                            <FormLabel>Email</FormLabel>
+                            <Input
+                                type="email"
+                                placeholder="maruf@gmail.com"
+                                focusBorderColor="primary.500"
+                            />
+                            <FormErrorMessage>
+                                Email is required.
+                            </FormErrorMessage>
+                        </FormControl>
                     </label>
                     <label className="block mt-4 text-sm">
-                        <span className="text-gray-500 dark:text-gray-400">
-                            Password
-                        </span>
-                        <Input type="password" placeholder="Enter password" />
+                        <FormControl isInvalid={false} isRequired>
+                            <FormLabel>Password</FormLabel>
+                            <InputGroup size="md">
+                                <Input
+                                    type={show ? 'text' : 'password'}
+                                    placeholder="Enter password"
+                                    focusBorderColor="primary.500"
+                                />
+                                <InputRightElement width="4.5rem">
+                                    <Button
+                                        h="1.75rem"
+                                        size="sm"
+                                        onClick={handleClick}
+                                        variant="outline"
+                                        fontWeight="normal"
+                                    >
+                                        {show ? 'Hide' : 'Show'}
+                                    </Button>
+                                </InputRightElement>
+                            </InputGroup>
+                            <FormErrorMessage>
+                                Password is required.
+                            </FormErrorMessage>
+                        </FormControl>
                     </label>
 
                     {/* <!-- You should use a button here, as the anchor is only used for the example  --> */}
-                    <button
+
+                    <Button
                         type="submit"
-                        className="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                        variant="solid"
+                        colorScheme="primary"
+                        w="full"
+                        mt="10"
                     >
                         Log in
-                    </button>
+                    </Button>
 
                     <hr className="my-8" />
 
-                    <p className="mt-4">
-                        <Link
-                            to="/"
-                            className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
-                        >
+                    <Text className="mt-4">
+                        <Link as={RemixLink} to="/" color="primary.700">
                             Forgot your password?
                         </Link>
-                    </p>
+                    </Text>
                     <p className="mt-1">
-                        <Link
-                            to="/register"
-                            className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
-                        >
+                        <Link as={RemixLink} to="/register" color="primary.700">
                             Create account
                         </Link>
                     </p>
@@ -69,4 +99,4 @@ function login() {
     )
 }
 
-export default login
+export default Login
