@@ -1,10 +1,13 @@
 import React from 'react'
-import Nav from './Navbar'
+import { useAuthProvider } from '~/context/AuthProvider'
+import MerchantNav from './merchant/Navbar'
+import Navbar from './Navbar'
 
 function Layout({ children }: { children: React.ReactNode }) {
+    const user = useAuthProvider()
     return (
         <>
-            <Nav />
+            {user?.id ? <MerchantNav /> : <Navbar />}
             {children}
         </>
     )

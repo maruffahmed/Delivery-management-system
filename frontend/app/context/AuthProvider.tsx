@@ -1,14 +1,14 @@
 import type { User } from '~/types'
 import React from 'react'
 
-export const AuthContext = React.createContext<User | null>(null)
+export const AuthContext = React.createContext<User | Object | null>(null)
 AuthContext.displayName = 'AuthContext'
 
 function AuthProvider({
     user,
     ...props
 }: {
-    user: User
+    user: User | {}
     children: React.ReactNode
 }) {
     return <AuthContext.Provider value={user} {...props} />
@@ -16,7 +16,8 @@ function AuthProvider({
 
 export const useAuthProvider = () => {
     const context = React.useContext(AuthContext) as User
-    if (context === undefined) {
+    console.log('context', context)
+    if (!context) {
         throw new Error('useAuthProvider must be used within a AuthProvider')
     }
     return context

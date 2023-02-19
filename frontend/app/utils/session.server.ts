@@ -1,23 +1,28 @@
 import { createCookieSessionStorage, redirect } from '@remix-run/node'
-import axios from 'axios'
+import { AxiosError } from 'axios'
+import type { ApiErrorResponse, LoginResponse } from '~/types'
+import axios from '~/utils/axios'
 
 type LoginForm = {
     email: string
     password: string
 }
 
-export async function login({ email, password }: LoginForm) {
+export async function login({
+    email,
+    password,
+}: LoginForm): Promise<LoginResponse | ApiErrorResponse | null> {
     try {
-        const res = await axios.post('http://localhost:1337/api/auth/local', {
-            identifier: email,
+        const res = await axios.post('/auth/login', {
+            username: email,
             password,
         })
         const user = res.data
-        // console.log("user ", user)
-        if (!user) return null
-
         return user
     } catch (error) {
+        if (error instanceof AxiosError) {
+            return error.response?.data
+        }
         return null
     }
     // return { id: user.id, username }
@@ -30,7 +35,7 @@ if (!sessionSecret) {
 
 const storage = createCookieSessionStorage({
     cookie: {
-        name: 'RJ_session',
+        name: 'DELIVERY_session',
         // normally you want this to be `secure: true`
         // but that doesn't work on localhost for Safari
         // https://web.dev/when-to-use-local-https/
@@ -53,11 +58,11 @@ export async function getUserId(request: Request) {
     if (!userId || typeof userId !== 'number') return null
     return userId
 }
-export async function getUserJwt(request: Request) {
+export async function getUserToken(request: Request) {
     const session = await getUserSession(request)
-    const jwt = session.get('jwt')
-    if (!jwt || typeof jwt !== 'string') return null
-    return jwt
+    const access_token = session.get('access_token')
+    if (!access_token || typeof access_token !== 'string') return null
+    return access_token
 }
 export async function requireUserId(
     request: Request,
@@ -75,20 +80,18 @@ export async function requireUserId(
 }
 
 export async function getUser(request: Request) {
-    const jwt = await getUserJwt(request)
-    if (typeof jwt !== 'string') {
+    const access_token = await getUserToken(request)
+    console.log('getUser', access_token)
+    if (typeof access_token !== 'string') {
         return null
     }
 
     try {
-        const user = await axios.get(
-            `http://localhost:1337/api/users/me?populate=role,avatar`,
-            {
-                headers: {
-                    Authorization: `Bearer ${jwt}`,
-                },
+        const user = await axios.get(`/users/me`, {
+            headers: {
+                Authorization: `Bearer ${access_token}`,
             },
-        )
+        })
         return user
     } catch {
         throw logout(request)
@@ -105,13 +108,13 @@ export async function logout(request: Request) {
 }
 
 export async function createUserSession(
-    userId: string,
-    jwt: string,
+    userId: number,
+    access_token: string,
     redirectTo: string,
 ) {
     const session = await storage.getSession()
     session.set('userId', userId)
-    session.set('jwt', jwt)
+    session.set('access_token', access_token)
     // console.log("session ", session)
     return redirect(redirectTo, {
         headers: {

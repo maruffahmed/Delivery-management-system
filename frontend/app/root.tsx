@@ -1,4 +1,10 @@
-import type { LinksFunction, MetaFunction } from '@remix-run/node'
+import type { User } from './types'
+import type {
+    LinksFunction,
+    LoaderFunction,
+    MetaFunction,
+} from '@remix-run/node'
+import { json } from '@remix-run/node'
 import {
     Links,
     LiveReload,
@@ -7,12 +13,15 @@ import {
     Scripts,
     ScrollRestoration,
     useCatch,
+    useLoaderData,
 } from '@remix-run/react'
 import styles from './styles/app.css'
 import { ServerStyleContext, ClientStyleContext } from './context'
 import { useContext, useEffect } from 'react'
 import { withEmotionCache } from '@emotion/react'
 import { baseTheme, ChakraProvider, extendTheme } from '@chakra-ui/react'
+import AuthProvider from './context/AuthProvider'
+import { getUser } from './utils/session.server'
 
 export const links: LinksFunction = () => {
     return [{ rel: 'stylesheet', href: styles }]
@@ -23,6 +32,20 @@ export const meta: MetaFunction = () => ({
     title: 'New Remix App',
     viewport: 'width=device-width,initial-scale=1',
 })
+
+type LoaderData = {
+    user: User | Object
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+    const res = await getUser(request)
+    const user: User = res?.data
+    // console.log('user', user)
+    const data: LoaderData = {
+        user: user ? user : {},
+    }
+    return json(data)
+}
 
 interface DocumentProps {
     children: React.ReactNode
@@ -88,11 +111,14 @@ const theme = extendTheme({
 })
 
 export default function App() {
+    const { user } = useLoaderData<LoaderData>()
     return (
         <Document>
-            <ChakraProvider theme={theme}>
-                <Outlet />
-            </ChakraProvider>
+            <AuthProvider user={user}>
+                <ChakraProvider theme={theme}>
+                    <Outlet />
+                </ChakraProvider>
+            </AuthProvider>
         </Document>
     )
 }

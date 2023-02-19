@@ -113,12 +113,16 @@ export interface UserAvatar {
 }
 export interface User {
     id: number
-    username: string
+    name: string
     email: string
-    confirmed: boolean
-    blocked: boolean
-    role: UserRole
-    avatar: UserAvatar
+    phone: string
+    // role: UserRole
+    // avatar: UserAvatar
+}
+
+export interface LoginResponse {
+    access_token: string
+    user: User
 }
 
 export interface Sale {
@@ -134,4 +138,10 @@ export interface Sale {
 }
 export interface Sales {
     data: Sale[]
+}
+
+export interface ApiErrorResponse {
+    statusCode: number
+    message: string
+    error: string
 }

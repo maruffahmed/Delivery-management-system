@@ -1,101 +1,123 @@
-import type { MetaFunction } from '@remix-run/node'
-import React from 'react'
-import { Form, Link as RemixLink } from '@remix-run/react'
-import {
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    Input,
-    InputRightElement,
-    Button,
-    InputGroup,
-    Text,
-    Link,
-} from '@chakra-ui/react'
+import type {
+    ActionFunction,
+    LoaderFunction,
+    MetaFunction,
+} from '@remix-run/node'
+import type { ApiErrorResponse, LoginResponse } from '~/types'
+import { json, redirect } from '@remix-run/node'
+import { useActionData, useSearchParams, useTransition } from '@remix-run/react'
 import LoginRegLeftSide from '~/components/common/loginRegLeftSide'
+import validator from 'validator'
+import { createUserSession, getUserId, login } from '~/utils/session.server'
+import { validateUrl } from '~/utils'
+import LoginForm from '~/components/merchant/LoginForm'
+import Layout from '~/components/Layout'
 
 export const meta: MetaFunction = () => ({
     title: 'Login',
 })
+
+function validateEmail(email: unknown) {
+    if (typeof email !== 'string' || !validator.isEmail(email)) {
+        return `Invalid email address`
+    }
+}
+
+function validatePassword(password: unknown) {
+    if (typeof password !== 'string' || password.length < 6) {
+        return `Passwords must be at least 6 characters long`
+    }
+}
+
+export type ActionData = {
+    formError?: string
+    fieldErrors?: {
+        email?: string | undefined
+        password?: string | undefined
+    }
+    fields?: {
+        email?: string
+        password?: string
+    }
+}
+
+const badRequest = (data: ActionData) => json(data, { status: 400 })
+
+export const action: ActionFunction = async ({ request }) => {
+    const form = await request.formData()
+    const email = form.get('email')
+    const password = form.get('password')
+    const redirectTo = validateUrl(
+        (form.get('redirectTo') as string) || '/dashboard',
+    )
+    if (
+        typeof email !== 'string' ||
+        typeof password !== 'string' ||
+        typeof redirectTo !== 'string'
+    ) {
+        return badRequest({
+            formError: `Form not submitted correctly.`,
+        })
+    }
+
+    const fields = { email, password }
+    const fieldErrors = {
+        email: validateEmail(email),
+        password: validatePassword(password),
+    }
+    if (Object.values(fieldErrors).some(Boolean))
+        return badRequest({ fieldErrors, fields })
+
+    const user = await login({ email, password })
+    console.log({ user })
+    if (user && (user as ApiErrorResponse).message) {
+        return badRequest({
+            fields,
+            formError: (user as ApiErrorResponse).message,
+        })
+    } else if (!user) {
+        return badRequest({
+            fields,
+            formError: 'Something is wrong! Please try again.',
+        })
+    }
+    return createUserSession(
+        (user as LoginResponse).user.id,
+        (user as LoginResponse).access_token,
+        redirectTo,
+    )
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+    const userId = await getUserId(request)
+    if (userId) {
+        return redirect('/dashboard')
+    }
+    return null
+}
+
 function Login() {
-    const [show, setShow] = React.useState(false)
-    const handleClick = () => setShow(!show)
+    const actionData = useActionData<ActionData>()
+    const [searchParams] = useSearchParams()
+    const transition = useTransition()
+
     return (
-        <div className="h-screen md:flex">
-            <LoginRegLeftSide
-                title="Welcome!"
-                subtitle="Enter your email and password to login to the dashboard"
-            />
+        <Layout>
+            <div className="h-screen md:flex">
+                <LoginRegLeftSide
+                    title="Welcome!"
+                    subtitle="Enter your email and password to login to the dashboard"
+                />
 
-            <div className="flex md:w-1/2 justify-center py-10 items-center bg-white">
-                <Form className="w-3/4 lg:w-2/4">
-                    <label className="block text-sm">
-                        <FormControl isInvalid={false} isRequired>
-                            <FormLabel>Email</FormLabel>
-                            <Input
-                                type="email"
-                                placeholder="maruf@gmail.com"
-                                focusBorderColor="primary.500"
-                            />
-                            <FormErrorMessage>
-                                Email is required.
-                            </FormErrorMessage>
-                        </FormControl>
-                    </label>
-                    <label className="block mt-4 text-sm">
-                        <FormControl isInvalid={false} isRequired>
-                            <FormLabel>Password</FormLabel>
-                            <InputGroup size="md">
-                                <Input
-                                    type={show ? 'text' : 'password'}
-                                    placeholder="Enter password"
-                                    focusBorderColor="primary.500"
-                                />
-                                <InputRightElement width="4.5rem">
-                                    <Button
-                                        h="1.75rem"
-                                        size="sm"
-                                        onClick={handleClick}
-                                        variant="outline"
-                                        fontWeight="normal"
-                                    >
-                                        {show ? 'Hide' : 'Show'}
-                                    </Button>
-                                </InputRightElement>
-                            </InputGroup>
-                            <FormErrorMessage>
-                                Password is required.
-                            </FormErrorMessage>
-                        </FormControl>
-                    </label>
-
-                    {/* <!-- You should use a button here, as the anchor is only used for the example  --> */}
-
-                    <Button
-                        type="submit"
-                        variant="solid"
-                        colorScheme="primary"
-                        w="full"
-                        mt="10"
-                    >
-                        Log in
-                    </Button>
-
-                    <hr className="my-8" />
-
-                    <Text className="mt-4">
-                        <Link as={RemixLink} to="/" color="primary.700">
-                            Forgot your password?
-                        </Link>
-                    </Text>
-                    <p className="mt-1">
-                        <Link as={RemixLink} to="/register" color="primary.700">
-                            Create account
-                        </Link>
-                    </p>
-                </Form>
+                <div className="flex md:w-1/2 justify-center py-10 items-center bg-white">
+                    <LoginForm
+                        actionData={actionData}
+                        searchParams={searchParams}
+                        transition={transition}
+                    />
+                </div>
             </div>
-        </div>
+        </Layout>
     )
 }
 

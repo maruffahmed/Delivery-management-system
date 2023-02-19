@@ -7,7 +7,7 @@ import {
     Text,
 } from '@chakra-ui/react'
 import { Link as RemixLink } from '@remix-run/react'
-import OverViewCard from '~/components/dashboard/OverViewCard'
+import OverViewCard from '~/components/merchant/dashboard/OverViewCard'
 
 export const OrderSummary = [
     {

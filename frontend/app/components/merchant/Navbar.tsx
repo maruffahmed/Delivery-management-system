@@ -3,6 +3,13 @@ import {
     Text,
     Box,
     Flex,
+    Avatar,
+    Button,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+    MenuDivider,
     useDisclosure,
     useColorModeValue,
     Stack,
@@ -18,12 +25,10 @@ import {
     DrawerHeader,
     DrawerBody,
     Link,
-    Button,
-    Icon,
+    MenuGroup,
 } from '@chakra-ui/react'
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
 import { Link as RemixLink } from '@remix-run/react'
-import { BsFillTelephoneFill } from 'react-icons/bs'
 
 const Links = ['Dashboard', 'Parcels', 'Payments', 'Coupon']
 
@@ -42,7 +47,7 @@ const NavLink = ({ children }: { children: ReactNode }) => (
     </Link>
 )
 
-export default function Navbar() {
+export default function MerchantNav() {
     // const { colorMode, toggleColorMode } = useColorMode()
     const { isOpen, onOpen, onClose } = useDisclosure()
     return (
@@ -110,31 +115,14 @@ export default function Navbar() {
                                     display={{ base: 'none', md: 'flex' }}
                                     ml="auto"
                                 >
-                                    <Flex align="center" gap="2">
-                                        <Icon
-                                            as={BsFillTelephoneFill}
-                                            fontSize="2xl"
-                                            color="primary.500"
-                                        />{' '}
-                                        <Text as="span">CALL US</Text>
-                                        <Link
-                                            href="tel:09610007339"
-                                            color="primary.500"
-                                            fontWeight="bold"
-                                        >
-                                            09610007339
-                                        </Link>
-                                    </Flex>
+                                    {Links.map((link) => (
+                                        <NavLink key={link}>{link}</NavLink>
+                                    ))}
                                     <Button
                                         colorScheme="primary"
                                         fontWeight="normal"
-                                        variant="outline"
-                                        px="8"
-                                        size="lg"
-                                        as={RemixLink}
-                                        to="/login"
                                     >
-                                        Log in
+                                        Create Parcel
                                     </Button>
                                 </HStack>
                                 {/* <Button
@@ -147,6 +135,48 @@ export default function Navbar() {
                                         <SunIcon />
                                     )}
                                 </Button> */}
+
+                                <Menu>
+                                    <MenuButton
+                                        as={Button}
+                                        rounded={'full'}
+                                        variant={'link'}
+                                        cursor={'pointer'}
+                                        minW={0}
+                                    >
+                                        <Avatar
+                                            size={'sm'}
+                                            name="Maruf Ahmed"
+                                        />
+                                    </MenuButton>
+                                    <MenuList>
+                                        <MenuGroup title="Profile">
+                                            <MenuItem>My Shops</MenuItem>
+                                            <MenuItem>
+                                                Manage Pickup Location
+                                            </MenuItem>
+                                            <MenuItem>Shop Settings</MenuItem>
+                                            <MenuItem>Coverage Area</MenuItem>
+                                        </MenuGroup>
+                                        <MenuDivider />
+                                        <MenuGroup title="Help">
+                                            <MenuItem>Tutorial</MenuItem>
+                                            <MenuItem>FAQ</MenuItem>
+                                        </MenuGroup>
+                                        <MenuDivider />
+                                        <MenuGroup>
+                                            <Link
+                                                as={RemixLink}
+                                                to="/logout"
+                                                _hover={{
+                                                    textDecoration: 'unset',
+                                                }}
+                                            >
+                                                <MenuItem>Logout</MenuItem>
+                                            </Link>
+                                        </MenuGroup>
+                                    </MenuList>
+                                </Menu>
                             </Stack>
                         </Flex>
                     </Flex>
