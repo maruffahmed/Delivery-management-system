@@ -20,13 +20,20 @@ npm run setup
 
 #### Setup environment variable
 
-Set the following environment variable to `backend` directory. Also, an example file is given with the name of `.env example`:
+Set the following environment variable to `backend` directory. Also, an example file is given with the name of `.env.example`:
 
 ```
-DATABASE_URL="file:./dev.db"
+DATABASE_URL = "file:./dev.db"
+JWT_SECRET = 'ANYTHING_YOU_LIKE'
+BCRYPT_SALT_OR_ROUNDS = "10"
 ```
 
-You can set the avobe environment variable as it is for development server.
+Set the following environment variable to `frontend` directory. Also, an example file is given with the name of `.env.example`:
+
+```
+SESSION_SECRET = "dearMj"
+API_BASE_URL = "http://localhost:5000"
+```
 
 ### Database migration 💿
 
@@ -53,6 +60,7 @@ And frontend server will be run at http://localhost:3000
 
 -   [NodeJs](https://nodejs.org/en/) - Node.js® is an open-source, cross-platform JavaScript runtime environment.
 -   [NestJs](https://nestjs.com/) - A progressive Node.js framework for building efficient, reliable and scalable server-side applications.
+-   [Prisma](https://nestjs.com/) - Next-generation Node.js and TypeScript ORM
 -   [Remix](https://remix.run/) - Remix is a full stack web framework
 -   [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework packed with classes
 
