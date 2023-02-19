@@ -822,6 +822,16 @@ html {
     margin-bottom: 2rem;
 }
 
+.my-10 {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.my-20 {
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+}
+
 .mb-3 {
     margin-bottom: 0.75rem;
 }
@@ -836,6 +846,14 @@ html {
 
 .mt-6 {
     margin-top: 1.5rem;
+}
+
+.mt-10 {
+    margin-top: 2.5rem;
+}
+
+.mb-20 {
+    margin-bottom: 5rem;
 }
 
 .block {
@@ -860,6 +878,14 @@ html {
 
 .h-screen {
     height: 100vh;
+}
+
+.h-full {
+    height: 100%;
+}
+
+.min-h-screen {
+    min-height: 100vh;
 }
 
 .w-1\/2 {
@@ -902,6 +928,14 @@ html {
     overflow: hidden;
 }
 
+.overflow-y-auto {
+    overflow-y: auto;
+}
+
+.overflow-y-hidden {
+    overflow-y: hidden;
+}
+
 .overflow-y-scroll {
     overflow-y: scroll;
 }
@@ -936,12 +970,21 @@ html {
     padding-bottom: 2.5rem;
 }
 
+.py-20 {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
 .pb-20 {
     padding-bottom: 5rem;
 }
 
 .pt-32 {
     padding-top: 8rem;
+}
+
+.pt-20 {
+    padding-top: 5rem;
 }
 
 .font-sans {
@@ -1013,11 +1056,32 @@ html {
 }
 
 @media (min-width: 1024px) {
+    .lg\:h-screen {
+        height: 100vh;
+    }
+
     .lg\:w-2\/4 {
         width: 50%;
     }
 
     .lg\:w-3\/4 {
         width: 75%;
+    }
+}
+
+@media (min-width: 1280px) {
+    .xl\:h-screen {
+        height: 100vh;
+    }
+
+    .xl\:py-20 {
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+    }
+}
+
+@media (min-width: 1536px) {
+    .\32xl\:h-screen {
+        height: 100vh;
     }
 }

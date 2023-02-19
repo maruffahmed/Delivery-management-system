@@ -14,6 +14,10 @@ import {
     Link,
     Box,
     Spinner,
+    Alert,
+    AlertIcon,
+    AlertTitle,
+    AlertDescription,
 } from '@chakra-ui/react'
 
 function LoginForm({
@@ -29,6 +33,17 @@ function LoginForm({
     const handleClick = () => setShow(!show)
     return (
         <Form method="post" className="w-3/4 lg:w-2/4">
+            <Box id="form-error-message" mb="5">
+                {actionData?.formError ? (
+                    <Alert status="error" variant="left-accent">
+                        <AlertIcon />
+                        <AlertTitle>Error!</AlertTitle>
+                        <AlertDescription>
+                            {actionData.formError}
+                        </AlertDescription>
+                    </Alert>
+                ) : null}
+            </Box>
             <input
                 type="hidden"
                 name="redirectTo"
@@ -101,14 +116,6 @@ function LoginForm({
                     ) : null}
                 </FormErrorMessage>
             </FormControl>
-
-            <Box id="form-error-message">
-                {actionData?.formError ? (
-                    <Text color="red.600" mt="2" role="alert">
-                        {actionData.formError}
-                    </Text>
-                ) : null}
-            </Box>
 
             {/* <!-- You should use a button here, as the anchor is only used for the example  --> */}
 

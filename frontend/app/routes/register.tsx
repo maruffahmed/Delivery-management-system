@@ -1,4 +1,5 @@
 import {
+    Box,
     Button,
     FormControl,
     FormErrorMessage,
@@ -30,14 +31,14 @@ function Register() {
 
     return (
         <Layout>
-            <div className="h-screen md:flex">
+            <div className="md:flex">
                 <LoginRegLeftSide
                     title="Add your information"
                     subtitle="Please tell a bit about you and your business"
                 />
 
-                <div className="flex md:w-1/2 justify-center items-center bg-white overflow-auto overflow-y-scroll">
-                    <Form className="w-3/4 lg:w-3/4 pt-32 pb-20">
+                <Box className="flex md:w-1/2 justify-center items-center bg-white overflow-y-auto h-full">
+                    <Form className="w-3/4 lg:w-3/4 h-full py-10 xl:py-20">
                         <Text className="text-gray-700 mt-1 font-bold mb-3">
                             Personal Inforamtion
                         </Text>
@@ -254,7 +255,7 @@ function Register() {
                             </Link>
                         </Text>
                     </Form>
-                </div>
+                </Box>
             </div>
         </Layout>
     )
