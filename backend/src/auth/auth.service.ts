@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { Prisma, Shops, User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { RolesService } from 'src/roles/roles.service';
 import * as bcrypt from 'bcrypt';
 import { ConflictException } from '@nestjs/common/exceptions';
