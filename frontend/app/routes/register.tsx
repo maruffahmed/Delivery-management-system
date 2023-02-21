@@ -1,34 +1,149 @@
-import {
-    Box,
-    Button,
-    FormControl,
-    FormErrorMessage,
-    FormLabel,
-    Input,
-    InputGroup,
-    InputRightElement,
-    Link,
-    Select,
-    Text,
-} from '@chakra-ui/react'
-import React from 'react'
-import type { MetaFunction } from '@remix-run/node'
-import { Form, Link as RemixLink } from '@remix-run/react'
+import type { ApiErrorResponse } from '~/types'
+import type {
+    ActionFunction,
+    LoaderFunction,
+    MetaFunction,
+} from '@remix-run/node'
+import { redirect } from '@remix-run/node'
+import { Box } from '@chakra-ui/react'
 import LoginRegLeftSide from '~/components/common/loginRegLeftSide'
 import Layout from '~/components/Layout'
+import RegisterForm from '~/components/merchant/RegisterForm'
+import { validateEmail, validatePassword, badRequest } from '~/utils'
+import { getUserId, register } from '~/utils/session.server'
+import { useActionData, useTransition } from '@remix-run/react'
 
 export const meta: MetaFunction = () => ({
     title: 'Register',
 })
+
+function validateConfirmPassword({
+    password,
+    confirmPassword,
+}: {
+    password: string
+    confirmPassword: string
+}) {
+    if (password !== confirmPassword) return "Confirm Password didn't match"
+}
+
+export type ActionData = {
+    formError?: string
+    formSuccess?: {
+        message: string
+    }
+    fieldErrors?: {
+        name?: string | undefined
+        email?: string | undefined
+        phone?: string | undefined
+        password?: string | undefined
+        confirmPassword?: string | undefined
+        shopName?: string | undefined
+        shopEmail?: string | undefined
+        shopAddress?: string | undefined
+        shopProductType?: string | undefined
+        shopSubProductType?: string | undefined
+    }
+    fields?: {
+        name?: string
+        email?: string
+        phone?: string
+        password?: string
+        confirmPassword?: string
+        shopName?: string
+        shopEmail?: string
+        shopAddress?: string
+        shopProductType?: string
+        shopSubProductType?: string
+    }
+}
+
+export const action: ActionFunction = async ({ request }) => {
+    const form = await request.formData()
+    const name = form.get('fullName')
+    const email = form.get('email')
+    const phone = form.get('phone')
+    const shopName = form.get('shopName')
+    const shopEmail = form.get('shopEmail')
+    const shopAddress = form.get('shopAddress')
+    const shopProductType = form.get('productType')
+    const shopSubProductType = form.get('subProductType')
+    const password = form.get('password')
+    const confirmPassword = form.get('confirmPassword')
+    if (
+        typeof name !== 'string' ||
+        typeof email !== 'string' ||
+        typeof phone !== 'string' ||
+        typeof shopName !== 'string' ||
+        typeof shopEmail !== 'string' ||
+        typeof shopAddress !== 'string' ||
+        typeof shopProductType !== 'string' ||
+        typeof shopSubProductType !== 'string' ||
+        typeof password !== 'string' ||
+        typeof confirmPassword !== 'string'
+    ) {
+        return badRequest({
+            formError: `Form not submitted correctly.`,
+        })
+    }
+
+    const fields = {
+        name,
+        email,
+        phone,
+        shopName,
+        shopEmail,
+        shopAddress,
+        shopProductType,
+        shopSubProductType,
+        password,
+        confirmPassword,
+    }
+    const fieldErrors = {
+        email: validateEmail(email),
+        shopEmail: validateEmail(shopEmail),
+        password: validatePassword(password),
+        confirmPassword: validateConfirmPassword({ password, confirmPassword }),
+    }
+    if (Object.values(fieldErrors).some(Boolean))
+        return badRequest({ fieldErrors, fields })
+
+    const user = await register({
+        name,
+        email,
+        phone,
+        password,
+        shopName,
+        shopEmail,
+        shopAddress,
+        shopProductType,
+        shopSubProductType,
+    })
+    console.log({ user })
+    if (user && (user as ApiErrorResponse).message) {
+        return badRequest({
+            fields,
+            formError: (user as ApiErrorResponse).message,
+        })
+    } else if (!user) {
+        return badRequest({
+            fields,
+            formError: 'Something is wrong! Please try again.',
+        })
+    }
+    return { formSuccess: { message: 'Registration Successful' } } as ActionData
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+    const userId = await getUserId(request)
+    if (userId) {
+        return redirect('/dashboard')
+    }
+    return null
+}
 function Register() {
-    const [show, setShow] = React.useState(false)
-    const handleClick = () => setShow(!show)
-
-    const [pass, setPass] = React.useState('')
-    const [confirmPass, setConfirmPass] = React.useState('')
-
-    console.log('Confirm password', pass === confirmPass)
-
+    const actionData = useActionData<ActionData>()
+    const transition = useTransition()
     return (
         <Layout>
             <div className="md:flex">
@@ -38,223 +153,10 @@ function Register() {
                 />
 
                 <Box className="flex md:w-1/2 justify-center items-center bg-white overflow-y-auto h-full">
-                    <Form className="w-3/4 lg:w-3/4 h-full py-10 xl:py-20">
-                        <Text className="text-gray-700 mt-1 font-bold mb-3">
-                            Personal Inforamtion
-                        </Text>
-                        <div className="flex justify-between gap-6 mb-3">
-                            <FormControl isInvalid={false} isRequired>
-                                <FormLabel>Full Name</FormLabel>
-                                <Input
-                                    type="text"
-                                    name="fullName"
-                                    placeholder="Maruf Ahmed"
-                                    focusBorderColor="primary.500"
-                                />
-                                <FormErrorMessage>
-                                    Name is required.
-                                </FormErrorMessage>
-                            </FormControl>
-                            <FormControl isInvalid={false} isRequired>
-                                <FormLabel>Email</FormLabel>
-                                <Input
-                                    type="email"
-                                    name="userEmail"
-                                    placeholder="jane@gmail.com"
-                                    focusBorderColor="primary.500"
-                                />
-                                <FormErrorMessage>
-                                    Email is required.
-                                </FormErrorMessage>
-                            </FormControl>
-                        </div>
-
-                        <div className="flex justify-between gap-6 mb-3">
-                            <FormControl isInvalid={false} isRequired>
-                                <FormLabel>Phone Number</FormLabel>
-                                <Input
-                                    type="tel"
-                                    name="userPhone"
-                                    placeholder="+8801234678910"
-                                    focusBorderColor="primary.500"
-                                />
-                                <FormErrorMessage>
-                                    Phone number is required.
-                                </FormErrorMessage>
-                            </FormControl>
-                        </div>
-
-                        <Text className="text-gray-700 font-bold mt-6">
-                            Shop Information
-                        </Text>
-                        <Text as="small" className="text-gray-700 mb-3 block">
-                            If you have more thant one busines, you can create
-                            multiple shops later
-                        </Text>
-                        <div className="flex justify-between gap-6 mb-3">
-                            <FormControl isInvalid={false} isRequired>
-                                <FormLabel>Shop Name</FormLabel>
-                                <Input
-                                    type="text"
-                                    name="shopName"
-                                    placeholder="Shop Name"
-                                    focusBorderColor="primary.500"
-                                />
-                                <FormErrorMessage>
-                                    Shop name is required.
-                                </FormErrorMessage>
-                            </FormControl>
-                            <FormControl isInvalid={false} isRequired>
-                                <FormLabel>Shop Email</FormLabel>
-                                <Input
-                                    type="email"
-                                    name="shopEmail"
-                                    placeholder="Email address"
-                                    focusBorderColor="primary.500"
-                                />
-                                <FormErrorMessage>
-                                    Shop email is required.
-                                </FormErrorMessage>
-                            </FormControl>
-                        </div>
-                        <div className="flex justify-between gap-6 mb-3">
-                            <FormControl isInvalid={false} isRequired>
-                                <FormLabel>Shop Address</FormLabel>
-                                <Input
-                                    type="text"
-                                    name="shopAddress"
-                                    placeholder="Shop Address"
-                                    focusBorderColor="primary.500"
-                                />
-                                <FormErrorMessage>
-                                    Shop address is required.
-                                </FormErrorMessage>
-                            </FormControl>
-
-                            <FormControl isInvalid={false} isRequired>
-                                <FormLabel>Product Type</FormLabel>
-                                <Select
-                                    placeholder="Choose product type"
-                                    name="productType"
-                                    focusBorderColor="primary.500"
-                                >
-                                    <option value="book">Book</option>
-                                    <option value="electronics">
-                                        Electronics
-                                    </option>
-                                </Select>
-                                <FormErrorMessage>
-                                    Product type is required.
-                                </FormErrorMessage>
-                            </FormControl>
-                        </div>
-
-                        <div className="flex justify-between gap-6 mb-3">
-                            <FormControl isInvalid={false} isRequired>
-                                <FormLabel>Product Sub Category Type</FormLabel>
-                                <Select
-                                    placeholder="Choose sub Category type"
-                                    name="subProductType"
-                                    focusBorderColor="primary.500"
-                                >
-                                    <option value="history">History</option>
-                                    <option value="computers">Computers</option>
-                                </Select>
-                                <FormErrorMessage>
-                                    Sub product type is required.
-                                </FormErrorMessage>
-                            </FormControl>
-                        </div>
-
-                        <p className="text-gray-700 font-bold mt-6 mb-3">
-                            Create Password
-                        </p>
-                        <div className="flex justify-between gap-6 mb-3">
-                            <FormControl isInvalid={false} isRequired>
-                                <FormLabel>Password</FormLabel>
-                                <InputGroup size="md">
-                                    <Input
-                                        type={show ? 'text' : 'password'}
-                                        name="password"
-                                        placeholder="Enter password"
-                                        focusBorderColor="primary.500"
-                                        onChange={(e) =>
-                                            setPass(e.target.value)
-                                        }
-                                    />
-                                    <InputRightElement width="4.5rem">
-                                        <Button
-                                            h="1.75rem"
-                                            size="sm"
-                                            onClick={handleClick}
-                                            variant="outline"
-                                            fontWeight="normal"
-                                        >
-                                            {show ? 'Hide' : 'Show'}
-                                        </Button>
-                                    </InputRightElement>
-                                </InputGroup>
-                                <FormErrorMessage>
-                                    Password is required.
-                                </FormErrorMessage>
-                            </FormControl>
-
-                            <FormControl
-                                isInvalid={pass !== confirmPass}
-                                isRequired
-                            >
-                                <FormLabel>Confirm Password</FormLabel>
-                                <InputGroup size="md">
-                                    <Input
-                                        type={show ? 'text' : 'password'}
-                                        name="confirmPassword"
-                                        placeholder="Confirm Password"
-                                        focusBorderColor="primary.500"
-                                        onChange={(e) =>
-                                            setConfirmPass(e.target.value)
-                                        }
-                                    />
-                                    <InputRightElement width="4.5rem">
-                                        <Button
-                                            h="1.75rem"
-                                            size="sm"
-                                            onClick={handleClick}
-                                            variant="outline"
-                                            fontWeight="normal"
-                                        >
-                                            {show ? 'Hide' : 'Show'}
-                                        </Button>
-                                    </InputRightElement>
-                                </InputGroup>
-                                <FormErrorMessage>
-                                    {pass !== confirmPass
-                                        ? "Password didn't match"
-                                        : 'Please confirm your password'}
-                                </FormErrorMessage>
-                            </FormControl>
-                        </div>
-
-                        {/* <!-- You should use a button here, as the anchor is only used for the example  --> */}
-                        <Button
-                            type="submit"
-                            variant="solid"
-                            colorScheme="primary"
-                            w="full"
-                            mt="5"
-                        >
-                            Sign up
-                        </Button>
-                        <Text mt="5">
-                            Already have account?{' '}
-                            <Link
-                                as={RemixLink}
-                                to="/login"
-                                color="primary.700"
-                            >
-                                Login
-                            </Link>
-                        </Text>
-                    </Form>
+                    <RegisterForm
+                        actionData={actionData}
+                        transition={transition}
+                    />
                 </Box>
             </div>
         </Layout>

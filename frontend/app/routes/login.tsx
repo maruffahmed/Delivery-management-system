@@ -4,30 +4,22 @@ import type {
     MetaFunction,
 } from '@remix-run/node'
 import type { ApiErrorResponse, LoginResponse } from '~/types'
-import { json, redirect } from '@remix-run/node'
+import { redirect } from '@remix-run/node'
 import { useActionData, useSearchParams, useTransition } from '@remix-run/react'
 import LoginRegLeftSide from '~/components/common/loginRegLeftSide'
-import validator from 'validator'
 import { createUserSession, getUserId, login } from '~/utils/session.server'
-import { validateUrl } from '~/utils'
+import {
+    badRequest,
+    validateEmail,
+    validatePassword,
+    validateUrl,
+} from '~/utils'
 import LoginForm from '~/components/merchant/LoginForm'
 import Layout from '~/components/Layout'
 
 export const meta: MetaFunction = () => ({
     title: 'Login',
 })
-
-function validateEmail(email: unknown) {
-    if (typeof email !== 'string' || !validator.isEmail(email)) {
-        return `Invalid email address`
-    }
-}
-
-function validatePassword(password: unknown) {
-    if (typeof password !== 'string' || password.length < 6) {
-        return `Passwords must be at least 6 characters long`
-    }
-}
 
 export type ActionData = {
     formError?: string
@@ -40,8 +32,6 @@ export type ActionData = {
         password?: string
     }
 }
-
-const badRequest = (data: ActionData) => json(data, { status: 400 })
 
 export const action: ActionFunction = async ({ request }) => {
     const form = await request.formData()

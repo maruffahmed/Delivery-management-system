@@ -1,6 +1,6 @@
 import { createCookieSessionStorage, redirect } from '@remix-run/node'
 import { AxiosError } from 'axios'
-import type { ApiErrorResponse, LoginResponse } from '~/types'
+import type { ApiErrorResponse, LoginResponse, User } from '~/types'
 import axios from '~/utils/axios'
 
 type LoginForm = {
@@ -26,6 +26,52 @@ export async function login({
         return null
     }
     // return { id: user.id, username }
+}
+
+type RegistrationForm = {
+    name: string
+    email: string
+    phone: string
+    password: string
+    shopName: string
+    shopEmail: string
+    shopAddress: string
+    shopProductType: string
+    shopSubProductType: string
+}
+export async function register(
+    regFormData: RegistrationForm,
+): Promise<User | ApiErrorResponse | null> {
+    const {
+        name,
+        email,
+        phone,
+        password,
+        shopName,
+        shopEmail,
+        shopAddress,
+        shopProductType,
+        shopSubProductType,
+    } = regFormData
+    try {
+        const user = await axios.post('/auth/merchant/register', {
+            name,
+            email,
+            phone,
+            password,
+            shopName,
+            shopEmail,
+            shopAddress,
+            shopProductType,
+            shopSubProductType,
+        })
+        return user.data
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            return error.response?.data
+        }
+        return null
+    }
 }
 
 const sessionSecret = process.env.SESSION_SECRET

@@ -27,10 +27,15 @@ function LoginForm({
 }: {
     actionData: ActionData | undefined
     searchParams: URLSearchParams
-    transition: Pick<Transition, 'state'>
+    transition: Pick<Transition, 'state' | 'submission'>
 }) {
     const [show, setShow] = React.useState(false)
     const handleClick = () => setShow(!show)
+
+    const isSubmitting =
+        transition.state === 'submitting' &&
+        transition.submission?.formData.get('_action') === 'login'
+
     return (
         <Form method="post" className="w-3/4 lg:w-2/4">
             <Box id="form-error-message" mb="5">
@@ -125,9 +130,11 @@ function LoginForm({
                 colorScheme="primary"
                 w="full"
                 mt="10"
-                disabled={transition.state === 'submitting'}
+                name="_action"
+                value="login"
+                disabled={isSubmitting}
             >
-                {transition.state !== 'idle' ? <Spinner /> : 'Log in'}
+                {isSubmitting ? <Spinner /> : 'Log in'}
             </Button>
 
             <hr className="my-8" />
