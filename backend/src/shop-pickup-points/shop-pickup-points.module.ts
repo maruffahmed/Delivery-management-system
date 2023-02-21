@@ -6,5 +6,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Module({
   providers: [ShopPickupPointsService, PrismaService],
   controllers: [ShopPickupPointsController],
+  exports: [ShopPickupPointsService],
 })
 export class ShopPickupPointsModule {}

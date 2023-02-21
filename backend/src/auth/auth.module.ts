@@ -8,11 +8,15 @@ import { UsersModule } from 'src/users/users.module';
 import { jwtConstants } from './constants';
 import { AuthController } from './auth.controller';
 import { RolesModule } from 'src/roles/roles.module';
+import { ShopsModule } from 'src/shops/shops.module';
+import { ShopPickupPointsModule } from 'src/shop-pickup-points/shop-pickup-points.module';
 
 @Module({
   imports: [
     UsersModule,
     RolesModule,
+    ShopsModule,
+    ShopPickupPointsModule,
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,

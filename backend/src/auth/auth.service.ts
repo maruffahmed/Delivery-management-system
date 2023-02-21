@@ -1,10 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { Prisma, User } from '@prisma/client';
+import { Prisma, Shops, User } from '@prisma/client';
 import { RolesService } from 'src/roles/roles.service';
 import * as bcrypt from 'bcrypt';
 import { ConflictException } from '@nestjs/common/exceptions';
+import { CreateUserDto } from 'src/users/dto/users.dto';
+import { ShopsService } from 'src/shops/shops.service';
+import { ShopPickupPointsService } from 'src/shop-pickup-points/shop-pickup-points.service';
 
 @Injectable()
 export class AuthService {
@@ -13,8 +16,11 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private rolesService: RolesService,
+    private shopsService: ShopsService,
+    private shopPickupPointsService: ShopPickupPointsService,
   ) {}
 
+  // Validate user with username(Email) and password
   async validateUser(
     email: string,
     pass: string,
@@ -38,6 +44,7 @@ export class AuthService {
     }
   }
 
+  // Login user and return access token
   async login(user: any) {
     const payload = {
       sub: user.id,
@@ -50,23 +57,27 @@ export class AuthService {
     };
   }
 
-  async merchantRegister(
-    data: Prisma.UserCreateInput,
-  ): Promise<Omit<User, 'password'>> {
+  // Create new merchant with a new shop and pickup point
+  async merchantRegister(data: CreateUserDto): Promise<Omit<User, 'password'>> {
     try {
-      const { password } = data;
+      const { name, email, phone, password } = data;
       // Encrypt the password
       const hash = await bcrypt.hash(password, parseInt(this.saltRounds));
 
+      // Create new user
       const _user = await this.usersService.createUser({
-        ...data,
+        name,
+        email,
+        phone,
         password: hash,
       });
 
+      // Find the metchant role by name
       const role = await this.rolesService.roleDetail({
         name: 'merchant',
       });
 
+      // Create a merchant role for the new user
       await this.rolesService.createRole({
         user: { connect: { id: _user.id } },
         role: {
@@ -76,6 +87,40 @@ export class AuthService {
         },
       });
 
+      // TODO : Create a new shop
+      const {
+        shopName,
+        shopAddress,
+        shopEmail,
+        shopProductType,
+        shopSubProductType,
+      } = data;
+      const _shop = await this.shopsService.createShop({
+        name: shopName,
+        email: shopEmail,
+        address: shopAddress,
+        productType: shopProductType,
+        productSubType: shopSubProductType,
+        user: {
+          connect: {
+            id: _user.id,
+          },
+        },
+      });
+      // TODO : Create a new shop pickup point
+      await this.shopPickupPointsService.createPickUpPoint({
+        name: _shop.address,
+        address: _shop.address,
+        area: _shop.address,
+        phone: _user.phone,
+        shops: {
+          connect: {
+            id: _shop.id,
+          },
+        },
+      });
+
+      // Find the created user and return without the password
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password: pass, ...user } = await this.usersService.user(
         {
@@ -89,19 +134,22 @@ export class AuthService {
                 role: true,
               },
             },
+            shops: true,
           },
         },
       );
-
       return user;
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         // The .code property can be accessed in a type-safe manner
         if (e.code === 'P2002') {
-          throw new ConflictException('Email address already exist');
+          throw new ConflictException('User email address already exist');
         }
       }
-      throw new BadRequestException();
+      if (e instanceof Prisma.PrismaClientValidationError) {
+        throw new BadRequestException(e.message);
+      }
+      // console.log('error ', e);
     }
   }
 }
