@@ -6,7 +6,6 @@ export const classNames = (...classes: (string | undefined | null)[]) => {
 }
 
 export function validateUrl(url: string) {
-    console.log(url)
     let urls = [
         '/dashboard',
         '/products',

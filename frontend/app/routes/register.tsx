@@ -119,7 +119,6 @@ export const action: ActionFunction = async ({ request }) => {
         shopProductType,
         shopSubProductType,
     })
-    console.log({ user })
     if (user && (user as ApiErrorResponse).message) {
         return badRequest({
             fields,

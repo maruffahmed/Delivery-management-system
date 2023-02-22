@@ -102,7 +102,7 @@ function RegisterForm({
                 Personal Inforamtion
             </Text>
             <div className="flex justify-between gap-6 mb-3">
-                <FormControl isInvalid={false} isRequired>
+                <FormControl isRequired>
                     <FormLabel>Full Name</FormLabel>
                     <Input
                         type="text"
@@ -110,7 +110,6 @@ function RegisterForm({
                         placeholder="Maruf Ahmed"
                         focusBorderColor="primary.500"
                     />
-                    <FormErrorMessage>Name is required.</FormErrorMessage>
                 </FormControl>
                 <FormControl
                     isInvalid={
@@ -140,7 +139,7 @@ function RegisterForm({
             </div>
 
             <div className="flex justify-between gap-6 mb-3">
-                <FormControl isInvalid={false} isRequired>
+                <FormControl isRequired>
                     <FormLabel>Phone Number</FormLabel>
                     <Input
                         type="tel"
@@ -148,9 +147,6 @@ function RegisterForm({
                         placeholder="+8801234678910"
                         focusBorderColor="primary.500"
                     />
-                    <FormErrorMessage>
-                        Phone number is required.
-                    </FormErrorMessage>
                 </FormControl>
             </div>
 
@@ -162,7 +158,7 @@ function RegisterForm({
                 shops later
             </Text>
             <div className="flex justify-between gap-6 mb-3">
-                <FormControl isInvalid={false} isRequired>
+                <FormControl isRequired>
                     <FormLabel>Shop Name</FormLabel>
                     <Input
                         type="text"
@@ -171,7 +167,6 @@ function RegisterForm({
                         focusBorderColor="primary.500"
                         defaultValue="maurf shop"
                     />
-                    <FormErrorMessage>Shop name is required.</FormErrorMessage>
                 </FormControl>
                 <FormControl
                     isInvalid={
@@ -203,7 +198,7 @@ function RegisterForm({
                 </FormControl>
             </div>
             <div className="flex justify-between gap-6 mb-3">
-                <FormControl isInvalid={false} isRequired>
+                <FormControl isRequired>
                     <FormLabel>Shop Address</FormLabel>
                     <Input
                         type="text"
@@ -212,12 +207,9 @@ function RegisterForm({
                         focusBorderColor="primary.500"
                         defaultValue="Sector #10, Uttara, Dhaka"
                     />
-                    <FormErrorMessage>
-                        Shop address is required.
-                    </FormErrorMessage>
                 </FormControl>
 
-                <FormControl isInvalid={false} isRequired>
+                <FormControl isRequired>
                     <FormLabel>Product Type</FormLabel>
                     <Select
                         placeholder="Choose product type"
@@ -228,14 +220,11 @@ function RegisterForm({
                         <option value="book">Book</option>
                         <option value="electronics">Electronics</option>
                     </Select>
-                    <FormErrorMessage>
-                        Product type is required.
-                    </FormErrorMessage>
                 </FormControl>
             </div>
 
             <div className="flex justify-between gap-6 mb-3">
-                <FormControl isInvalid={false} isRequired>
+                <FormControl isRequired>
                     <FormLabel>Product Sub Category Type</FormLabel>
                     <Select
                         placeholder="Choose sub Category type"
@@ -246,9 +235,6 @@ function RegisterForm({
                         <option value="history">History</option>
                         <option value="computers">Computers</option>
                     </Select>
-                    <FormErrorMessage>
-                        Sub product type is required.
-                    </FormErrorMessage>
                 </FormControl>
             </div>
 

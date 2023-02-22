@@ -107,7 +107,8 @@ export async function getUserId(request: Request) {
 export async function getUserToken(request: Request) {
     const session = await getUserSession(request)
     const access_token = session.get('access_token')
-    if (!access_token || typeof access_token !== 'string') return null
+    if (!access_token || typeof access_token !== 'string')
+        return logout(request)
     return access_token
 }
 export async function requireUserId(
@@ -127,7 +128,6 @@ export async function requireUserId(
 
 export async function getUser(request: Request) {
     const access_token = await getUserToken(request)
-    console.log('getUser', access_token)
     if (typeof access_token !== 'string') {
         return null
     }

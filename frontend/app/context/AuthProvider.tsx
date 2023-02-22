@@ -16,7 +16,7 @@ function AuthProvider({
 
 export const useAuthProvider = () => {
     const context = React.useContext(AuthContext) as User
-    console.log('context', context)
+    // console.log('context', context)
     if (!context) {
         throw new Error('useAuthProvider must be used within a AuthProvider')
     }

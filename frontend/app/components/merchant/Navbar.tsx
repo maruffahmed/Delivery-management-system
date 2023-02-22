@@ -30,9 +30,14 @@ import {
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
 import { Link as RemixLink } from '@remix-run/react'
 
-const Links = ['Dashboard', 'Parcels', 'Payments', 'Coupon']
+const Links = [
+    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Parcels', href: '/parcel-list' },
+    { title: 'Payments', href: '/payments-list' },
+    { title: 'Coupon', href: '/coupon-list' },
+]
 
-const NavLink = ({ children }: { children: ReactNode }) => (
+const NavLink = ({ children, href }: { children: ReactNode; href: string }) => (
     <Link
         px={2}
         py={1}
@@ -41,7 +46,7 @@ const NavLink = ({ children }: { children: ReactNode }) => (
             textDecoration: 'none',
             bg: useColorModeValue('gray.200', 'gray.700'),
         }}
-        href={'#'}
+        href={href}
     >
         {children}
     </Link>
@@ -116,7 +121,12 @@ export default function MerchantNav() {
                                     ml="auto"
                                 >
                                     {Links.map((link) => (
-                                        <NavLink key={link}>{link}</NavLink>
+                                        <NavLink
+                                            key={link.title}
+                                            href={link.href}
+                                        >
+                                            {link.title}
+                                        </NavLink>
                                     ))}
                                     <Button
                                         colorScheme="primary"
@@ -151,17 +161,41 @@ export default function MerchantNav() {
                                     </MenuButton>
                                     <MenuList>
                                         <MenuGroup title="Profile">
-                                            <MenuItem>My Shops</MenuItem>
-                                            <MenuItem>
+                                            <MenuItem
+                                                _focus={{ bg: 'primary.50' }}
+                                                as={RemixLink}
+                                                to="/shop-list"
+                                            >
+                                                My Shops
+                                            </MenuItem>
+                                            <MenuItem
+                                                _focus={{ bg: 'primary.50' }}
+                                            >
                                                 Manage Pickup Location
                                             </MenuItem>
-                                            <MenuItem>Shop Settings</MenuItem>
-                                            <MenuItem>Coverage Area</MenuItem>
+                                            <MenuItem
+                                                _focus={{ bg: 'primary.50' }}
+                                            >
+                                                Shop Settings
+                                            </MenuItem>
+                                            <MenuItem
+                                                _focus={{ bg: 'primary.50' }}
+                                            >
+                                                Coverage Area
+                                            </MenuItem>
                                         </MenuGroup>
                                         <MenuDivider />
                                         <MenuGroup title="Help">
-                                            <MenuItem>Tutorial</MenuItem>
-                                            <MenuItem>FAQ</MenuItem>
+                                            <MenuItem
+                                                _focus={{ bg: 'primary.50' }}
+                                            >
+                                                Tutorial
+                                            </MenuItem>
+                                            <MenuItem
+                                                _focus={{ bg: 'primary.50' }}
+                                            >
+                                                FAQ
+                                            </MenuItem>
                                         </MenuGroup>
                                         <MenuDivider />
                                         <MenuGroup>
@@ -172,7 +206,13 @@ export default function MerchantNav() {
                                                     textDecoration: 'unset',
                                                 }}
                                             >
-                                                <MenuItem>Logout</MenuItem>
+                                                <MenuItem
+                                                    _focus={{
+                                                        bg: 'primary.50',
+                                                    }}
+                                                >
+                                                    Logout
+                                                </MenuItem>
                                             </Link>
                                         </MenuGroup>
                                     </MenuList>
@@ -189,7 +229,7 @@ export default function MerchantNav() {
                             <Box>
                                 <Heading fontWeight="extrabold">
                                     RED
-                                    <Text color="red" display="inline">
+                                    <Text color="primary.500" display="inline">
                                         X
                                     </Text>
                                 </Heading>
@@ -199,7 +239,9 @@ export default function MerchantNav() {
                         <DrawerBody>
                             <Stack as={'nav'} spacing={4}>
                                 {Links.map((link) => (
-                                    <NavLink key={link}>{link}</NavLink>
+                                    <NavLink key={link.title} href={link.href}>
+                                        {link.title}
+                                    </NavLink>
                                 ))}
                             </Stack>
                         </DrawerBody>

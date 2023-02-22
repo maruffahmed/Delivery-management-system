@@ -59,7 +59,6 @@ export const action: ActionFunction = async ({ request }) => {
         return badRequest({ fieldErrors, fields })
 
     const user = await login({ email, password })
-    console.log({ user })
     if (user && (user as ApiErrorResponse).message) {
         return badRequest({
             fields,

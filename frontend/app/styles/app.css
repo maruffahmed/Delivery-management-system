@@ -842,12 +842,24 @@ html {
     display: block;
 }
 
+.inline-block {
+    display: inline-block;
+}
+
 .inline {
     display: inline;
 }
 
 .flex {
     display: flex;
+}
+
+.grid {
+    display: grid;
+}
+
+.contents {
+    display: contents;
 }
 
 .hidden {
@@ -916,6 +928,10 @@ html {
 
 .border-4 {
     border-width: 4px;
+}
+
+.border {
+    border-width: 1px;
 }
 
 .border-t-8 {
