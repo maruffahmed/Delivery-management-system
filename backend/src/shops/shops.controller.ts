@@ -23,12 +23,13 @@ export class ShopsController {
   // GET /shops
   @Get()
   @UseGuards(JwtAuthGuard)
-  async getShops(@Request() req): Promise<Shops[]> {
-    return this.shopsService.shops({
+  async getShops(@Request() req): Promise<{ data: Shops[] }> {
+    const shops = await this.shopsService.shops({
       where: {
         userId: req.user.id,
       },
     });
+    return { data: shops };
   }
 
   // GET /shops/1

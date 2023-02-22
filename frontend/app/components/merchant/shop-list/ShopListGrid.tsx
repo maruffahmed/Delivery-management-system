@@ -1,3 +1,4 @@
+import type { Shops } from '~/types'
 import {
     Card,
     CardBody,
@@ -13,14 +14,10 @@ import {
 } from '@chakra-ui/react'
 import { BsFillPlusCircleFill } from 'react-icons/bs'
 import { RiPencilLine } from 'react-icons/ri'
+import { useShopProvider } from '~/context/ShopProvider'
 
-function ShopListGrid({
-    shops,
-    onOpen,
-}: {
-    shops: Array<any>
-    onOpen: () => void
-}) {
+function ShopListGrid({ shops, onOpen }: { shops: Shops; onOpen: () => void }) {
+    const { activeShop, storeActiveShop } = useShopProvider()
     return (
         <SimpleGrid
             columns={{ sm: 2, md: 3, lg: 4 }}
@@ -45,9 +42,19 @@ function ShopListGrid({
                 </Flex>
             </Center>
 
-            {shops.length
-                ? shops.map((shop) => (
-                      <Card variant="outline" key={shop.id}>
+            {shops.data.length
+                ? shops.data.map((shop) => (
+                      <Card
+                          variant="outline"
+                          key={shop.id}
+                          borderColor={
+                              activeShop?.id === shop.id
+                                  ? 'primary.500'
+                                  : 'gray.200'
+                          }
+                          cursor="pointer"
+                          onClick={() => storeActiveShop(shop)}
+                      >
                           <CardHeader>
                               <Heading size="md"> {shop.name}</Heading>
                           </CardHeader>

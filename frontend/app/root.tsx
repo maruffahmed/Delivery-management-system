@@ -22,6 +22,7 @@ import { withEmotionCache } from '@emotion/react'
 import { baseTheme, ChakraProvider, extendTheme } from '@chakra-ui/react'
 import AuthProvider from './context/AuthProvider'
 import { getUser } from './utils/session.server'
+import ShopProvider from './context/ShopProvider'
 
 export const links: LinksFunction = () => {
     return [{ rel: 'stylesheet', href: styles }]
@@ -115,9 +116,11 @@ export default function App() {
     return (
         <Document>
             <AuthProvider user={user}>
-                <ChakraProvider theme={theme}>
-                    <Outlet />
-                </ChakraProvider>
+                <ShopProvider>
+                    <ChakraProvider theme={theme}>
+                        <Outlet />
+                    </ChakraProvider>
+                </ShopProvider>
             </AuthProvider>
         </Document>
     )

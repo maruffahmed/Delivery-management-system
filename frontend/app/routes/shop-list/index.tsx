@@ -11,25 +11,29 @@ import { useActionData, useLoaderData } from '@remix-run/react'
 import ShopListGrid from '~/components/merchant/shop-list/ShopListGrid'
 import { badRequest, validateEmail } from '~/utils'
 import AddShopDrawer from '~/components/merchant/shop-list/AddShopDrawer'
+import type { Shops } from '~/types'
+import React from 'react'
+import { useShopProvider } from '~/context/ShopProvider'
 
 export const meta: MetaFunction = () => ({
     title: 'Shop list',
 })
 
 export type LoaderData = {
-    shops: Array<any>
+    shops: Shops
 }
 export const loader: LoaderFunction = async ({
     request,
 }): Promise<LoaderData> => {
     const access_token = await getUserToken(request)
     // console.log('access_token', access_token)
-    const shops = await axios.get('/shops', {
+    const res = await axios.get('/shops', {
         headers: {
             Authorization: `Bearer ${access_token}`,
         },
     })
-    return { shops: shops.data }
+    const shops = res.data as Shops
+    return { shops }
 }
 
 export type ActionData = {
@@ -100,14 +104,21 @@ export const action: ActionFunction = async ({ request }) => {
     )
     return json({
         formSuccess: { message: 'Shop created successful' },
+        shops: shops.data,
     })
 }
 
 function Index() {
+    const { storeShops } = useShopProvider()
     const { shops } = useLoaderData<LoaderData>()
     const actionData = useActionData<ActionData>()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
+    React.useEffect(() => {
+        if (shops) {
+            storeShops(shops)
+        }
+    }, [shops, storeShops])
     return (
         <Container maxW="container.xl" py="8">
             <Heading

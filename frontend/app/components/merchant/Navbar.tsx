@@ -29,6 +29,7 @@ import {
 } from '@chakra-ui/react'
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
 import { Link as RemixLink } from '@remix-run/react'
+import { useShopProvider } from '~/context/ShopProvider'
 
 const Links = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -53,6 +54,7 @@ const NavLink = ({ children, href }: { children: ReactNode; href: string }) => (
 )
 
 export default function MerchantNav() {
+    const { activeShop, resetShopProvider } = useShopProvider()
     // const { colorMode, toggleColorMode } = useColorMode()
     const { isOpen, onOpen, onClose } = useDisclosure()
     return (
@@ -154,10 +156,14 @@ export default function MerchantNav() {
                                         cursor={'pointer'}
                                         minW={0}
                                     >
-                                        <Avatar
-                                            size={'sm'}
-                                            name="Maruf Ahmed"
-                                        />
+                                        {activeShop ? (
+                                            <Avatar
+                                                size={'sm'}
+                                                name={activeShop.name}
+                                            />
+                                        ) : (
+                                            <Avatar size={'sm'} />
+                                        )}
                                     </MenuButton>
                                     <MenuList>
                                         <MenuGroup title="Profile">
@@ -205,6 +211,7 @@ export default function MerchantNav() {
                                                 _hover={{
                                                     textDecoration: 'unset',
                                                 }}
+                                                onClick={resetShopProvider}
                                             >
                                                 <MenuItem
                                                     _focus={{
