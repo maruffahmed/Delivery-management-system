@@ -1,3 +1,4 @@
+import type { ShopLoaderData } from '../shop-list/index'
 import type { LoaderFunction } from '@remix-run/node'
 import {
     Box,
@@ -6,14 +7,16 @@ import {
     SimpleGrid,
     Link,
     Text,
+    Alert,
+    AlertIcon,
+    AlertTitle,
+    AlertDescription,
 } from '@chakra-ui/react'
 import { Link as RemixLink, useLoaderData } from '@remix-run/react'
 import OverViewCard from '~/components/merchant/dashboard/OverViewCard'
-import type { Shops } from '~/types'
-import { getUserToken } from '~/utils/session.server'
-import axios from '~/utils/axios'
 import { useShopProvider } from '~/context/ShopProvider'
 import React from 'react'
+import { getShops } from '~/utils/merchant/shops'
 
 export const OrderSummary = [
     {
@@ -90,45 +93,43 @@ export const PaymentSummary = [
             'Total sum of parcels that have been created and picked up by REDX',
     },
 ]
-export type LoaderData = {
-    shops: Shops
-}
 export const loader: LoaderFunction = async ({
     request,
-}): Promise<LoaderData> => {
-    const access_token = await getUserToken(request)
-    // console.log('access_token', access_token)
-    const res = await axios.get('/shops', {
-        headers: {
-            Authorization: `Bearer ${access_token}`,
-        },
-    })
-    const shops = res.data as Shops
-    return { shops }
+}): Promise<ShopLoaderData> => {
+    try {
+        const shops = await getShops(request)
+        return { shops }
+    } catch (error) {
+        return {
+            error: 'Something is wrong. Please reload the browser.',
+            shops: { data: [] },
+        } as ShopLoaderData
+    }
 }
 function Dashboard() {
-    const { shops } = useLoaderData<LoaderData>()
-    const { storeShops, activeShop, storeActiveShop } = useShopProvider()
+    const { shops, error } = useLoaderData<ShopLoaderData>()
+    const { activeShop, storeActiveShop, resetShopProvider } = useShopProvider()
 
     React.useEffect(() => {
-        storeShops(shops)
         if (shops.data.length) {
             if (!activeShop) {
-                window.localStorage.setItem(
-                    'xshop',
-                    JSON.stringify(shops.data[0]),
-                )
                 storeActiveShop(shops.data[0])
             }
-            // storeActiveShop(shops.data[0])
         } else {
-            storeActiveShop(null)
+            resetShopProvider()
         }
-    }, [storeActiveShop, storeShops, shops, activeShop])
+    }, [storeActiveShop, shops, activeShop, resetShopProvider])
 
     return (
         <Box bg="whitesmoke" minH="100vh">
             <Container maxW="container.xl" py="8">
+                {error && (
+                    <Alert status="error" variant="left-accent" my="5">
+                        <AlertIcon />
+                        <AlertTitle>Error!</AlertTitle>
+                        <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                )}
                 <Heading as="h2" size="lg">
                     Welcome, Maruf
                 </Heading>

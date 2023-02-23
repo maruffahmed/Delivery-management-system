@@ -17,7 +17,7 @@ import { RiPencilLine } from 'react-icons/ri'
 import { useShopProvider } from '~/context/ShopProvider'
 
 function ShopListGrid({ shops, onOpen }: { shops: Shops; onOpen: () => void }) {
-    const { activeShop, storeActiveShop } = useShopProvider()
+    const { activeShop, chnageActiveShop } = useShopProvider()
     return (
         <SimpleGrid
             columns={{ sm: 2, md: 3, lg: 4 }}
@@ -53,7 +53,7 @@ function ShopListGrid({ shops, onOpen }: { shops: Shops; onOpen: () => void }) {
                                   : 'gray.200'
                           }
                           cursor="pointer"
-                          onClick={() => storeActiveShop(shop)}
+                          onClick={() => chnageActiveShop(shop)}
                       >
                           <CardHeader>
                               <Heading size="md"> {shop.name}</Heading>

@@ -4,7 +4,7 @@ import type {
     MetaFunction,
 } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { Container, Heading, useDisclosure } from '@chakra-ui/react'
+import { Container, Heading, Text, useDisclosure } from '@chakra-ui/react'
 import { getUserToken } from '~/utils/session.server'
 import axios from '~/utils/axios'
 import { useActionData, useLoaderData } from '@remix-run/react'
@@ -12,28 +12,28 @@ import ShopListGrid from '~/components/merchant/shop-list/ShopListGrid'
 import { badRequest, validateEmail } from '~/utils'
 import AddShopDrawer from '~/components/merchant/shop-list/AddShopDrawer'
 import type { Shops } from '~/types'
-import React from 'react'
-import { useShopProvider } from '~/context/ShopProvider'
+import { getShops } from '~/utils/merchant/shops'
 
 export const meta: MetaFunction = () => ({
     title: 'Shop list',
 })
 
-export type LoaderData = {
+export type ShopLoaderData = {
     shops: Shops
+    error?: string
 }
 export const loader: LoaderFunction = async ({
     request,
-}): Promise<LoaderData> => {
-    const access_token = await getUserToken(request)
-    // console.log('access_token', access_token)
-    const res = await axios.get('/shops', {
-        headers: {
-            Authorization: `Bearer ${access_token}`,
-        },
-    })
-    const shops = res.data as Shops
-    return { shops }
+}): Promise<ShopLoaderData> => {
+    try {
+        const shops = await getShops(request)
+        return { shops }
+    } catch (error) {
+        return {
+            error: 'Something is wrong. Please reload the browser.',
+            shops: { data: [] },
+        } as ShopLoaderData
+    }
 }
 
 export type ActionData = {
@@ -109,16 +109,9 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 function Index() {
-    const { storeShops } = useShopProvider()
-    const { shops } = useLoaderData<LoaderData>()
+    const { shops, error } = useLoaderData<ShopLoaderData>()
     const actionData = useActionData<ActionData>()
     const { isOpen, onOpen, onClose } = useDisclosure()
-
-    React.useEffect(() => {
-        if (shops) {
-            storeShops(shops)
-        }
-    }, [shops, storeShops])
     return (
         <Container maxW="container.xl" py="8">
             <Heading
@@ -137,7 +130,13 @@ function Index() {
                 actionData={actionData}
             />
             {/* Shop list grid */}
-            <ShopListGrid shops={shops} onOpen={onOpen} />
+            {error ? (
+                <Text color="primary.500" mt="5">
+                    {error}
+                </Text>
+            ) : (
+                <ShopListGrid shops={shops} onOpen={onOpen} />
+            )}
         </Container>
     )
 }
