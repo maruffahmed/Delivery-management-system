@@ -13,7 +13,7 @@ export async function login({
     password,
 }: LoginForm): Promise<LoginResponse | ApiErrorResponse | null> {
     try {
-        const res = await axios.post('/auth/login', {
+        const res = await axios.post('/auth/merchant/login', {
             username: email,
             password,
         })
