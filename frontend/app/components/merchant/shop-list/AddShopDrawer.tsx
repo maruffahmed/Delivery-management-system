@@ -13,9 +13,8 @@ import {
     FormLabel,
     Input,
     Select,
+    SimpleGrid,
     Spinner,
-    Stack,
-    // useToast,
 } from '@chakra-ui/react'
 import { Form, useTransition } from '@remix-run/react'
 
@@ -35,16 +34,8 @@ function AddShopDrawer({
         transition.state === 'submitting' &&
         transition.submission?.formData.get('_action') === 'addShop'
 
-    // const toast = useToast({
-    //     isClosable: true,
-    // })
-    // const successToast = 'shop-add-success-toast'
     React.useEffect(() => {
         if (actionData?.formSuccess?.message.length) {
-            // toast({
-            //     title: actionData.formSuccess.message,
-            //     status: 'success',
-            // })
             formRef.current?.reset()
             onClose()
         }
@@ -59,7 +50,7 @@ function AddShopDrawer({
                     </DrawerHeader>
 
                     <DrawerBody>
-                        <Stack spacing="4">
+                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing="4">
                             <FormControl isRequired>
                                 <FormLabel>Shop name</FormLabel>
                                 <Input
@@ -67,6 +58,7 @@ function AddShopDrawer({
                                     name="shopName"
                                     focusBorderColor="primary.500"
                                     ref={firstField}
+                                    placeholder="Shop name"
                                 />
                             </FormControl>
 
@@ -82,7 +74,7 @@ function AddShopDrawer({
                                 <Input
                                     type="email"
                                     name="shopEmail"
-                                    placeholder="maruf@gmail.com"
+                                    placeholder="Email address"
                                     focusBorderColor="primary.500"
                                     defaultValue={actionData?.fields?.shopEmail}
                                     aria-errormessage={
@@ -103,6 +95,34 @@ function AddShopDrawer({
                                     type="text"
                                     name="shopAddress"
                                     focusBorderColor="primary.500"
+                                    placeholder="Shop address"
+                                />
+                            </FormControl>
+                            <FormControl isRequired>
+                                <FormLabel>Pickup address</FormLabel>
+                                <Input
+                                    type="text"
+                                    name="pickupAddress"
+                                    focusBorderColor="primary.500"
+                                    placeholder="Pickup address"
+                                />
+                            </FormControl>
+                            <FormControl isRequired>
+                                <FormLabel>Pickup area</FormLabel>
+                                <Input
+                                    type="text"
+                                    name="pickupArea"
+                                    focusBorderColor="primary.500"
+                                    placeholder="Pickup area"
+                                />
+                            </FormControl>
+                            <FormControl isRequired>
+                                <FormLabel>Pickup phone</FormLabel>
+                                <Input
+                                    type="text"
+                                    name="pickupPhone"
+                                    focusBorderColor="primary.500"
+                                    placeholder="Pickup phone"
                                 />
                             </FormControl>
                             <FormControl isRequired>
@@ -132,7 +152,7 @@ function AddShopDrawer({
                                     <option value="computers">Computers</option>
                                 </Select>
                             </FormControl>
-                        </Stack>
+                        </SimpleGrid>
                     </DrawerBody>
                     <DrawerFooter>
                         <Button

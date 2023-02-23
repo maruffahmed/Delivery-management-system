@@ -5,14 +5,12 @@ import type {
 } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Container, Heading, Text, useDisclosure } from '@chakra-ui/react'
-import { getUserToken } from '~/utils/session.server'
-import axios from '~/utils/axios'
 import { useActionData, useLoaderData } from '@remix-run/react'
 import ShopListGrid from '~/components/merchant/shop-list/ShopListGrid'
 import { badRequest, validateEmail } from '~/utils'
 import AddShopDrawer from '~/components/merchant/shop-list/AddShopDrawer'
 import type { Shops } from '~/types'
-import { getShops } from '~/utils/merchant/shops'
+import { addShop, getShops } from '~/utils/merchant/shops'
 
 export const meta: MetaFunction = () => ({
     title: 'Shop list',
@@ -48,23 +46,31 @@ export type ActionData = {
         shopName?: string
         shopEmail?: string
         shopAddress?: string
+        pickupAddress?: string
+        pickupArea?: string
+        pickupPhone?: string
         shopProductType?: string
         shopSubProductType?: string
     }
 }
 
 export const action: ActionFunction = async ({ request }) => {
-    const access_token = await getUserToken(request)
     const form = await request.formData()
     const shopName = form.get('shopName')
     const shopEmail = form.get('shopEmail')
     const shopAddress = form.get('shopAddress')
+    const pickupAddress = form.get('pickupAddress')
+    const pickupArea = form.get('pickupArea')
+    const pickupPhone = form.get('pickupPhone')
     const shopProductType = form.get('productType')
     const shopSubProductType = form.get('subProductType')
     if (
         typeof shopName !== 'string' ||
         typeof shopEmail !== 'string' ||
         typeof shopAddress !== 'string' ||
+        typeof pickupAddress !== 'string' ||
+        typeof pickupArea !== 'string' ||
+        typeof pickupPhone !== 'string' ||
         typeof shopProductType !== 'string' ||
         typeof shopSubProductType !== 'string'
     ) {
@@ -77,6 +83,9 @@ export const action: ActionFunction = async ({ request }) => {
         shopName,
         shopEmail,
         shopAddress,
+        pickupAddress,
+        pickupArea,
+        pickupPhone,
         shopProductType,
         shopSubProductType,
     }
@@ -86,26 +95,17 @@ export const action: ActionFunction = async ({ request }) => {
     if (Object.values(fieldErrors).some(Boolean))
         return badRequest({ fieldErrors, fields })
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const shops = await axios.post(
-        '/shops',
-        {
-            name: shopName,
-            email: shopEmail,
-            address: shopAddress,
-            productType: shopProductType,
-            productSubType: shopSubProductType,
-        },
-        {
-            headers: {
-                Authorization: `Bearer ${access_token}`,
-            },
-        },
-    )
-    return json({
-        formSuccess: { message: 'Shop created successful' },
-        shops: shops.data,
-    })
+    try {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const shop = await addShop(request, fields)
+        return json({
+            formSuccess: { message: 'Shop created successful' },
+        })
+    } catch (error) {
+        return badRequest({
+            formError: `Something went wrong. Please try again.`,
+        })
+    }
 }
 
 function Index() {

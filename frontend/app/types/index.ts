@@ -23,6 +23,17 @@ export interface Shop {
     userId: number
 }
 
+export interface ShopCreateBody {
+    shopName: string
+    shopEmail: string
+    shopAddress: string
+    pickupAddress: string
+    pickupArea: string
+    pickupPhone: string
+    shopProductType: string
+    shopSubProductType: string
+}
+
 export interface Shops {
     data: Shop[]
 }
