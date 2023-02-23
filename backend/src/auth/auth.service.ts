@@ -8,6 +8,7 @@ import { ConflictException } from '@nestjs/common/exceptions';
 import { CreateUserDto } from 'src/users/dto/users.dto';
 import { ShopsService } from 'src/shops/shops.service';
 import { ShopPickupPointsService } from 'src/shop-pickup-points/shop-pickup-points.service';
+import { UserWithRolesDetails } from './types/auth.types';
 
 @Injectable()
 export class AuthService {
@@ -45,16 +46,46 @@ export class AuthService {
   }
 
   // Login user and return access token
-  async login(user: any) {
+  async merchantLogin(user: any) {
     const payload = {
       sub: user.id,
       email: user.email,
       name: user.name,
     };
-    return {
-      access_token: this.jwtService.sign(payload),
-      user,
-    };
+    try {
+      const user = (await this.usersService.user(
+        {
+          id: payload.sub,
+        },
+        {
+          include: {
+            roles: {
+              include: {
+                role: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      )) as UserWithRolesDetails;
+      console.log('user', user);
+      const isMerchant = user.roles.some(
+        (role) => role.role.name === 'merchant',
+      );
+
+      if (!isMerchant) {
+        throw new BadRequestException('User is not a merchant');
+      }
+      return {
+        access_token: this.jwtService.sign(payload),
+        user,
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 
   // Create new merchant with a new shop and pickup point
