@@ -60,6 +60,7 @@ export default function MerchantNav() {
     return (
         <>
             <Box
+                as="nav"
                 bg={useColorModeValue('white', 'gray.900')}
                 py={3}
                 borderBottom="1px"
@@ -176,6 +177,8 @@ export default function MerchantNav() {
                                             </MenuItem>
                                             <MenuItem
                                                 _focus={{ bg: 'primary.50' }}
+                                                as={RemixLink}
+                                                to="/pickup-list"
                                             >
                                                 Manage Pickup Location
                                             </MenuItem>

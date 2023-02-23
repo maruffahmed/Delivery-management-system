@@ -4,12 +4,20 @@ import type {
     MetaFunction,
 } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { Container, Heading, Text, useDisclosure } from '@chakra-ui/react'
+import {
+    Alert,
+    AlertDescription,
+    AlertIcon,
+    AlertTitle,
+    Container,
+    Heading,
+    useDisclosure,
+} from '@chakra-ui/react'
 import { useActionData, useLoaderData } from '@remix-run/react'
 import ShopListGrid from '~/components/merchant/shop-list/ShopListGrid'
 import { badRequest, validateEmail } from '~/utils'
 import AddShopDrawer from '~/components/merchant/shop-list/AddShopDrawer'
-import type { Shops } from '~/types'
+import type { ApiErrorResponse, Shops } from '~/types'
 import { addShop, getShops } from '~/utils/merchant/shops'
 
 export const meta: MetaFunction = () => ({
@@ -23,15 +31,19 @@ export type ShopLoaderData = {
 export const loader: LoaderFunction = async ({
     request,
 }): Promise<ShopLoaderData> => {
-    try {
-        const shops = await getShops(request)
-        return { shops }
-    } catch (error) {
+    const shops = await getShops(request)
+    if (shops && (shops as ApiErrorResponse).message) {
+        return {
+            error: (shops as ApiErrorResponse).message,
+            shops: { data: [] },
+        } as ShopLoaderData
+    } else if (!shops) {
         return {
             error: 'Something is wrong. Please reload the browser.',
             shops: { data: [] },
         } as ShopLoaderData
     }
+    return { shops } as ShopLoaderData
 }
 
 export type ActionData = {
@@ -95,17 +107,21 @@ export const action: ActionFunction = async ({ request }) => {
     if (Object.values(fieldErrors).some(Boolean))
         return badRequest({ fieldErrors, fields })
 
-    try {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const shop = await addShop(request, fields)
-        return json({
-            formSuccess: { message: 'Shop created successful' },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const shop = await addShop(request, fields)
+    if (shop && (shop as ApiErrorResponse).message) {
+        return badRequest({
+            formError: (shop as ApiErrorResponse).message,
         })
-    } catch (error) {
+    } else if (!shop) {
         return badRequest({
             formError: `Something went wrong. Please try again.`,
         })
     }
+
+    return json({
+        formSuccess: { message: 'Shop created successful' },
+    })
 }
 
 function Index() {
@@ -122,7 +138,7 @@ function Index() {
                 borderColor="primary.500"
                 display="inline-block"
             >
-                My Shop(s)
+                My Shops
             </Heading>
             <AddShopDrawer
                 isOpen={isOpen}
@@ -131,9 +147,11 @@ function Index() {
             />
             {/* Shop list grid */}
             {error ? (
-                <Text color="primary.500" mt="5">
-                    {error}
-                </Text>
+                <Alert status="error" variant="left-accent" my="5">
+                    <AlertIcon />
+                    <AlertTitle>Error!</AlertTitle>
+                    <AlertDescription>{error}</AlertDescription>
+                </Alert>
             ) : (
                 <ShopListGrid shops={shops} onOpen={onOpen} />
             )}

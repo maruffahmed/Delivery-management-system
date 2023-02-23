@@ -1,5 +1,11 @@
-import type { ApiErrorResponse, Shop, ShopCreateBody, Shops } from '~/types'
-import { getUserToken, logout } from '../session.server'
+import type {
+    ApiErrorResponse,
+    PickupPoints,
+    Shop,
+    ShopCreateBody,
+    Shops,
+} from '~/types'
+import { getUserToken } from '../session.server'
 import axios from '~/utils/axios'
 import { AxiosError } from 'axios'
 
@@ -15,7 +21,7 @@ export const addShop = async (
         shopProductType,
         shopSubProductType,
     }: ShopCreateBody,
-): Promise<Shop> => {
+): Promise<Shop | ApiErrorResponse | null> => {
     try {
         const access_token = await getUserToken(request)
         const createShopRes = await axios.post(
@@ -53,37 +59,68 @@ export const addShop = async (
         return shop
     } catch (error) {
         if (error instanceof AxiosError) {
-            throw new Error(error.response?.data)
+            return error.response?.data
         }
-        throw error
+        return null
     }
 }
 
-export const getShops = async (request: Request): Promise<Shops> => {
+export const getShops = async (
+    request: Request,
+): Promise<Shops | ApiErrorResponse | null> => {
     try {
         const access_token = await getUserToken(request)
-        // console.log('access_token', access_token)
         const res = await axios.get('/shops', {
             headers: {
                 Authorization: `Bearer ${access_token}`,
             },
         })
-        const shops = res.data
-        if ((shops as ApiErrorResponse).statusCode == 401) logout(request)
-        return res.data as Shops
+        const shops: Shops = res.data
+        return shops
     } catch (error) {
         if (error instanceof AxiosError) {
-            throw new Error(error.response?.data)
+            return error.response?.data
         }
-        throw error
+        return null
     }
 }
-export const getShop = async (id: string) => {}
-export const getShopPickUpPoints = async (shopId: string) => {}
-export const getShopPickUpPoint = async ({
-    shopId,
-    pickUpPointId,
-}: {
-    shopId: string
-    pickUpPointId: string
-}) => {}
+// export const getShop = async (id: string) => {}
+export const getShopPickUpPoints = async (
+    request: Request,
+): Promise<PickupPoints | ApiErrorResponse | null> => {
+    try {
+        const coockies = request.headers.get('cookie')
+        if (coockies) {
+            const coockiesArray = coockies.split('activeShop')
+            const activeShopData = coockiesArray.find((coockie) =>
+                coockie.includes('id'),
+            )
+            if (activeShopData) {
+                console.log('activeShopData', activeShopData)
+                const shopId = JSON.parse(activeShopData).id
+                const access_token = await getUserToken(request)
+                const res = await axios.get(`/shops/${shopId}/pickup-points`, {
+                    headers: {
+                        Authorization: `Bearer ${access_token}`,
+                    },
+                })
+                const pickupPoints: PickupPoints = res.data
+                return pickupPoints
+            }
+            return null
+        }
+        return null
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            return error.response?.data
+        }
+        return null
+    }
+}
+// export const getShopPickUpPoint = async ({
+//     shopId,
+//     pickUpPointId,
+// }: {
+//     shopId: string
+//     pickUpPointId: string
+// }) => {}

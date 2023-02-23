@@ -38,6 +38,21 @@ export interface Shops {
     data: Shop[]
 }
 
+// Pickup point
+export interface PickupPoint {
+    id: number
+    name: string
+    address: string
+    area: string
+    phone: string
+    isActive: boolean
+    shopId: number
+}
+
+export interface PickupPoints {
+    data: PickupPoint[]
+}
+
 // API responce
 export interface LoginResponse {
     access_token: string

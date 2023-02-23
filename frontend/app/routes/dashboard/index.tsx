@@ -1,3 +1,4 @@
+import type { ApiErrorResponse } from '~/types'
 import type { ShopLoaderData } from '../shop-list/index'
 import type { LoaderFunction } from '@remix-run/node'
 import {
@@ -96,15 +97,19 @@ export const PaymentSummary = [
 export const loader: LoaderFunction = async ({
     request,
 }): Promise<ShopLoaderData> => {
-    try {
-        const shops = await getShops(request)
-        return { shops }
-    } catch (error) {
+    const shops = await getShops(request)
+    if (shops && (shops as ApiErrorResponse).message) {
+        return {
+            error: (shops as ApiErrorResponse).message,
+            shops: { data: [] },
+        } as ShopLoaderData
+    } else if (!shops) {
         return {
             error: 'Something is wrong. Please reload the browser.',
             shops: { data: [] },
         } as ShopLoaderData
     }
+    return { shops } as ShopLoaderData
 }
 function Dashboard() {
     const { shops, error } = useLoaderData<ShopLoaderData>()

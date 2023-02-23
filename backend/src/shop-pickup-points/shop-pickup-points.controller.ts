@@ -27,12 +27,13 @@ export class ShopPickupPointsController {
   @UseGuards(JwtAuthGuard, UserShopGuard)
   async getPickUpPoints(
     @Param('shopId', ParseIntPipe) shopId: number,
-  ): Promise<PickUpPoints[]> {
-    return this.shopPickupPointsService.pickUpPoints({
+  ): Promise<{ data: PickUpPoints[] }> {
+    const pickupPoints = await this.shopPickupPointsService.pickUpPoints({
       where: {
         shopsId: shopId,
       },
     });
+    return { data: pickupPoints };
   }
 
   // GET /shops/1/pickup-points/1

@@ -48,6 +48,7 @@ export default function Navbar() {
     return (
         <>
             <Box
+                as="nav"
                 bg={useColorModeValue('white', 'gray.900')}
                 py={3}
                 borderBottom="1px"

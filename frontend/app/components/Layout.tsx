@@ -8,7 +8,7 @@ function Layout({ children }: { children: React.ReactNode }) {
     return (
         <>
             {user?.id ? <MerchantNav /> : <Navbar />}
-            {children}
+            <main>{children}</main>
         </>
     )
 }

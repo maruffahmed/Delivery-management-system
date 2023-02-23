@@ -1,6 +1,10 @@
 import type { ActionData } from '~/routes/shop-list/index'
 import React from 'react'
 import {
+    Alert,
+    AlertDescription,
+    AlertIcon,
+    AlertTitle,
     Button,
     Drawer,
     DrawerBody,
@@ -153,6 +157,16 @@ function AddShopDrawer({
                                 </Select>
                             </FormControl>
                         </SimpleGrid>
+
+                        {actionData?.formError?.length ? (
+                            <Alert status="error" mt="4">
+                                <AlertIcon />
+                                <AlertTitle>Error!</AlertTitle>
+                                <AlertDescription>
+                                    {actionData.formError}
+                                </AlertDescription>
+                            </Alert>
+                        ) : null}
                     </DrawerBody>
                     <DrawerFooter>
                         <Button

@@ -5,9 +5,14 @@ interface ShopContextType {
     // shops: Shops
     // storeShops: (shops: Shops) => void
     activeShop: Shop | null
-    storeActiveShop: (shop: Shop | null) => void
-    chnageActiveShop: (shop: Shop | null) => void
+    storeActiveShop: (shop: Shop) => void
+    chnageActiveShop: (shop: Shop) => void
     resetShopProvider: () => void
+}
+
+const storeActiveShopCookie = (shop: Shop) => {
+    const shopCookie = JSON.stringify(shop)
+    document.cookie = `xshop=activeShop${shopCookie}activeShop; path=/; max-age=2592000 ; samesite=lax; secure `
 }
 
 export const ShopContext = React.createContext<ShopContextType | null>(null)
@@ -30,19 +35,22 @@ function ShopProvider({ ...props }: { children: React.ReactNode }) {
     //     console.log('Run useEffect in ShopProvider storeShops')
     // }, [])
 
-    const storeActiveShop = (shop: Shop | null) => {
+    const storeActiveShop = (shop: Shop) => {
         const lsShop = window.localStorage.getItem('xshop')
         if (lsShop) {
             const lsShopData = JSON.parse(lsShop)
             setActiveShop(lsShopData)
+            storeActiveShopCookie(lsShopData)
         } else {
             window.localStorage.setItem('xshop', JSON.stringify(shop))
+            storeActiveShopCookie(shop)
             setActiveShop(shop)
         }
     }
 
-    const chnageActiveShop = (shop: Shop | null) => {
+    const chnageActiveShop = (shop: Shop) => {
         window.localStorage.setItem('xshop', JSON.stringify(shop))
+        storeActiveShopCookie(shop)
         setActiveShop(shop)
     }
     React.useEffect(() => {
@@ -50,6 +58,7 @@ function ShopProvider({ ...props }: { children: React.ReactNode }) {
         if (lsShop) {
             const lsShopData = JSON.parse(lsShop)
             setActiveShop(lsShopData)
+            storeActiveShopCookie(lsShopData)
         }
         console.log('Run useEffect in ShopProvider storeActiveShop')
     }, [])
