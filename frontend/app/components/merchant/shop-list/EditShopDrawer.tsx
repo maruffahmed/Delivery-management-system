@@ -49,7 +49,6 @@ function EditShopDrawer({
             onClose()
         }
     }, [actionData, onClose, chnageActiveShop])
-    console.log(actionData?.formSuccess)
     return (
         <Drawer placement="right" size="lg" onClose={onClose} isOpen={isOpen}>
             <DrawerOverlay />

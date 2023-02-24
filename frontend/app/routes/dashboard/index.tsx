@@ -114,7 +114,6 @@ export const loader: LoaderFunction = async ({
 function Dashboard() {
     const { shops, error } = useLoaderData<ShopLoaderData>()
     const { activeShop, storeActiveShop, resetShopProvider } = useShopProvider()
-
     React.useEffect(() => {
         if (shops.data.length) {
             if (!activeShop) {
@@ -136,7 +135,7 @@ function Dashboard() {
                     </Alert>
                 )}
                 <Heading as="h2" size="lg">
-                    Welcome, Maruf
+                    Welcome, {activeShop?.name}
                 </Heading>
                 <Box my="10">
                     <Text as="small" fontSize="sm" color="gray.600">

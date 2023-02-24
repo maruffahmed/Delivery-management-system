@@ -1,3 +1,4 @@
+import React from 'react'
 import type {
     ActionFunction,
     LoaderFunction,
@@ -16,6 +17,7 @@ import {
 } from '~/utils'
 import LoginForm from '~/components/merchant/LoginForm'
 import Layout from '~/components/Layout'
+import { useShopProvider } from '~/context/ShopProvider'
 
 export const meta: MetaFunction = () => ({
     title: 'Login',
@@ -89,7 +91,12 @@ function Login() {
     const actionData = useActionData<ActionData>()
     const [searchParams] = useSearchParams()
     const transition = useTransition()
+    const { resetShopProvider } = useShopProvider()
 
+    React.useEffect(() => {
+        resetShopProvider()
+        console.log('resetShopProvider')
+    }, [resetShopProvider])
     return (
         <Layout>
             <div className="h-screen md:flex">
