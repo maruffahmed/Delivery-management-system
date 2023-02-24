@@ -16,7 +16,15 @@ import { BsFillPlusCircleFill } from 'react-icons/bs'
 import { RiPencilLine } from 'react-icons/ri'
 import { useShopProvider } from '~/context/ShopProvider'
 
-function ShopListGrid({ shops, onOpen }: { shops: Shops; onOpen: () => void }) {
+function ShopListGrid({
+    shops,
+    onAddShopDrawerOpen,
+    onEditDrawerOpen,
+}: {
+    shops: Shops
+    onAddShopDrawerOpen: () => void
+    onEditDrawerOpen: () => void
+}) {
     const { activeShop, chnageActiveShop } = useShopProvider()
     return (
         <SimpleGrid
@@ -30,7 +38,7 @@ function ShopListGrid({ shops, onOpen }: { shops: Shops; onOpen: () => void }) {
                 borderRadius="base"
                 height={{ base: '200px', sm: 'auto' }}
                 cursor="pointer"
-                onClick={onOpen}
+                onClick={onAddShopDrawerOpen}
             >
                 <Flex direction="column" align="center" gap="2">
                     <Icon
@@ -68,6 +76,7 @@ function ShopListGrid({ shops, onOpen }: { shops: Shops; onOpen: () => void }) {
                                   as={RiPencilLine}
                                   fontSize="xl"
                                   cursor="pointer"
+                                  onClick={() => onEditDrawerOpen()}
                               />
                           </CardFooter>
                       </Card>

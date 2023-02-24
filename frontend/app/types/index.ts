@@ -33,6 +33,12 @@ export interface ShopCreateBody {
     shopProductType: string
     shopSubProductType: string
 }
+export interface ShopUpdateBody {
+    updateShopId: string
+    updateShopName: string
+    updateShopEmail: string
+    updateShopAddress: string
+}
 
 export interface Shops {
     data: Shop[]

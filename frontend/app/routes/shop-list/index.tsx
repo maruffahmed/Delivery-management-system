@@ -18,7 +18,8 @@ import ShopListGrid from '~/components/merchant/shop-list/ShopListGrid'
 import { badRequest, validateEmail } from '~/utils'
 import AddShopDrawer from '~/components/merchant/shop-list/AddShopDrawer'
 import type { ApiErrorResponse, Shops } from '~/types'
-import { addShop, getShops } from '~/utils/merchant/shops'
+import { addShop, getShops, updateShop } from '~/utils/merchant/shops'
+import EditShopDrawer from '~/components/merchant/shop-list/EditShopDrawer'
 
 export const meta: MetaFunction = () => ({
     title: 'Shop list',
@@ -53,6 +54,7 @@ export type ActionData = {
     }
     fieldErrors?: {
         shopEmail?: string | undefined
+        updateShopEmail?: string | undefined
     }
     fields?: {
         shopName?: string
@@ -63,11 +65,18 @@ export type ActionData = {
         pickupPhone?: string
         shopProductType?: string
         shopSubProductType?: string
+        updateShopId?: string
+        updateShopName?: string
+        updateShopEmail?: string
+        updateShopAddress?: string
     }
 }
 
 export const action: ActionFunction = async ({ request }) => {
     const form = await request.formData()
+    const action = form.get('_action')
+
+    // Shop add form fields
     const shopName = form.get('shopName')
     const shopEmail = form.get('shopEmail')
     const shopAddress = form.get('shopAddress')
@@ -76,57 +85,115 @@ export const action: ActionFunction = async ({ request }) => {
     const pickupPhone = form.get('pickupPhone')
     const shopProductType = form.get('productType')
     const shopSubProductType = form.get('subProductType')
-    if (
-        typeof shopName !== 'string' ||
-        typeof shopEmail !== 'string' ||
-        typeof shopAddress !== 'string' ||
-        typeof pickupAddress !== 'string' ||
-        typeof pickupArea !== 'string' ||
-        typeof pickupPhone !== 'string' ||
-        typeof shopProductType !== 'string' ||
-        typeof shopSubProductType !== 'string'
-    ) {
-        return badRequest({
-            formError: `Form not submitted correctly.`,
-        })
-    }
 
-    const fields = {
-        shopName,
-        shopEmail,
-        shopAddress,
-        pickupAddress,
-        pickupArea,
-        pickupPhone,
-        shopProductType,
-        shopSubProductType,
-    }
-    const fieldErrors = {
-        shopEmail: validateEmail(shopEmail),
-    }
-    if (Object.values(fieldErrors).some(Boolean))
-        return badRequest({ fieldErrors, fields })
+    // Shop edit form fields
+    const updateShopId = form.get('updateShopId')
+    const updateShopName = form.get('updateShopName')
+    const updateShopEmail = form.get('updateShopEmail')
+    const updateShopAddress = form.get('updateShopAddress')
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const shop = await addShop(request, fields)
-    if (shop && (shop as ApiErrorResponse).message) {
-        return badRequest({
-            formError: (shop as ApiErrorResponse).message,
-        })
-    } else if (!shop) {
-        return badRequest({
-            formError: `Something went wrong. Please try again.`,
-        })
-    }
+    switch (action) {
+        case 'addShop': {
+            if (
+                typeof shopName !== 'string' ||
+                typeof shopEmail !== 'string' ||
+                typeof shopAddress !== 'string' ||
+                typeof pickupAddress !== 'string' ||
+                typeof pickupArea !== 'string' ||
+                typeof pickupPhone !== 'string' ||
+                typeof shopProductType !== 'string' ||
+                typeof shopSubProductType !== 'string'
+            ) {
+                return badRequest({
+                    formError: `Form not submitted correctly.`,
+                })
+            }
 
-    return json({
-        formSuccess: { message: 'Shop created successful' },
-    })
+            const fields = {
+                shopName,
+                shopEmail,
+                shopAddress,
+                pickupAddress,
+                pickupArea,
+                pickupPhone,
+                shopProductType,
+                shopSubProductType,
+            }
+            const fieldErrors = {
+                shopEmail: validateEmail(shopEmail),
+            }
+            if (Object.values(fieldErrors).some(Boolean))
+                return badRequest({ fieldErrors, fields })
+
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const shop = await addShop(request, fields)
+            if (shop && (shop as ApiErrorResponse).message) {
+                return badRequest({
+                    formError: (shop as ApiErrorResponse).message,
+                })
+            } else if (!shop) {
+                return badRequest({
+                    formError: `Something went wrong. Please try again.`,
+                })
+            }
+
+            return json({
+                formSuccess: { message: 'Shop created successful' },
+            })
+        }
+        case 'editShop': {
+            if (
+                typeof updateShopId !== 'string' ||
+                typeof updateShopName !== 'string' ||
+                typeof updateShopEmail !== 'string' ||
+                typeof updateShopAddress !== 'string'
+            ) {
+                return badRequest({
+                    formError: `Form not submitted correctly.`,
+                })
+            }
+            const fields = {
+                updateShopId,
+                updateShopName,
+                updateShopEmail,
+                updateShopAddress,
+            }
+            const fieldErrors = {
+                updateShopEmail: validateEmail(updateShopEmail),
+            }
+            if (Object.values(fieldErrors).some(Boolean))
+                return badRequest({ fieldErrors, fields })
+
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const shop = await updateShop(request, fields)
+            if (shop && (shop as ApiErrorResponse).message) {
+                return badRequest({
+                    formError: (shop as ApiErrorResponse).message,
+                })
+            } else if (!shop) {
+                return badRequest({
+                    formError: `Something went wrong. Please try again.`,
+                })
+            }
+
+            return json({
+                formSuccess: { message: 'Shop edit successful' },
+            })
+        }
+        default:
+            return badRequest({ formError: `Form not submitted correctly.` })
+    }
 }
 
 function Index() {
     const { shops, error } = useLoaderData<ShopLoaderData>()
     const actionData = useActionData<ActionData>()
+    const {
+        isOpen: isAddShopDrawerOpen,
+        onOpen: onAddShopDrawerOpen,
+        onClose: onAddShopDrawerClose,
+    } = useDisclosure()
+
     const { isOpen, onOpen, onClose } = useDisclosure()
     return (
         <Container maxW="container.xl" py="8">
@@ -141,6 +208,11 @@ function Index() {
                 My Shops
             </Heading>
             <AddShopDrawer
+                isOpen={isAddShopDrawerOpen}
+                onClose={onAddShopDrawerClose}
+                actionData={actionData}
+            />
+            <EditShopDrawer
                 isOpen={isOpen}
                 onClose={onClose}
                 actionData={actionData}
@@ -153,7 +225,11 @@ function Index() {
                     <AlertDescription>{error}</AlertDescription>
                 </Alert>
             ) : (
-                <ShopListGrid shops={shops} onOpen={onOpen} />
+                <ShopListGrid
+                    shops={shops}
+                    onAddShopDrawerOpen={onAddShopDrawerOpen}
+                    onEditDrawerOpen={onOpen}
+                />
             )}
         </Container>
     )

@@ -4,6 +4,7 @@ import type {
     Shop,
     ShopCreateBody,
     Shops,
+    ShopUpdateBody,
 } from '~/types'
 import { getUserToken } from '../session.server'
 import axios from '~/utils/axios'
@@ -56,6 +57,40 @@ export const addShop = async (
                 },
             },
         )
+        return shop
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            return error.response?.data
+        }
+        return null
+    }
+}
+
+export const updateShop = async (
+    request: Request,
+    {
+        updateShopId,
+        updateShopName,
+        updateShopEmail,
+        updateShopAddress,
+    }: ShopUpdateBody,
+): Promise<Shop | ApiErrorResponse | null> => {
+    try {
+        const access_token = await getUserToken(request)
+        const shopUpdateres = await axios.patch(
+            `/shops/${updateShopId}`,
+            {
+                name: updateShopName,
+                email: updateShopEmail,
+                address: updateShopAddress,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            },
+        )
+        const shop: Shop = shopUpdateres.data
         return shop
     } catch (error) {
         if (error instanceof AxiosError) {
