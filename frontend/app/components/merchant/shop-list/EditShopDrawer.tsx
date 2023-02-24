@@ -35,7 +35,7 @@ function EditShopDrawer({
 }) {
     const formRef = React.useRef<HTMLFormElement>(null)
     const firstField = React.useRef<HTMLInputElement>(null)
-    const { activeShop } = useShopProvider()
+    const { activeShop, chnageActiveShop } = useShopProvider()
 
     const transition = useTransition()
     const isSubmitting =
@@ -44,10 +44,12 @@ function EditShopDrawer({
 
     React.useEffect(() => {
         if (actionData?.formSuccess?.message.length) {
+            chnageActiveShop(actionData?.formSuccess?.shop)
             formRef.current?.reset()
             onClose()
         }
-    }, [actionData, onClose])
+    }, [actionData, onClose, chnageActiveShop])
+    console.log(actionData?.formSuccess)
     return (
         <Drawer placement="right" size="lg" onClose={onClose} isOpen={isOpen}>
             <DrawerOverlay />

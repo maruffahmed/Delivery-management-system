@@ -35,7 +35,7 @@ function ShopProvider({ ...props }: { children: React.ReactNode }) {
     //     console.log('Run useEffect in ShopProvider storeShops')
     // }, [])
 
-    const storeActiveShop = (shop: Shop) => {
+    const storeActiveShop = React.useCallback((shop: Shop) => {
         const lsShop = window.localStorage.getItem('xshop')
         if (lsShop) {
             const lsShopData = JSON.parse(lsShop)
@@ -46,13 +46,14 @@ function ShopProvider({ ...props }: { children: React.ReactNode }) {
             storeActiveShopCookie(shop)
             setActiveShop(shop)
         }
-    }
+    }, [])
 
-    const chnageActiveShop = (shop: Shop) => {
+    const chnageActiveShop = React.useCallback((shop: Shop) => {
         window.localStorage.setItem('xshop', JSON.stringify(shop))
         storeActiveShopCookie(shop)
         setActiveShop(shop)
-    }
+    }, [])
+
     React.useEffect(() => {
         const lsShop = window.localStorage.getItem('xshop')
         if (lsShop) {

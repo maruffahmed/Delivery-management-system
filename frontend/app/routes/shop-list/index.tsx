@@ -17,7 +17,7 @@ import { useActionData, useLoaderData } from '@remix-run/react'
 import ShopListGrid from '~/components/merchant/shop-list/ShopListGrid'
 import { badRequest, validateEmail } from '~/utils'
 import AddShopDrawer from '~/components/merchant/shop-list/AddShopDrawer'
-import type { ApiErrorResponse, Shops } from '~/types'
+import type { ApiErrorResponse, Shop, Shops } from '~/types'
 import { addShop, getShops, updateShop } from '~/utils/merchant/shops'
 import EditShopDrawer from '~/components/merchant/shop-list/EditShopDrawer'
 
@@ -51,6 +51,7 @@ export type ActionData = {
     formError?: string
     formSuccess?: {
         message: string
+        shop: Shop
     }
     fieldErrors?: {
         shopEmail?: string | undefined
@@ -125,7 +126,6 @@ export const action: ActionFunction = async ({ request }) => {
             if (Object.values(fieldErrors).some(Boolean))
                 return badRequest({ fieldErrors, fields })
 
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const shop = await addShop(request, fields)
             if (shop && (shop as ApiErrorResponse).message) {
                 return badRequest({
@@ -138,7 +138,7 @@ export const action: ActionFunction = async ({ request }) => {
             }
 
             return json({
-                formSuccess: { message: 'Shop created successful' },
+                formSuccess: { message: 'Shop created successful', shop },
             })
         }
         case 'editShop': {
@@ -164,7 +164,6 @@ export const action: ActionFunction = async ({ request }) => {
             if (Object.values(fieldErrors).some(Boolean))
                 return badRequest({ fieldErrors, fields })
 
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const shop = await updateShop(request, fields)
             if (shop && (shop as ApiErrorResponse).message) {
                 return badRequest({
@@ -177,7 +176,7 @@ export const action: ActionFunction = async ({ request }) => {
             }
 
             return json({
-                formSuccess: { message: 'Shop edit successful' },
+                formSuccess: { message: 'Shop edit successful', shop },
             })
         }
         default:
