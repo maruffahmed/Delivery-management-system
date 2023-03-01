@@ -1,5 +1,7 @@
 import type {
     ApiErrorResponse,
+    PickupPoint,
+    PickupPointCreateBody,
     PickupPoints,
     Shop,
     ShopCreateBody,
@@ -10,6 +12,7 @@ import { getUserToken } from '../session.server'
 import axios from '~/utils/axios'
 import { AxiosError } from 'axios'
 
+// Add a new shop
 export const addShop = async (
     request: Request,
     {
@@ -66,6 +69,7 @@ export const addShop = async (
     }
 }
 
+// Update a existing shop with shop ID
 export const updateShop = async (
     request: Request,
     {
@@ -100,6 +104,7 @@ export const updateShop = async (
     }
 }
 
+// Get all shops
 export const getShops = async (
     request: Request,
 ): Promise<Shops | ApiErrorResponse | null> => {
@@ -120,31 +125,42 @@ export const getShops = async (
     }
 }
 // export const getShop = async (id: string) => {}
+
+// Utils : Get shop ID from cookie
+const getShopIdFromCookie = (request: Request): string | null => {
+    const coockies = request.headers.get('cookie')
+    // console.log('coockies, ', coockies)
+    if (coockies) {
+        const coockiesArray = coockies.split('activeShop')
+        const activeShopData = coockiesArray.find((coockie) =>
+            coockie.includes('userId'),
+        )
+        if (activeShopData) {
+            // console.log('activeShopData', activeShopData)
+            const shopId = JSON.parse(activeShopData).id
+            return shopId
+        }
+        return null
+    }
+    return null
+}
+
+// Get shops pickup points by shop ID
 export const getShopPickUpPoints = async (
     request: Request,
 ): Promise<PickupPoints | ApiErrorResponse | null> => {
     try {
-        const coockies = request.headers.get('cookie')
-        if (coockies) {
-            const coockiesArray = coockies.split('activeShop')
-            const activeShopData = coockiesArray.find((coockie) =>
-                coockie.includes('id'),
-            )
-            if (activeShopData) {
-                console.log('activeShopData', activeShopData)
-                const shopId = JSON.parse(activeShopData).id
-                const access_token = await getUserToken(request)
-                const res = await axios.get(`/shops/${shopId}/pickup-points`, {
-                    headers: {
-                        Authorization: `Bearer ${access_token}`,
-                    },
-                })
-                const pickupPoints: PickupPoints = res.data
-                return pickupPoints
-            }
-            return null
-        }
-        return null
+        const shopId = getShopIdFromCookie(request)
+        if (!shopId) return null
+
+        const access_token = await getUserToken(request)
+        const res = await axios.get(`/shops/${shopId}/pickup-points`, {
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+            },
+        })
+        const pickupPoints: PickupPoints = res.data
+        return pickupPoints
     } catch (error) {
         if (error instanceof AxiosError) {
             return error.response?.data
@@ -152,6 +168,47 @@ export const getShopPickUpPoints = async (
         return null
     }
 }
+
+// Add new shops pickup point by shop ID
+export const addShopPickUpPoint = async (
+    request: Request,
+    {
+        pickupName,
+        pickupAddress,
+        pickupArea,
+        pickupPhone,
+    }: PickupPointCreateBody,
+): Promise<PickupPoint | ApiErrorResponse | null> => {
+    try {
+        const shopId = getShopIdFromCookie(request)
+        if (!shopId) return null
+
+        const access_token = await getUserToken(request)
+        const res = await axios.post(
+            `/shops/${shopId}/pickup-points`,
+            {
+                name: pickupName,
+                address: pickupAddress,
+                area: pickupArea,
+                phone: pickupPhone,
+                isActive: true,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            },
+        )
+        const pickupPoint: PickupPoint = res.data
+        return pickupPoint
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            return error.response?.data
+        }
+        return null
+    }
+}
+
 // export const getShopPickUpPoint = async ({
 //     shopId,
 //     pickUpPointId,

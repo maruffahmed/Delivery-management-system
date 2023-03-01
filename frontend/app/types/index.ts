@@ -59,6 +59,13 @@ export interface PickupPoints {
     data: PickupPoint[]
 }
 
+export interface PickupPointCreateBody {
+    pickupName: string
+    pickupAddress: string
+    pickupArea: string
+    pickupPhone: string
+}
+
 // API responce
 export interface LoginResponse {
     access_token: string
