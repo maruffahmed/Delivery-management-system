@@ -3,6 +3,7 @@ import type {
     PickupPoint,
     PickupPointCreateBody,
     PickupPoints,
+    PickupPointUpdateBody,
     Shop,
     ShopCreateBody,
     Shops,
@@ -203,6 +204,59 @@ export const addShopPickUpPoint = async (
         return pickupPoint
     } catch (error) {
         if (error instanceof AxiosError) {
+            return error.response?.data
+        }
+        return null
+    }
+}
+
+// Update pickup point
+export const updateShopPickUpPoint = async (
+    request: Request,
+    {
+        pickupId,
+        pickupName,
+        pickupAddress,
+        pickupArea,
+        pickupPhone,
+        pickupStatus,
+    }: PickupPointUpdateBody,
+): Promise<PickupPoint | ApiErrorResponse | null> => {
+    try {
+        const shopId = getShopIdFromCookie(request)
+        if (!shopId) return null
+
+        console.log(`/shops/${shopId}/pickup-points/${pickupId}`, {
+            shopId,
+            pickupId,
+            pickupName,
+            pickupAddress,
+            pickupArea,
+            pickupPhone,
+            pickupStatus,
+        })
+
+        const access_token = await getUserToken(request)
+        const res = await axios.patch(
+            `/shops/${shopId}/pickup-points/${pickupId}`,
+            {
+                name: pickupName,
+                address: pickupAddress,
+                area: pickupArea,
+                phone: pickupPhone,
+                isActive: pickupStatus === 'active' ? true : false,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            },
+        )
+        const pickupPoint: PickupPoint = res.data
+        return pickupPoint
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            console.log('pickupPoint', error.response?.data)
             return error.response?.data
         }
         return null

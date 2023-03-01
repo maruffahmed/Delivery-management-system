@@ -17,10 +17,16 @@ import {
 import Layout from '~/components/Layout'
 import { requireUserId } from '~/utils/session.server'
 import { useActionData, useLoaderData } from '@remix-run/react'
-import { addShopPickUpPoint, getShopPickUpPoints } from '~/utils/merchant/shops'
+import {
+    addShopPickUpPoint,
+    getShopPickUpPoints,
+    updateShopPickUpPoint,
+} from '~/utils/merchant/shops'
 import PickupListGrid from '~/components/merchant/pickup-list/PickupListGrid'
 import AddPickupPointDrawer from '~/components/merchant/pickup-list/AddPickupPointDrawer'
 import { badRequest } from '~/utils'
+import EditPickupPointDrawer from '~/components/merchant/pickup-list/EditPickupPointDrawer'
+import PickupPointProvider from '~/context/PickupPointProvider'
 
 export const meta: MetaFunction = () => ({
     title: 'Dashboard',
@@ -53,10 +59,12 @@ export type PickupPointActionData = {
         message: string
     }
     fields?: {
+        pickupId?: string
         pickupName?: string
         pickupAddress?: string
         pickupArea?: string
         pickupPhone?: string
+        pickupStatus?: string
     }
 }
 
@@ -64,17 +72,15 @@ export const action: ActionFunction = async ({ request }) => {
     const form = await request.formData()
     const action = form.get('_action')
 
-    // Shop add form fields
+    // Pickup point add form fields
     const pickupName = form.get('pickupName')
     const pickupAddress = form.get('pickupAddress')
     const pickupArea = form.get('pickupArea')
     const pickupPhone = form.get('pickupPhone')
 
-    // Shop edit form fields
-    const updateShopId = form.get('updateShopId')
-    const updateShopName = form.get('updateShopName')
-    const updateShopEmail = form.get('updateShopEmail')
-    const updateShopAddress = form.get('updateShopAddress')
+    // Pickup point update form fields
+    const pickupId = form.get('pickupId')
+    const pickupStatus = form.get('pickupStatus')
 
     switch (action) {
         case 'addShopPickup': {
@@ -111,8 +117,43 @@ export const action: ActionFunction = async ({ request }) => {
                 formSuccess: { message: 'New Pickup point add successfully' },
             })
         }
-        case 'editShop':
-            break
+        case 'updateShopPickup': {
+            if (
+                typeof pickupId !== 'string' ||
+                typeof pickupName !== 'string' ||
+                typeof pickupAddress !== 'string' ||
+                typeof pickupArea !== 'string' ||
+                typeof pickupPhone !== 'string' ||
+                typeof pickupStatus !== 'string'
+            ) {
+                return badRequest({
+                    formError: `Form not submitted correctly.`,
+                })
+            }
+            const fields = {
+                pickupId,
+                pickupName,
+                pickupAddress,
+                pickupArea,
+                pickupPhone,
+                pickupStatus,
+            }
+            const pickupPoint = await updateShopPickUpPoint(request, fields)
+            console.log('pickupPoint', pickupPoint)
+            if (pickupPoint && (pickupPoint as ApiErrorResponse).message) {
+                return badRequest({
+                    formError: (pickupPoint as ApiErrorResponse).message,
+                })
+            } else if (!pickupPoint) {
+                return badRequest({
+                    formError: `Something went wrong. Please try again.`,
+                })
+            }
+
+            return json({
+                formSuccess: { message: 'Pickup point update successful' },
+            })
+        }
         default:
             return badRequest({ formError: `Form not submitted correctly.` })
     }
@@ -125,40 +166,53 @@ function PickupList() {
         onOpen: onPickupPointOpen,
         isOpen: isPickupPointOpen,
         onClose: onPickupPointClose,
+    } = useDisclosure()
+    const {
+        onOpen: onEditPickupPointOpen,
+        isOpen: isEditPickupPointOpen,
+        onClose: onEditPickupPointClose,
     } = useDisclosure({
         // isOpen: true,
     })
     return (
         <Layout>
-            <Container maxW="container.xl" py="8">
-                <Heading
-                    as="h3"
-                    fontSize="3xl"
-                    pb="6"
-                    borderBottom="4px"
-                    borderColor="primary.500"
-                    display="inline-block"
-                >
-                    Pickup points
-                </Heading>
-                <AddPickupPointDrawer
-                    actionData={actionData}
-                    isOpen={isPickupPointOpen}
-                    onClose={onPickupPointClose}
-                />
-                {error ? (
-                    <Alert status="error" variant="left-accent" my="5">
-                        <AlertIcon />
-                        <AlertTitle>Error!</AlertTitle>
-                        <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                ) : (
-                    <PickupListGrid
-                        pickupPoints={pickupPoints}
-                        onOpen={onPickupPointOpen}
+            <PickupPointProvider>
+                <Container maxW="container.xl" py="8">
+                    <Heading
+                        as="h3"
+                        fontSize="3xl"
+                        pb="6"
+                        borderBottom="4px"
+                        borderColor="primary.500"
+                        display="inline-block"
+                    >
+                        Pickup points
+                    </Heading>
+                    <AddPickupPointDrawer
+                        actionData={actionData}
+                        isOpen={isPickupPointOpen}
+                        onClose={onPickupPointClose}
                     />
-                )}
-            </Container>
+                    <EditPickupPointDrawer
+                        actionData={actionData}
+                        isOpen={isEditPickupPointOpen}
+                        onClose={onEditPickupPointClose}
+                    />
+                    {error ? (
+                        <Alert status="error" variant="left-accent" my="5">
+                            <AlertIcon />
+                            <AlertTitle>Error!</AlertTitle>
+                            <AlertDescription>{error}</AlertDescription>
+                        </Alert>
+                    ) : (
+                        <PickupListGrid
+                            pickupPoints={pickupPoints}
+                            onOpen={onPickupPointOpen}
+                            onEditDrawerOpen={onEditPickupPointOpen}
+                        />
+                    )}
+                </Container>
+            </PickupPointProvider>
         </Layout>
     )
 }

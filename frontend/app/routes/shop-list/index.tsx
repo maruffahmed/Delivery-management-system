@@ -176,7 +176,7 @@ export const action: ActionFunction = async ({ request }) => {
             }
 
             return json({
-                formSuccess: { message: 'Shop edit successful', shop },
+                formSuccess: { message: 'Shop update successful', shop },
             })
         }
         default:

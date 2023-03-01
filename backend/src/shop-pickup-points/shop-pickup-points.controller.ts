@@ -70,7 +70,7 @@ export class ShopPickupPointsController {
     );
   }
 
-  // POST /shops/1/pickup-points/1
+  // Patch /shops/1/pickup-points/1
   @Patch(':shopId/pickup-points/:pickupPointId')
   @UseGuards(JwtAuthGuard, UserShopGuard)
   async updatePickUpPoints(

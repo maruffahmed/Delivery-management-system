@@ -15,12 +15,14 @@ import {
     FormControl,
     FormLabel,
     Input,
+    Select,
     Spinner,
     Stack,
 } from '@chakra-ui/react'
 import { Form, useTransition } from '@remix-run/react'
+import { usePickupPoint } from '~/context/PickupPointProvider'
 
-function AddPickupPointDrawer({
+function EditPickupPointDrawer({
     onClose,
     isOpen,
     actionData,
@@ -34,7 +36,7 @@ function AddPickupPointDrawer({
     const transition = useTransition()
     const isSubmitting =
         transition.state === 'submitting' &&
-        transition.submission?.formData.get('_action') === 'addShopPickup'
+        transition.submission?.formData.get('_action') === 'updateShopPickup'
 
     React.useEffect(() => {
         if (actionData?.formSuccess?.message.length) {
@@ -42,17 +44,24 @@ function AddPickupPointDrawer({
             onClose()
         }
     }, [actionData, onClose])
+
+    const { pickupPoint } = usePickupPoint()
     return (
         <Drawer placement="right" size="lg" onClose={onClose} isOpen={isOpen}>
             <DrawerOverlay />
             <Form method="post" ref={formRef}>
                 <DrawerContent>
                     <DrawerHeader borderBottomWidth="1px">
-                        Add new shop pickup point
+                        Update shop pickup point
                     </DrawerHeader>
 
                     <DrawerBody>
                         <Stack spacing="4">
+                            <input
+                                type="hidden"
+                                name="pickupId"
+                                defaultValue={pickupPoint?.id}
+                            />
                             <FormControl isRequired>
                                 <FormLabel>Pickup name</FormLabel>
                                 <Input
@@ -61,6 +70,7 @@ function AddPickupPointDrawer({
                                     focusBorderColor="primary.500"
                                     ref={firstField}
                                     placeholder="Enter pickup name"
+                                    defaultValue={pickupPoint?.name}
                                 />
                             </FormControl>
 
@@ -71,6 +81,7 @@ function AddPickupPointDrawer({
                                     name="pickupAddress"
                                     focusBorderColor="primary.500"
                                     placeholder="Enter pickup address"
+                                    defaultValue={pickupPoint?.address}
                                 />
                             </FormControl>
 
@@ -81,6 +92,7 @@ function AddPickupPointDrawer({
                                     name="pickupArea"
                                     focusBorderColor="primary.500"
                                     placeholder="Select pickup area"
+                                    defaultValue={pickupPoint?.area}
                                 />
                             </FormControl>
                             <FormControl isRequired>
@@ -90,7 +102,28 @@ function AddPickupPointDrawer({
                                     name="pickupPhone"
                                     focusBorderColor="primary.500"
                                     placeholder="Pickup phone"
+                                    defaultValue={pickupPoint?.phone}
                                 />
+                            </FormControl>
+                            <FormControl isRequired>
+                                <FormLabel>Pickup Location Status</FormLabel>
+                                <Select
+                                    name="pickupStatus"
+                                    focusBorderColor="primary.500"
+                                >
+                                    <option
+                                        value="active"
+                                        selected={pickupPoint?.isActive}
+                                    >
+                                        Active
+                                    </option>
+                                    <option
+                                        value="inactive"
+                                        selected={!pickupPoint?.isActive}
+                                    >
+                                        Inactive
+                                    </option>
+                                </Select>
                             </FormControl>
                         </Stack>
 
@@ -117,7 +150,7 @@ function AddPickupPointDrawer({
                             colorScheme="primary"
                             type="submit"
                             name="_action"
-                            value="addShopPickup"
+                            value="updateShopPickup"
                         >
                             {isSubmitting ? <Spinner /> : 'Save'}
                         </Button>
@@ -128,4 +161,4 @@ function AddPickupPointDrawer({
     )
 }
 
-export default AddPickupPointDrawer
+export default EditPickupPointDrawer

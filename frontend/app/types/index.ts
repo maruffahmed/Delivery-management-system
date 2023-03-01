@@ -65,6 +65,10 @@ export interface PickupPointCreateBody {
     pickupArea: string
     pickupPhone: string
 }
+export interface PickupPointUpdateBody extends PickupPointCreateBody {
+    pickupId: string
+    pickupStatus: string
+}
 
 // API responce
 export interface LoginResponse {

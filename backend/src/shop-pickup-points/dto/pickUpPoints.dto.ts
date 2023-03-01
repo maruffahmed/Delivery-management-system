@@ -39,8 +39,8 @@ export class UpdatePickUpPointsDto implements Prisma.PickUpPointsUpdateInput {
   name: string;
 
   @IsOptional()
-  @IsString({ message: 'Email must be a string' })
-  @IsEmail({}, { message: 'Invalid email address' })
+  @IsNotEmpty()
+  @IsString({ message: 'Address must be a string' })
   address: string;
 
   @IsOptional()
