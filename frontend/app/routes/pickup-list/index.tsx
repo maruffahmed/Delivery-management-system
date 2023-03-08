@@ -29,7 +29,7 @@ import EditPickupPointDrawer from '~/components/merchant/pickup-list/EditPickupP
 import PickupPointProvider from '~/context/PickupPointProvider'
 
 export const meta: MetaFunction = () => ({
-    title: 'Dashboard',
+    title: 'Pickup point list',
 })
 
 export type PickupLoaderData = {

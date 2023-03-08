@@ -18,10 +18,19 @@ import {
     MenuItem,
     Button,
 } from '@chakra-ui/react'
+import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import Layout from '~/components/Layout'
+import { requireUserId } from '~/utils/session.server'
 import { CiDeliveryTruck } from 'react-icons/ci'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { MdOutlineCancel } from 'react-icons/md'
+
+export const meta: MetaFunction = () => ({
+    title: 'Pracel List',
+})
+export const loader: LoaderFunction = async ({ request }) => {
+    return await requireUserId(request)
+}
 
 function ParcelList() {
     return (

@@ -1,11 +1,5 @@
 import { Prisma, PickUpPoints } from '@prisma/client';
-import {
-  IsString,
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  IsBoolean,
-} from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsBoolean } from 'class-validator';
 
 export class CreatePickUpPointsDto implements PickUpPoints {
   id: number;

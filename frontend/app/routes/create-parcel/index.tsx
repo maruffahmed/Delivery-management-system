@@ -19,7 +19,16 @@ import {
     Text,
     Textarea,
 } from '@chakra-ui/react'
+import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import Layout from '~/components/Layout'
+import { requireUserId } from '~/utils/session.server'
+
+export const meta: MetaFunction = () => ({
+    title: 'Create new parcel',
+})
+export const loader: LoaderFunction = async ({ request }) => {
+    return await requireUserId(request)
+}
 
 function CreateParcel() {
     return (
