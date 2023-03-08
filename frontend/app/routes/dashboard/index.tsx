@@ -1,6 +1,6 @@
 import type { ApiErrorResponse } from '~/types'
 import type { ShopLoaderData } from '../shop-list/index'
-import type { LoaderFunction } from '@remix-run/node'
+import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import {
     Box,
     Container,
@@ -18,6 +18,8 @@ import OverViewCard from '~/components/merchant/dashboard/OverViewCard'
 import { useShopProvider } from '~/context/ShopProvider'
 import React from 'react'
 import { getShops } from '~/utils/merchant/shops'
+import { requireUserId } from '~/utils/session.server'
+import Layout from '~/components/Layout'
 
 export const OrderSummary = [
     {
@@ -94,9 +96,14 @@ export const PaymentSummary = [
             'Total sum of parcels that have been created and picked up by REDX',
     },
 ]
+
+export const meta: MetaFunction = () => ({
+    title: 'Dashboard',
+})
 export const loader: LoaderFunction = async ({
     request,
 }): Promise<ShopLoaderData> => {
+    await requireUserId(request)
     const shops = await getShops(request)
     if (shops && (shops as ApiErrorResponse).message) {
         return {
@@ -125,61 +132,75 @@ function Dashboard() {
     }, [storeActiveShop, shops, activeShop, resetShopProvider])
 
     return (
-        <Box bg="whitesmoke" minH="100vh">
-            <Container maxW="container.xl" py="8">
-                {error && (
-                    <Alert status="error" variant="left-accent" my="5">
-                        <AlertIcon />
-                        <AlertTitle>Error!</AlertTitle>
-                        <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                )}
-                <Heading as="h2" size="lg">
-                    Welcome, {activeShop?.name}
-                </Heading>
-                <Box my="10">
-                    <Text as="small" fontSize="sm" color="gray.600">
-                        Overview of your order summary
-                    </Text>
+        <Layout>
+            <Box bg="whitesmoke" minH="100vh">
+                <Container maxW="container.xl" py="8">
+                    {error && (
+                        <Alert status="error" variant="left-accent" my="5">
+                            <AlertIcon />
+                            <AlertTitle>Error!</AlertTitle>
+                            <AlertDescription>{error}</AlertDescription>
+                        </Alert>
+                    )}
+                    <Heading size="lg">Welcome, {activeShop?.name}</Heading>
+                    <Box my="10">
+                        <Text as="small" fontSize="sm" color="gray.600">
+                            Overview of your order summary
+                        </Text>
 
-                    <SimpleGrid mt="5" columns={{ sm: 2, md: 3 }} spacing="10">
-                        {OrderSummary.length
-                            ? OrderSummary.map((order) => (
-                                  <OverViewCard key={order.id} order={order} />
-                              ))
-                            : null}
-                    </SimpleGrid>
-                </Box>
-                <Box my="10">
-                    <Text as="small" fontSize="sm" color="gray.600">
-                        Overview of your payment summary
-                    </Text>
+                        <SimpleGrid
+                            mt="5"
+                            columns={{ sm: 2, md: 3 }}
+                            spacing="10"
+                        >
+                            {OrderSummary.length
+                                ? OrderSummary.map((order) => (
+                                      <OverViewCard
+                                          key={order.id}
+                                          order={order}
+                                      />
+                                  ))
+                                : null}
+                        </SimpleGrid>
+                    </Box>
+                    <Box my="10">
+                        <Text as="small" fontSize="sm" color="gray.600">
+                            Overview of your payment summary
+                        </Text>
 
-                    <SimpleGrid mt="5" columns={{ sm: 2, md: 3 }} spacing="10">
-                        {PaymentSummary.length
-                            ? PaymentSummary.map((order) => (
-                                  <OverViewCard key={order.id} order={order} />
-                              ))
-                            : null}
-                    </SimpleGrid>
-                </Box>
-                <Text>
-                    কল করুন @{' '}
-                    <Text as="span" fontWeight="bold" color="primary.500">
-                        ০৯৬১০০০৭৩৩৯
-                    </Text>{' '}
-                    | কোন প্রশ্ন আছে?{' '}
-                    <Link
-                        as={RemixLink}
-                        to="/"
-                        fontWeight="bold"
-                        color="primary.500"
-                    >
-                        FAQ দেখে নিন
-                    </Link>
-                </Text>
-            </Container>
-        </Box>
+                        <SimpleGrid
+                            mt="5"
+                            columns={{ sm: 2, md: 3 }}
+                            spacing="10"
+                        >
+                            {PaymentSummary.length
+                                ? PaymentSummary.map((order) => (
+                                      <OverViewCard
+                                          key={order.id}
+                                          order={order}
+                                      />
+                                  ))
+                                : null}
+                        </SimpleGrid>
+                    </Box>
+                    <Text>
+                        কল করুন @{' '}
+                        <Text as="span" fontWeight="bold" color="primary.500">
+                            ০৯৬১০০০৭৩৩৯
+                        </Text>{' '}
+                        | কোন প্রশ্ন আছে?{' '}
+                        <Link
+                            as={RemixLink}
+                            to="/"
+                            fontWeight="bold"
+                            color="primary.500"
+                        >
+                            FAQ দেখে নিন
+                        </Link>
+                    </Text>
+                </Container>
+            </Box>
+        </Layout>
     )
 }
 

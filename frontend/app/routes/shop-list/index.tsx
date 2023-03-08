@@ -20,6 +20,8 @@ import AddShopDrawer from '~/components/merchant/shop-list/AddShopDrawer'
 import type { ApiErrorResponse, Shop, Shops } from '~/types'
 import { addShop, getShops, updateShop } from '~/utils/merchant/shops'
 import EditShopDrawer from '~/components/merchant/shop-list/EditShopDrawer'
+import { requireUserId } from '~/utils/session.server'
+import Layout from '~/components/Layout'
 
 export const meta: MetaFunction = () => ({
     title: 'Shop list',
@@ -32,6 +34,7 @@ export type ShopLoaderData = {
 export const loader: LoaderFunction = async ({
     request,
 }): Promise<ShopLoaderData> => {
+    await requireUserId(request)
     const shops = await getShops(request)
     if (shops && (shops as ApiErrorResponse).message) {
         return {
@@ -195,42 +198,44 @@ function Index() {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     return (
-        <Container maxW="container.xl" py="8">
-            <Heading
-                as="h3"
-                fontSize="3xl"
-                pb="6"
-                borderBottom="4px"
-                borderColor="primary.500"
-                display="inline-block"
-            >
-                My Shops
-            </Heading>
-            <AddShopDrawer
-                isOpen={isAddShopDrawerOpen}
-                onClose={onAddShopDrawerClose}
-                actionData={actionData}
-            />
-            <EditShopDrawer
-                isOpen={isOpen}
-                onClose={onClose}
-                actionData={actionData}
-            />
-            {/* Shop list grid */}
-            {error ? (
-                <Alert status="error" variant="left-accent" my="5">
-                    <AlertIcon />
-                    <AlertTitle>Error!</AlertTitle>
-                    <AlertDescription>{error}</AlertDescription>
-                </Alert>
-            ) : (
-                <ShopListGrid
-                    shops={shops}
-                    onAddShopDrawerOpen={onAddShopDrawerOpen}
-                    onEditDrawerOpen={onOpen}
+        <Layout>
+            <Container maxW="container.xl" py="8">
+                <Heading
+                    as="h3"
+                    fontSize="3xl"
+                    pb="6"
+                    borderBottom="4px"
+                    borderColor="primary.500"
+                    display="inline-block"
+                >
+                    My Shops
+                </Heading>
+                <AddShopDrawer
+                    isOpen={isAddShopDrawerOpen}
+                    onClose={onAddShopDrawerClose}
+                    actionData={actionData}
                 />
-            )}
-        </Container>
+                <EditShopDrawer
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    actionData={actionData}
+                />
+                {/* Shop list grid */}
+                {error ? (
+                    <Alert status="error" variant="left-accent" my="5">
+                        <AlertIcon />
+                        <AlertTitle>Error!</AlertTitle>
+                        <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                ) : (
+                    <ShopListGrid
+                        shops={shops}
+                        onAddShopDrawerOpen={onAddShopDrawerOpen}
+                        onEditDrawerOpen={onOpen}
+                    />
+                )}
+            </Container>
+        </Layout>
     )
 }
 

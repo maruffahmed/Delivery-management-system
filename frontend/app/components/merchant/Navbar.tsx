@@ -40,6 +40,7 @@ const Links = [
 
 const NavLink = ({ children, href }: { children: ReactNode; href: string }) => (
     <Link
+        as={RemixLink}
         px={2}
         py={1}
         rounded={'md'}
@@ -47,7 +48,7 @@ const NavLink = ({ children, href }: { children: ReactNode; href: string }) => (
             textDecoration: 'none',
             bg: useColorModeValue('gray.200', 'gray.700'),
         }}
-        href={href}
+        to={href}
     >
         {children}
     </Link>
@@ -134,6 +135,8 @@ export default function MerchantNav() {
                                     <Button
                                         colorScheme="primary"
                                         fontWeight="normal"
+                                        as={RemixLink}
+                                        to="/create-parcel"
                                     >
                                         Create Parcel
                                     </Button>
