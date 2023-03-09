@@ -71,7 +71,6 @@ export class AuthService {
           },
         },
       )) as UserWithRolesDetails;
-      console.log('user', user);
       const isMerchant = user.roles.some(
         (role) => role.role.name === 'merchant',
       );

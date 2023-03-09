@@ -57,3 +57,87 @@ model PickUpPoints {
   shops    Shops   @relation(fields: [shopsId], references: [id])
   shopsId  Int
 }
+
+model ShopProductsParentCategories {
+  id                          Int                           @id @default(autoincrement())
+  name                        String                        @unique
+  description                 String?
+  ShopProductsChildCategories ShopProductsChildCategories[]
+}
+
+model ShopProductsChildCategories {
+  id          Int                          @id @default(autoincrement())
+  name        String                       @unique
+  description String?
+  parent      ShopProductsParentCategories @relation(fields: [parentId], references: [id])
+  parentId    Int
+}
+
+model Divisions {
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
+  districts Districts[]
+}
+
+model Districts {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
+  division   Divisions @relation(fields: [divisionId], references: [id])
+  divisionId Int
+  areas      Areas[]
+}
+
+model Areas {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
+  district   Districts @relation(fields: [districtId], references: [id])
+  districtId Int
+  zones      Zones     @relation(fields: [zonesId], references: [id])
+  zonesId    Int
+}
+
+model Zones {
+  id              Int           @id @default(autoincrement())
+  name            String        @unique
+  areas           Areas[]
+  pricing         ParcelPricing @relation(fields: [parcelPricingId], references: [id])
+  parcelPricingId Int
+}
+
+model ParcelPricing {
+  id         Int     @id @default(autoincrement())
+  KG05_PRICE Float
+  KG1_PRICE  Float
+  KG2_PRICE  Float
+  KG3_PRICE  Float
+  KG4_PRICE  Float
+  KG5_PRICE  Float
+  zones      Zones[]
+}
+
+// model Parcel {
+//   id             Int            @id @default(autoincrement())
+//   parcelNumber   String
+//   // parcelType     String
+//   // parcelSubType  String
+//   parcelStatus   String
+//   parcelWeight   Float
+//   // parcelLength   Float
+//   // parcelWidth    Float
+//   // parcelHeight   Float
+//   // parcelVolume   Float
+//   parcelValue    Float
+//   parcelCurrency String
+//   parcelPickUp   PickUpPoints   @relation(fields: [parcelPickUpId], references: [id])
+//   parcelPickUpId Int
+//   parcelDropOff  DropOffPoints  @relation(fields: [parcelDropOffId], references: [id])
+//   parcelDropOffId Int
+//   parcelShop     Shops          @relation(fields: [parcelShopId], references: [id])
+//   parcelShopId   Int
+//   parcelUser     User           @relation(fields: [parcelUserId], references: [id])
+//   parcelUserId   Int
+//   parcelDriver   Driver         @relation(fields: [parcelDriverId], references: [id])
+//   parcelDriverId Int
+//   parcelDelivery Delivery       @relation(fields: [parcelDeliveryId], references: [id])
+//   parcelDeliveryId Int
+// }
