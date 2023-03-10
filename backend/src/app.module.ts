@@ -5,6 +5,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { RolesModule } from './roles/roles.module';
 import { ShopsModule } from './shops/shops.module';
 import { ShopPickupPointsModule } from './shop-pickup-points/shop-pickup-points.module';
+import { ShopProductCategoriesModule } from './shop-product-categories/shop-product-categories.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ShopPickupPointsModule } from './shop-pickup-points/shop-pickup-points.
     RolesModule,
     ShopsModule,
     ShopPickupPointsModule,
+    ShopProductCategoriesModule,
   ],
   controllers: [],
   providers: [PrismaService],

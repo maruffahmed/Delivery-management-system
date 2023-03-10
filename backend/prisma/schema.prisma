@@ -115,6 +115,11 @@ model ParcelPricing {
   zones      Zones[]
 }
 
+model ParcelCategories {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+}
+
 // model Parcel {
 //   id             Int            @id @default(autoincrement())
 //   parcelNumber   String
