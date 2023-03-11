@@ -23,6 +23,8 @@ import { baseTheme, ChakraProvider, extendTheme } from '@chakra-ui/react'
 import AuthProvider from './context/AuthProvider'
 import { getUser } from './utils/session.server'
 import ShopProvider from './context/ShopProvider'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 export const links: LinksFunction = () => {
     return [{ rel: 'stylesheet', href: styles }]
@@ -111,16 +113,28 @@ const theme = extendTheme({
     },
 })
 
+// Create a client
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+        },
+    },
+})
+
 export default function App() {
     const { user } = useLoaderData<LoaderData>()
     return (
         <Document>
             <AuthProvider user={user}>
-                <ShopProvider>
-                    <ChakraProvider theme={theme}>
-                        <Outlet />
-                    </ChakraProvider>
-                </ShopProvider>
+                <QueryClientProvider client={queryClient}>
+                    <ReactQueryDevtools initialIsOpen={false} />
+                    <ShopProvider>
+                        <ChakraProvider theme={theme}>
+                            <Outlet />
+                        </ChakraProvider>
+                    </ShopProvider>
+                </QueryClientProvider>
             </AuthProvider>
         </Document>
     )

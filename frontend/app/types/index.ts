@@ -70,6 +70,25 @@ export interface PickupPointUpdateBody extends PickupPointCreateBody {
     pickupStatus: string
 }
 
+// product categories
+export interface ProductParentCategory {
+    id: number
+    name: string
+    description: string
+    childs?: ProductChildCategory[]
+}
+
+export interface ProductParentCategories {
+    data: ProductParentCategory[]
+}
+
+export interface ProductChildCategory extends ProductParentCategory {
+    parentId: number
+}
+export interface ProductChildCategories {
+    data?: ProductChildCategory[]
+}
+
 // API responce
 export interface LoginResponse {
     access_token: string

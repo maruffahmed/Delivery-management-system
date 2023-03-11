@@ -1,12 +1,13 @@
 import { createCookieSessionStorage, redirect } from '@remix-run/node'
 import { AxiosError } from 'axios'
 import type { ApiErrorResponse, LoginResponse, User } from '~/types'
-import axios from '~/utils/axios'
+import axios from '~/utils/axios.server'
 
 type LoginForm = {
     email: string
     password: string
 }
+const tokenName = 'access_token'
 
 export async function login({
     email,
@@ -106,7 +107,7 @@ export async function getUserId(request: Request) {
 }
 export async function getUserToken(request: Request) {
     const session = await getUserSession(request)
-    const access_token = session.get('access_token')
+    const access_token = session.get(tokenName)
     if (!access_token || typeof access_token !== 'string')
         return logout(request)
     return access_token
@@ -160,7 +161,7 @@ export async function createUserSession(
 ) {
     const session = await storage.getSession()
     session.set('userId', userId)
-    session.set('access_token', access_token)
+    session.set(tokenName, access_token)
     // console.log("session ", session)
     return redirect(redirectTo, {
         headers: {

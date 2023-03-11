@@ -59,10 +59,10 @@ model PickUpPoints {
 }
 
 model ShopProductsParentCategories {
-  id                          Int                           @id @default(autoincrement())
-  name                        String                        @unique
-  description                 String?
-  ShopProductsChildCategories ShopProductsChildCategories[]
+  id          Int                           @id @default(autoincrement())
+  name        String                        @unique
+  description String?
+  childs      ShopProductsChildCategories[]
 }
 
 model ShopProductsChildCategories {

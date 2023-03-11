@@ -1,5 +1,13 @@
-import { Controller, Get, ParseIntPipe } from '@nestjs/common';
-import { Param, UseGuards } from '@nestjs/common/decorators';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseBoolPipe,
+  ParseIntPipe,
+  Query,
+  UseGuards,
+  DefaultValuePipe,
+} from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ShopProductCategoriesService } from './shop-product-categories.service';
 
@@ -12,8 +20,17 @@ export class ShopProductCategoriesController {
   // GET /shop-product-categories/parents
   @Get('/parent')
   @UseGuards(JwtAuthGuard)
-  async productParentCategories() {
-    return this.shopProductCategoriesService.productParentCategories({});
+  async productParentCategories(
+    @Query('child', new DefaultValuePipe(false), ParseBoolPipe) child: boolean,
+  ) {
+    return this.shopProductCategoriesService.productParentCategories(
+      {},
+      {
+        include: {
+          childs: child,
+        },
+      },
+    );
   }
 
   // GET /shop-product-categories/parents

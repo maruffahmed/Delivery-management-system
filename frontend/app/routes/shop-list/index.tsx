@@ -20,7 +20,7 @@ import AddShopDrawer from '~/components/merchant/shop-list/AddShopDrawer'
 import type { ApiErrorResponse, Shop, Shops } from '~/types'
 import { addShop, getShops, updateShop } from '~/utils/merchant/shops'
 import EditShopDrawer from '~/components/merchant/shop-list/EditShopDrawer'
-import { requireUserId } from '~/utils/session.server'
+import { getUserToken, requireUserId } from '~/utils/session.server'
 import Layout from '~/components/Layout'
 
 export const meta: MetaFunction = () => ({
@@ -30,24 +30,28 @@ export const meta: MetaFunction = () => ({
 export type ShopLoaderData = {
     shops: Shops
     error?: string
+    access_token: string
 }
 export const loader: LoaderFunction = async ({
     request,
 }): Promise<ShopLoaderData> => {
     await requireUserId(request)
+    const access_token = await getUserToken(request)
     const shops = await getShops(request)
     if (shops && (shops as ApiErrorResponse).message) {
         return {
             error: (shops as ApiErrorResponse).message,
             shops: { data: [] },
+            access_token,
         } as ShopLoaderData
     } else if (!shops) {
         return {
             error: 'Something is wrong. Please reload the browser.',
             shops: { data: [] },
+            access_token,
         } as ShopLoaderData
     }
-    return { shops } as ShopLoaderData
+    return { shops, access_token } as ShopLoaderData
 }
 
 export type ActionData = {
@@ -188,7 +192,7 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 function Index() {
-    const { shops, error } = useLoaderData<ShopLoaderData>()
+    const { shops, error, access_token } = useLoaderData<ShopLoaderData>()
     const actionData = useActionData<ActionData>()
     const {
         isOpen: isAddShopDrawerOpen,
@@ -214,6 +218,7 @@ function Index() {
                     isOpen={isAddShopDrawerOpen}
                     onClose={onAddShopDrawerClose}
                     actionData={actionData}
+                    access_token={access_token}
                 />
                 <EditShopDrawer
                     isOpen={isOpen}

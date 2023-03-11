@@ -21,15 +21,34 @@ import {
     Spinner,
 } from '@chakra-ui/react'
 import { Form, useTransition } from '@remix-run/react'
+import { useQuery } from 'react-query'
+import axios from 'axios'
+import config from '~/config'
+import type { ProductChildCategories, ProductParentCategories } from '~/types'
+
+const getShopParentCategories = (
+    access_token: string,
+): Promise<ProductParentCategories> => {
+    return axios.get(
+        `${config.API_BASE_URL}/shop-product-categories/parent?child=true`,
+        {
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+            },
+        },
+    )
+}
 
 function AddShopDrawer({
     onClose,
     isOpen,
     actionData,
+    access_token,
 }: {
     onClose: () => void
     isOpen: boolean
     actionData: ActionData | undefined
+    access_token: string
 }) {
     const formRef = React.useRef<HTMLFormElement>(null)
     const firstField = React.useRef<HTMLInputElement>(null)
@@ -39,11 +58,31 @@ function AddShopDrawer({
         transition.submission?.formData.get('_action') === 'addShop'
 
     React.useEffect(() => {
+        // Clear form data on success and close drawer
         if (actionData?.formSuccess?.message.length) {
             formRef.current?.reset()
             onClose()
         }
     }, [actionData, onClose])
+
+    // Product categories state
+    const [productChildCat, setProductChildCat] =
+        React.useState<ProductChildCategories>()
+
+    const { data: productParentCategories } = useQuery({
+        queryKey: 'shopProductParentCat',
+        queryFn: () => getShopParentCategories(access_token),
+    })
+
+    const handleProductChildCat = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedCat = productParentCategories?.data.find(
+            (cat) => cat.name === e.target.value,
+        )
+        setProductChildCat({
+            data: selectedCat?.childs,
+        })
+    }
+
     return (
         <Drawer placement="right" size="lg" onClose={onClose} isOpen={isOpen}>
             <DrawerOverlay />
@@ -135,12 +174,22 @@ function AddShopDrawer({
                                     placeholder="Choose product type"
                                     name="productType"
                                     focusBorderColor="primary.500"
-                                    defaultValue="book"
+                                    onChange={handleProductChildCat}
                                 >
-                                    <option value="book">Book</option>
-                                    <option value="electronics">
-                                        Electronics
-                                    </option>
+                                    {productParentCategories?.data.length
+                                        ? productParentCategories?.data.map(
+                                              (cat) => {
+                                                  return (
+                                                      <option
+                                                          value={cat.name}
+                                                          key={cat.id}
+                                                      >
+                                                          {cat.name}
+                                                      </option>
+                                                  )
+                                              },
+                                          )
+                                        : null}
                                 </Select>
                             </FormControl>
 
@@ -152,8 +201,18 @@ function AddShopDrawer({
                                     focusBorderColor="primary.500"
                                     defaultValue="history"
                                 >
-                                    <option value="history">History</option>
-                                    <option value="computers">Computers</option>
+                                    {productChildCat?.data?.length
+                                        ? productChildCat?.data.map((cat) => {
+                                              return (
+                                                  <option
+                                                      value={cat.name}
+                                                      key={cat.id}
+                                                  >
+                                                      {cat.name}
+                                                  </option>
+                                              )
+                                          })
+                                        : null}
                                 </Select>
                             </FormControl>
                         </SimpleGrid>

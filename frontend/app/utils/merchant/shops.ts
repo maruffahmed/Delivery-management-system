@@ -4,13 +4,14 @@ import type {
     PickupPointCreateBody,
     PickupPoints,
     PickupPointUpdateBody,
+    ProductParentCategories,
     Shop,
     ShopCreateBody,
     Shops,
     ShopUpdateBody,
 } from '~/types'
 import { getUserToken } from '../session.server'
-import axios from '~/utils/axios'
+import axios from '~/utils/axios.server'
 import { AxiosError } from 'axios'
 
 // Add a new shop
