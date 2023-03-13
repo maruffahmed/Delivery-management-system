@@ -22,22 +22,12 @@ import {
 } from '@chakra-ui/react'
 import { Form, useTransition } from '@remix-run/react'
 import { useQuery } from 'react-query'
-import axios from 'axios'
-import config from '~/config'
-import type { ProductChildCategories, ProductParentCategories } from '~/types'
-
-const getShopParentCategories = (
-    access_token: string,
-): Promise<ProductParentCategories> => {
-    return axios.get(
-        `${config.API_BASE_URL}/shop-product-categories/parent?child=true`,
-        {
-            headers: {
-                Authorization: `Bearer ${access_token}`,
-            },
-        },
-    )
-}
+import type { ProductChildCategories } from '~/types'
+import SearchableSelect from '~/components/common/SearchableSelectInput'
+import {
+    getServiceAreaTree,
+    getShopParentCategories,
+} from '~/utils/merchant/CSR_API'
 
 function AddShopDrawer({
     onClose,
@@ -80,6 +70,27 @@ function AddShopDrawer({
         )
         setProductChildCat({
             data: selectedCat?.childs,
+        })
+    }
+
+    // Service area
+    const { data: serviceArea, isLoading } = useQuery({
+        queryKey: 'serviceArea',
+        queryFn: () => getServiceAreaTree(access_token),
+    })
+
+    const pickupAreaOptions = [] as { label: string; value: string }[]
+
+    if (!isLoading) {
+        serviceArea?.data?.divisions.forEach((div) => {
+            div?.districts?.forEach((dis) => {
+                dis?.areas?.forEach((area) => {
+                    pickupAreaOptions.push({
+                        label: div.name + ' - ' + dis.name + ' - ' + area.name,
+                        value: div.name + ' - ' + dis.name + ' - ' + area.name,
+                    })
+                })
+            })
         })
     }
 
@@ -152,12 +163,7 @@ function AddShopDrawer({
                             </FormControl>
                             <FormControl isRequired>
                                 <FormLabel>Pickup area</FormLabel>
-                                <Input
-                                    type="text"
-                                    name="pickupArea"
-                                    focusBorderColor="primary.500"
-                                    placeholder="Pickup area"
-                                />
+                                <SearchableSelect options={pickupAreaOptions} />
                             </FormControl>
                             <FormControl isRequired>
                                 <FormLabel>Pickup phone</FormLabel>

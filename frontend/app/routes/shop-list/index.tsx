@@ -100,6 +100,17 @@ export const action: ActionFunction = async ({ request }) => {
     const updateShopEmail = form.get('updateShopEmail')
     const updateShopAddress = form.get('updateShopAddress')
 
+    console.table({
+        shopName,
+        shopEmail,
+        shopAddress,
+        pickupAddress,
+        pickupArea,
+        pickupPhone,
+        shopProductType,
+        shopSubProductType,
+    })
+
     switch (action) {
         case 'addShop': {
             if (

@@ -89,6 +89,34 @@ export interface ProductChildCategories {
     data?: ProductChildCategory[]
 }
 
+// Service area
+
+export interface Division {
+    id: number
+    name: string
+    districts?: District[]
+}
+
+export interface District {
+    id: number
+    name: string
+    divisionId: number
+    areas?: Area[]
+}
+
+export interface Area {
+    id: number
+    name: string
+    districtId: number
+    zonesId: number
+}
+
+export interface ServiceArea {
+    data: {
+        divisions: Division[]
+    }
+}
+
 // API responce
 export interface LoginResponse {
     access_token: string

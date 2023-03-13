@@ -4,7 +4,6 @@ import type {
     PickupPointCreateBody,
     PickupPoints,
     PickupPointUpdateBody,
-    ProductParentCategories,
     Shop,
     ShopCreateBody,
     Shops,
