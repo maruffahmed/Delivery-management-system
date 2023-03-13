@@ -23,11 +23,8 @@ import {
 import { Form, useTransition } from '@remix-run/react'
 import { useQuery } from 'react-query'
 import type { ProductChildCategories } from '~/types'
-import SearchableSelect from '~/components/common/SearchableSelectInput'
-import {
-    getServiceAreaTree,
-    getShopParentCategories,
-} from '~/utils/merchant/CSR_API'
+import { getShopParentCategories } from '~/utils/merchant/CSR_API'
+import SearchableAreaSelect from '~/components/common/SearchableAreaSelect'
 
 function AddShopDrawer({
     onClose,
@@ -70,27 +67,6 @@ function AddShopDrawer({
         )
         setProductChildCat({
             data: selectedCat?.childs,
-        })
-    }
-
-    // Service area
-    const { data: serviceArea, isLoading } = useQuery({
-        queryKey: 'serviceArea',
-        queryFn: () => getServiceAreaTree(access_token),
-    })
-
-    const pickupAreaOptions = [] as { label: string; value: string }[]
-
-    if (!isLoading) {
-        serviceArea?.data?.divisions.forEach((div) => {
-            div?.districts?.forEach((dis) => {
-                dis?.areas?.forEach((area) => {
-                    pickupAreaOptions.push({
-                        label: div.name + ' - ' + dis.name + ' - ' + area.name,
-                        value: div.name + ' - ' + dis.name + ' - ' + area.name,
-                    })
-                })
-            })
         })
     }
 
@@ -163,7 +139,10 @@ function AddShopDrawer({
                             </FormControl>
                             <FormControl isRequired>
                                 <FormLabel>Pickup area</FormLabel>
-                                <SearchableSelect options={pickupAreaOptions} />
+                                <SearchableAreaSelect
+                                    access_token={access_token}
+                                    name="pickupArea"
+                                />
                             </FormControl>
                             <FormControl isRequired>
                                 <FormLabel>Pickup phone</FormLabel>

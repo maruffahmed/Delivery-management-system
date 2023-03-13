@@ -15,7 +15,7 @@ import {
     useDisclosure,
 } from '@chakra-ui/react'
 import Layout from '~/components/Layout'
-import { requireUserId } from '~/utils/session.server'
+import { getUserToken, requireUserId } from '~/utils/session.server'
 import { useActionData, useLoaderData } from '@remix-run/react'
 import {
     addShopPickUpPoint,
@@ -35,22 +35,26 @@ export const meta: MetaFunction = () => ({
 export type PickupLoaderData = {
     pickupPoints: PickupPoints
     error?: string
+    access_token: string
 }
 export const loader: LoaderFunction = async ({ request }) => {
     await requireUserId(request)
+    const access_token = await getUserToken(request)
     const pickupPoints = await getShopPickUpPoints(request)
     if (pickupPoints && (pickupPoints as ApiErrorResponse).message) {
         return {
             error: (pickupPoints as ApiErrorResponse).message,
             pickupPoints: { data: [] },
+            access_token,
         } as PickupLoaderData
     } else if (!pickupPoints) {
         return {
             error: 'Something is wrong. Please reload the browser.',
             pickupPoints: { data: [] },
+            access_token,
         } as PickupLoaderData
     }
-    return { pickupPoints } as PickupLoaderData
+    return { pickupPoints, access_token } as PickupLoaderData
 }
 
 export type PickupPointActionData = {
@@ -160,7 +164,8 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 function PickupList() {
-    const { pickupPoints, error } = useLoaderData<PickupLoaderData>()
+    const { pickupPoints, error, access_token } =
+        useLoaderData<PickupLoaderData>()
     const actionData = useActionData<PickupPointActionData>()
     const {
         onOpen: onPickupPointOpen,
@@ -192,11 +197,13 @@ function PickupList() {
                         actionData={actionData}
                         isOpen={isPickupPointOpen}
                         onClose={onPickupPointClose}
+                        access_token={access_token}
                     />
                     <EditPickupPointDrawer
                         actionData={actionData}
                         isOpen={isEditPickupPointOpen}
                         onClose={onEditPickupPointClose}
+                        access_token={access_token}
                     />
                     {error ? (
                         <Alert status="error" variant="left-accent" my="5">

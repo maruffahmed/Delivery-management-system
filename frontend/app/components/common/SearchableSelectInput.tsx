@@ -21,10 +21,19 @@ function MenuList(props: any) {
     )
 }
 
+export interface SearchableSelectOptionsType {
+    label: string
+    value: string
+}
+
 const SearchableSelect = ({
     options,
+    name,
+    defaultValue,
 }: {
-    options: Array<{ label: string; value: string }>
+    options: Array<SearchableSelectOptionsType>
+    name: string
+    defaultValue?: SearchableSelectOptionsType
 }) => {
     return (
         <Select
@@ -43,7 +52,8 @@ const SearchableSelect = ({
             }}
             selectedOptionColorScheme="primary"
             focusBorderColor="primary.500"
-            name="pickupArea"
+            name={name}
+            defaultValue={defaultValue}
         />
     )
 }

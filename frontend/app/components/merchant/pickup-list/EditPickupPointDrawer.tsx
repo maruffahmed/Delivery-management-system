@@ -21,15 +21,18 @@ import {
 } from '@chakra-ui/react'
 import { Form, useTransition } from '@remix-run/react'
 import { usePickupPoint } from '~/context/PickupPointProvider'
+import SearchableAreaSelect from '~/components/common/SearchableAreaSelect'
 
 function EditPickupPointDrawer({
     onClose,
     isOpen,
     actionData,
+    access_token,
 }: {
     onClose: () => void
     isOpen: boolean
     actionData: PickupPointActionData | undefined
+    access_token: string
 }) {
     const formRef = React.useRef<HTMLFormElement>(null)
     const firstField = React.useRef<HTMLInputElement>(null)
@@ -87,12 +90,17 @@ function EditPickupPointDrawer({
 
                             <FormControl isRequired>
                                 <FormLabel>Pickup area</FormLabel>
-                                <Input
-                                    type="text"
+                                <SearchableAreaSelect
+                                    access_token={access_token}
                                     name="pickupArea"
-                                    focusBorderColor="primary.500"
-                                    placeholder="Select pickup area"
-                                    defaultValue={pickupPoint?.area}
+                                    defaultValue={
+                                        pickupPoint?.area
+                                            ? {
+                                                  label: pickupPoint?.area,
+                                                  value: pickupPoint?.area,
+                                              }
+                                            : undefined
+                                    }
                                 />
                             </FormControl>
                             <FormControl isRequired>
