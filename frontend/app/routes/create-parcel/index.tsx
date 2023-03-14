@@ -12,6 +12,11 @@ import {
     Heading,
     Input,
     Link,
+    NumberDecrementStepper,
+    NumberIncrementStepper,
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper,
     Select,
     SimpleGrid,
     Spacer,
@@ -20,8 +25,10 @@ import {
     Textarea,
 } from '@chakra-ui/react'
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
+import { useQuery } from 'react-query'
 import SearchableAreaSelect from '~/components/common/SearchableAreaSelect'
 import Layout from '~/components/Layout'
+import { getParcelProductParentCateogires } from '~/utils/merchant/CSR_API'
 import { requireUserId } from '~/utils/session.server'
 
 export const meta: MetaFunction = () => ({
@@ -34,6 +41,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 function CreateParcel() {
+    const { data: parcelProductParentCat } = useQuery({
+        queryKey: 'parcelProductParentCategories',
+        queryFn: () => getParcelProductParentCateogires(),
+    })
     return (
         <Layout>
             <Container maxW="container.xl" py="8">
@@ -78,7 +89,9 @@ function CreateParcel() {
                             </FormControl>
 
                             <FormControl>
-                                <FormLabel>Invoice Id</FormLabel>
+                                <FormLabel>
+                                    Invoice Id <small>(Optional)</small>
+                                </FormLabel>
                                 <Input
                                     type="text"
                                     name="invoiceId"
@@ -92,13 +105,24 @@ function CreateParcel() {
                         </Heading>
                         <SimpleGrid columns={{ base: 1, md: 2 }} spacing="5">
                             <FormControl isRequired>
-                                <FormLabel>Percel weight</FormLabel>
-                                <Input
-                                    type="text"
+                                <FormLabel>Percel weight (gm)</FormLabel>
+                                <NumberInput
                                     name="percelWeight"
-                                    placeholder="500gm"
+                                    defaultValue="500"
+                                    min={500}
+                                    max={20000}
+                                    step={500}
                                     focusBorderColor="primary.500"
-                                />
+                                >
+                                    <NumberInputField
+                                        placeholder="500gm"
+                                        prefix="gm"
+                                    />
+                                    <NumberInputStepper>
+                                        <NumberIncrementStepper />
+                                        <NumberDecrementStepper />
+                                    </NumberInputStepper>
+                                </NumberInput>
                             </FormControl>
                             <FormControl isRequired>
                                 <FormLabel>Delivery area</FormLabel>
@@ -114,7 +138,7 @@ function CreateParcel() {
                                 />
                             </FormControl>
                             <FormControl isRequired>
-                                <FormLabel>Percel price</FormLabel>
+                                <FormLabel>Percel product price</FormLabel>
                                 <Input
                                     type="text"
                                     name="percelPrice"
@@ -144,10 +168,18 @@ function CreateParcel() {
                                     name="productCategory"
                                     focusBorderColor="primary.500"
                                 >
-                                    <option value="book">Book</option>
-                                    <option value="electronics">
-                                        Electronics
-                                    </option>
+                                    {parcelProductParentCat?.data.length
+                                        ? parcelProductParentCat?.data.map(
+                                              (cat) => (
+                                                  <option
+                                                      key={cat.id}
+                                                      value={cat.name}
+                                                  >
+                                                      {cat.name}
+                                                  </option>
+                                              ),
+                                          )
+                                        : null}
                                 </Select>
                             </FormControl>
                         </SimpleGrid>

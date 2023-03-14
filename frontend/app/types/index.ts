@@ -82,6 +82,10 @@ export interface ProductParentCategories {
     data: ProductParentCategory[]
 }
 
+export interface ParcelProductParentCategories {
+    data: Pick<ProductParentCategory, 'id' | 'name'>[]
+}
+
 export interface ProductChildCategory extends ProductParentCategory {
     parentId: number
 }
