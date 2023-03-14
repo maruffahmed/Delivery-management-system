@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import {
+  ParcelProductCategories,
   Prisma,
   ShopProductsChildCategories,
   ShopProductsParentCategories,
@@ -23,6 +24,28 @@ export class ShopProductCategoriesService {
   ): Promise<ShopProductsParentCategories[]> {
     const { skip, take, cursor, where, orderBy } = params;
     return this.prisma.shopProductsParentCategories.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+      ...options,
+    });
+  }
+
+  // return all parcel product parent categories
+  async parcelProductParentCategories(
+    params: {
+      skip?: number;
+      take?: number;
+      cursor?: Prisma.ParcelProductCategoriesWhereUniqueInput;
+      where?: Prisma.ParcelProductCategoriesWhereInput;
+      orderBy?: Prisma.ParcelProductCategoriesOrderByWithRelationInput;
+    },
+    options?: Prisma.ParcelProductCategoriesArgs,
+  ): Promise<ParcelProductCategories[]> {
+    const { skip, take, cursor, where, orderBy } = params;
+    return this.prisma.parcelProductCategories.findMany({
       skip,
       take,
       cursor,

@@ -15,7 +15,7 @@ export class ShopProductCategoriesController {
     private shopProductCategoriesService: ShopProductCategoriesService,
   ) {}
 
-  // GET /shop-product-categories/parents
+  // GET /shop-product-categories/parent
   @Get('/parent')
   async productParentCategories(
     @Query('child', new DefaultValuePipe(false), ParseBoolPipe) child: boolean,
@@ -30,13 +30,19 @@ export class ShopProductCategoriesController {
     );
   }
 
-  // GET /shop-product-categories/parents
+  // GET /shop-product-categories/parent
+  @Get('/parcel-parent')
+  async parcelProductParentCategories() {
+    return this.shopProductCategoriesService.parcelProductParentCategories({});
+  }
+
+  // GET /shop-product-categories/child
   @Get('/child')
   async productChildCategories() {
     return this.shopProductCategoriesService.productChildCategories({});
   }
 
-  // GET /shop-product-categories/parents
+  // GET /shop-product-categories/child/1
   @Get('/child/:parentId')
   async productChildCategoriesWhere(
     @Param('parentId', ParseIntPipe) parentId: number,

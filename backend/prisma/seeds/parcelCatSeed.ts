@@ -1,13 +1,13 @@
 import { PrismaClient } from '@prisma/client';
-import ParentParcelCat from './data/ParentParcelCat';
-import { delay } from './utils';
+import ParentParcelCat from '../data/ParentParcelCat';
+import { delay } from '../utils';
 const prisma = new PrismaClient();
 
 async function main() {
   // Seed parcel categories
   const parcelParentCategoies = ParentParcelCat.parentCategories;
   for (const parentCategory of parcelParentCategoies) {
-    await prisma.parcelCategories.upsert({
+    await prisma.parcelProductCategories.upsert({
       where: { name: parentCategory.name },
       update: {},
       create: {

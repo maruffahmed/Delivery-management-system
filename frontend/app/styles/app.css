@@ -826,6 +826,10 @@ html {
     margin-bottom: 0.75rem;
 }
 
+.mb-5 {
+    margin-bottom: 1.25rem;
+}
+
 .mt-1 {
     margin-top: 0.25rem;
 }
@@ -836,14 +840,6 @@ html {
 
 .mt-6 {
     margin-top: 1.5rem;
-}
-
-.mb-4 {
-    margin-bottom: 1rem;
-}
-
-.mb-5 {
-    margin-bottom: 1.25rem;
 }
 
 .block {
@@ -906,16 +902,8 @@ html {
     justify-content: center;
 }
 
-.justify-between {
-    justify-content: space-between;
-}
-
 .justify-around {
     justify-content: space-around;
-}
-
-.gap-6 {
-    gap: 1.5rem;
 }
 
 .overflow-hidden {

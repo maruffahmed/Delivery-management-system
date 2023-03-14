@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
-import { delay } from './utils';
-import Locations from './data/AreaTree';
-import AreaPrice from './data/AreaPrice';
+import { delay } from '../utils';
+import Locations from '../data/AreaTree';
+import AreaPrice from '../data/AreaPrice';
 const prisma = new PrismaClient();
 
 async function main() {

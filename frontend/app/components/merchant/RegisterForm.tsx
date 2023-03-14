@@ -15,7 +15,6 @@ import {
     InputGroup,
     InputRightElement,
     Link,
-    Select,
     SimpleGrid,
     Spinner,
     Text,
@@ -284,7 +283,6 @@ function RegisterForm({
                                     ? 'password-error'
                                     : undefined
                             }
-                            defaultValue="111111"
                         />
                         <InputRightElement width="4.5rem">
                             <Button
@@ -330,7 +328,6 @@ function RegisterForm({
                                     ? 'confirmPassword-error'
                                     : undefined
                             }
-                            defaultValue="111111"
                         />
                         <InputRightElement width="4.5rem">
                             <Button
