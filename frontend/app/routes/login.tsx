@@ -87,7 +87,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     return null
 }
 
-function Login() {
+export default function Login() {
     const actionData = useActionData<ActionData>()
     const [searchParams] = useSearchParams()
     const transition = useTransition()
@@ -116,5 +116,3 @@ function Login() {
         </Layout>
     )
 }
-
-export default Login

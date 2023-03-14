@@ -33,16 +33,10 @@ export type ActionData = {
         message: string
     }
     fieldErrors?: {
-        name?: string | undefined
         email?: string | undefined
-        phone?: string | undefined
         password?: string | undefined
         confirmPassword?: string | undefined
-        shopName?: string | undefined
         shopEmail?: string | undefined
-        shopAddress?: string | undefined
-        shopProductType?: string | undefined
-        shopSubProductType?: string | undefined
     }
     fields?: {
         name?: string
@@ -55,6 +49,9 @@ export type ActionData = {
         shopAddress?: string
         shopProductType?: string
         shopSubProductType?: string
+        pickupAddress?: string
+        pickupArea?: string
+        pickupPhone?: string
     }
 }
 
@@ -70,6 +67,10 @@ export const action: ActionFunction = async ({ request }) => {
     const shopSubProductType = form.get('subProductType')
     const password = form.get('password')
     const confirmPassword = form.get('confirmPassword')
+    const pickupAddress = form.get('pickupAddress')
+    const pickupArea = form.get('pickupArea')
+    const pickupPhone = form.get('pickupPhone')
+
     if (
         typeof name !== 'string' ||
         typeof email !== 'string' ||
@@ -80,7 +81,10 @@ export const action: ActionFunction = async ({ request }) => {
         typeof shopProductType !== 'string' ||
         typeof shopSubProductType !== 'string' ||
         typeof password !== 'string' ||
-        typeof confirmPassword !== 'string'
+        typeof confirmPassword !== 'string' ||
+        typeof pickupAddress !== 'string' ||
+        typeof pickupArea !== 'string' ||
+        typeof pickupPhone !== 'string'
     ) {
         return badRequest({
             formError: `Form not submitted correctly.`,
@@ -98,6 +102,9 @@ export const action: ActionFunction = async ({ request }) => {
         shopSubProductType,
         password,
         confirmPassword,
+        pickupAddress,
+        pickupArea,
+        pickupPhone,
     }
     const fieldErrors = {
         email: validateEmail(email),
@@ -118,6 +125,9 @@ export const action: ActionFunction = async ({ request }) => {
         shopAddress,
         shopProductType,
         shopSubProductType,
+        pickupAddress,
+        pickupArea,
+        pickupPhone,
     })
     if (user && (user as ApiErrorResponse).message) {
         return badRequest({

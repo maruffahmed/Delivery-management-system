@@ -35,7 +35,6 @@ export const meta: MetaFunction = () => ({
 export type PickupLoaderData = {
     pickupPoints: PickupPoints
     error?: string
-    access_token: string
 }
 export const loader: LoaderFunction = async ({ request }) => {
     await requireUserId(request)
@@ -45,13 +44,11 @@ export const loader: LoaderFunction = async ({ request }) => {
         return {
             error: (pickupPoints as ApiErrorResponse).message,
             pickupPoints: { data: [] },
-            access_token,
         } as PickupLoaderData
     } else if (!pickupPoints) {
         return {
             error: 'Something is wrong. Please reload the browser.',
             pickupPoints: { data: [] },
-            access_token,
         } as PickupLoaderData
     }
     return { pickupPoints, access_token } as PickupLoaderData
@@ -164,8 +161,7 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 function PickupList() {
-    const { pickupPoints, error, access_token } =
-        useLoaderData<PickupLoaderData>()
+    const { pickupPoints, error } = useLoaderData<PickupLoaderData>()
     const actionData = useActionData<PickupPointActionData>()
     const {
         onOpen: onPickupPointOpen,
@@ -197,13 +193,11 @@ function PickupList() {
                         actionData={actionData}
                         isOpen={isPickupPointOpen}
                         onClose={onPickupPointClose}
-                        access_token={access_token}
                     />
                     <EditPickupPointDrawer
                         actionData={actionData}
                         isOpen={isEditPickupPointOpen}
                         onClose={onEditPickupPointClose}
-                        access_token={access_token}
                     />
                     {error ? (
                         <Alert status="error" variant="left-accent" my="5">

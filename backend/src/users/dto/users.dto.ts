@@ -42,4 +42,16 @@ export class CreateUserDto implements User {
   @IsNotEmpty()
   @IsString({ message: "'shopSubProductType' be a string" })
   shopSubProductType: string;
+
+  @IsNotEmpty()
+  @IsString({ message: "'pickupAddress' be a string" })
+  pickupAddress: string;
+
+  @IsNotEmpty()
+  @IsString({ message: "'pickupArea' be a string" })
+  pickupArea: string;
+
+  @IsNotEmpty()
+  @IsString({ message: "'pickupPhone' be a string" })
+  pickupPhone: string;
 }

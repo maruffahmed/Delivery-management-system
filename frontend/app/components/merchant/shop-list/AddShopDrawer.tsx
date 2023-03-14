@@ -16,26 +16,25 @@ import {
     FormErrorMessage,
     FormLabel,
     Input,
-    Select,
     SimpleGrid,
     Spinner,
 } from '@chakra-ui/react'
 import { Form, useTransition } from '@remix-run/react'
-import { useQuery } from 'react-query'
-import type { ProductChildCategories } from '~/types'
-import { getShopParentCategories } from '~/utils/merchant/CSR_API'
 import SearchableAreaSelect from '~/components/common/SearchableAreaSelect'
+import {
+    ShopProductCatSelectProvider,
+    ShopProductChildCategoriesSelect,
+    ShopProductParentCategoriesSelect,
+} from '~/context/ShopProductCatSelect'
 
 function AddShopDrawer({
     onClose,
     isOpen,
     actionData,
-    access_token,
 }: {
     onClose: () => void
     isOpen: boolean
     actionData: ActionData | undefined
-    access_token: string
 }) {
     const formRef = React.useRef<HTMLFormElement>(null)
     const firstField = React.useRef<HTMLInputElement>(null)
@@ -52,24 +51,6 @@ function AddShopDrawer({
         }
     }, [actionData, onClose])
 
-    // Product categories state
-    const [productChildCat, setProductChildCat] =
-        React.useState<ProductChildCategories>()
-
-    const { data: productParentCategories } = useQuery({
-        queryKey: 'shopProductParentCat',
-        queryFn: () => getShopParentCategories(access_token),
-    })
-
-    const handleProductChildCat = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedCat = productParentCategories?.data.find(
-            (cat) => cat.name === e.target.value,
-        )
-        setProductChildCat({
-            data: selectedCat?.childs,
-        })
-    }
-
     return (
         <Drawer placement="right" size="lg" onClose={onClose} isOpen={isOpen}>
             <DrawerOverlay />
@@ -80,127 +61,107 @@ function AddShopDrawer({
                     </DrawerHeader>
 
                     <DrawerBody>
-                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing="4">
-                            <FormControl isRequired>
-                                <FormLabel>Shop name</FormLabel>
-                                <Input
-                                    type="text"
-                                    name="shopName"
-                                    focusBorderColor="primary.500"
-                                    ref={firstField}
-                                    placeholder="Shop name"
-                                />
-                            </FormControl>
-
-                            <FormControl
-                                isInvalid={
-                                    actionData?.fieldErrors?.shopEmail?.length
-                                        ? true
-                                        : false
-                                }
-                                isRequired
+                        <ShopProductCatSelectProvider>
+                            <SimpleGrid
+                                columns={{ base: 1, md: 2 }}
+                                spacing="4"
                             >
-                                <FormLabel>Shop email</FormLabel>
-                                <Input
-                                    type="email"
-                                    name="shopEmail"
-                                    placeholder="Email address"
-                                    focusBorderColor="primary.500"
-                                    defaultValue={actionData?.fields?.shopEmail}
-                                    aria-errormessage={
-                                        actionData?.fieldErrors?.shopEmail
-                                            ? 'email-error'
-                                            : undefined
-                                    }
-                                />
-                                <FormErrorMessage>
-                                    {actionData?.fieldErrors?.shopEmail ? (
-                                        <>{actionData.fieldErrors.shopEmail}</>
-                                    ) : null}
-                                </FormErrorMessage>
-                            </FormControl>
-                            <FormControl isRequired>
-                                <FormLabel>Shop address</FormLabel>
-                                <Input
-                                    type="text"
-                                    name="shopAddress"
-                                    focusBorderColor="primary.500"
-                                    placeholder="Shop address"
-                                />
-                            </FormControl>
-                            <FormControl isRequired>
-                                <FormLabel>Pickup address</FormLabel>
-                                <Input
-                                    type="text"
-                                    name="pickupAddress"
-                                    focusBorderColor="primary.500"
-                                    placeholder="Pickup address"
-                                />
-                            </FormControl>
-                            <FormControl isRequired>
-                                <FormLabel>Pickup area</FormLabel>
-                                <SearchableAreaSelect
-                                    access_token={access_token}
-                                    name="pickupArea"
-                                />
-                            </FormControl>
-                            <FormControl isRequired>
-                                <FormLabel>Pickup phone</FormLabel>
-                                <Input
-                                    type="text"
-                                    name="pickupPhone"
-                                    focusBorderColor="primary.500"
-                                    placeholder="Pickup phone"
-                                />
-                            </FormControl>
-                            <FormControl isRequired>
-                                <FormLabel>Product Type</FormLabel>
-                                <Select
-                                    placeholder="Choose product type"
-                                    name="productType"
-                                    focusBorderColor="primary.500"
-                                    onChange={handleProductChildCat}
-                                >
-                                    {productParentCategories?.data.length
-                                        ? productParentCategories?.data.map(
-                                              (cat) => {
-                                                  return (
-                                                      <option
-                                                          value={cat.name}
-                                                          key={cat.id}
-                                                      >
-                                                          {cat.name}
-                                                      </option>
-                                                  )
-                                              },
-                                          )
-                                        : null}
-                                </Select>
-                            </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel>Shop name</FormLabel>
+                                    <Input
+                                        type="text"
+                                        name="shopName"
+                                        focusBorderColor="primary.500"
+                                        ref={firstField}
+                                        placeholder="Shop name"
+                                    />
+                                </FormControl>
 
-                            <FormControl isRequired>
-                                <FormLabel>Product Sub Category Type</FormLabel>
-                                <Select
-                                    placeholder="Choose sub Category type"
-                                    name="subProductType"
-                                    focusBorderColor="primary.500"
-                                    defaultValue="history"
+                                <FormControl
+                                    isInvalid={
+                                        actionData?.fieldErrors?.shopEmail
+                                            ?.length
+                                            ? true
+                                            : false
+                                    }
+                                    isRequired
                                 >
-                                    {productChildCat?.data?.length
-                                        ? productChildCat?.data.map((cat) => {
-                                              return (
-                                                  <option
-                                                      value={cat.name}
-                                                      key={cat.id}
-                                                  >
-                                                      {cat.name}
-                                                  </option>
-                                              )
-                                          })
-                                        : null}
-                                </Select>
-                            </FormControl>
-                        </SimpleGrid>
+                                    <FormLabel>Shop email</FormLabel>
+                                    <Input
+                                        type="email"
+                                        name="shopEmail"
+                                        placeholder="Email address"
+                                        focusBorderColor="primary.500"
+                                        defaultValue={
+                                            actionData?.fields?.shopEmail
+                                        }
+                                        aria-errormessage={
+                                            actionData?.fieldErrors?.shopEmail
+                                                ? 'email-error'
+                                                : undefined
+                                        }
+                                    />
+                                    <FormErrorMessage>
+                                        {actionData?.fieldErrors?.shopEmail ? (
+                                            <>
+                                                {
+                                                    actionData.fieldErrors
+                                                        .shopEmail
+                                                }
+                                            </>
+                                        ) : null}
+                                    </FormErrorMessage>
+                                </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel>Shop address</FormLabel>
+                                    <Input
+                                        type="text"
+                                        name="shopAddress"
+                                        focusBorderColor="primary.500"
+                                        placeholder="Shop address"
+                                    />
+                                </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel>Pickup address</FormLabel>
+                                    <Input
+                                        type="text"
+                                        name="pickupAddress"
+                                        focusBorderColor="primary.500"
+                                        placeholder="Pickup address"
+                                    />
+                                </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel>Pickup area</FormLabel>
+                                    <SearchableAreaSelect name="pickupArea" />
+                                </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel>Pickup phone</FormLabel>
+                                    <Input
+                                        type="text"
+                                        name="pickupPhone"
+                                        focusBorderColor="primary.500"
+                                        placeholder="Pickup phone"
+                                    />
+                                </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel>Product Type</FormLabel>
+                                    <ShopProductParentCategoriesSelect
+                                        placeholder="Choose product type"
+                                        name="productType"
+                                    />
+                                </FormControl>
+
+                                <FormControl isRequired>
+                                    <FormLabel>
+                                        Product Sub Category Type
+                                    </FormLabel>
+                                    <ShopProductChildCategoriesSelect
+                                        placeholder="Choose sub Category type"
+                                        name="subProductType"
+                                    />
+                                </FormControl>
+                            </SimpleGrid>
+                        </ShopProductCatSelectProvider>
 
                         {actionData?.formError?.length ? (
                             <Alert status="error" mt="4">

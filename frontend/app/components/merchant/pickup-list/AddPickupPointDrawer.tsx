@@ -25,12 +25,10 @@ function AddPickupPointDrawer({
     onClose,
     isOpen,
     actionData,
-    access_token,
 }: {
     onClose: () => void
     isOpen: boolean
     actionData: PickupPointActionData | undefined
-    access_token: string
 }) {
     const formRef = React.useRef<HTMLFormElement>(null)
     const firstField = React.useRef<HTMLInputElement>(null)
@@ -79,10 +77,7 @@ function AddPickupPointDrawer({
 
                             <FormControl isRequired>
                                 <FormLabel>Pickup area</FormLabel>
-                                <SearchableAreaSelect
-                                    access_token={access_token}
-                                    name="pickupArea"
-                                />
+                                <SearchableAreaSelect name="pickupArea" />
                             </FormControl>
                             <FormControl isRequired>
                                 <FormLabel>Pickup phone</FormLabel>

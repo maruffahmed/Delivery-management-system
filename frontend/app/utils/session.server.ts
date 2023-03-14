@@ -39,6 +39,9 @@ type RegistrationForm = {
     shopAddress: string
     shopProductType: string
     shopSubProductType: string
+    pickupAddress: string
+    pickupArea: string
+    pickupPhone: string
 }
 export async function register(
     regFormData: RegistrationForm,
@@ -53,6 +56,9 @@ export async function register(
         shopAddress,
         shopProductType,
         shopSubProductType,
+        pickupAddress,
+        pickupArea,
+        pickupPhone,
     } = regFormData
     try {
         const user = await axios.post('/auth/merchant/register', {
@@ -65,6 +71,9 @@ export async function register(
             shopAddress,
             shopProductType,
             shopSubProductType,
+            pickupAddress,
+            pickupArea,
+            pickupPhone,
         })
         return user.data
     } catch (error) {

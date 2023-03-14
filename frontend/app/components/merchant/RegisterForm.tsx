@@ -16,11 +16,18 @@ import {
     InputRightElement,
     Link,
     Select,
+    SimpleGrid,
     Spinner,
     Text,
     useToast,
 } from '@chakra-ui/react'
 import { Form, Link as RemixLink } from '@remix-run/react'
+import {
+    ShopProductCatSelectProvider,
+    ShopProductChildCategoriesSelect,
+    ShopProductParentCategoriesSelect,
+} from '~/context/ShopProductCatSelect'
+import SearchableAreaSelect from '../common/SearchableAreaSelect'
 
 function RegisterForm({
     actionData,
@@ -101,7 +108,7 @@ function RegisterForm({
             <Text className="text-gray-700 mt-1 font-bold mb-3">
                 Personal Inforamtion
             </Text>
-            <div className="flex justify-between gap-6 mb-3">
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing="4">
                 <FormControl isRequired>
                     <FormLabel>Full Name</FormLabel>
                     <Input
@@ -136,9 +143,6 @@ function RegisterForm({
                         ) : null}
                     </FormErrorMessage>
                 </FormControl>
-            </div>
-
-            <div className="flex justify-between gap-6 mb-3">
                 <FormControl isRequired>
                     <FormLabel>Phone Number</FormLabel>
                     <Input
@@ -148,98 +152,116 @@ function RegisterForm({
                         focusBorderColor="primary.500"
                     />
                 </FormControl>
-            </div>
+            </SimpleGrid>
 
             <Text className="text-gray-700 font-bold mt-6">
                 Shop Information
             </Text>
-            <Text as="small" className="text-gray-700 mb-3 block">
+            <Text as="small" className="text-gray-700 mb-5 block">
                 If you have more thant one busines, you can create multiple
                 shops later
             </Text>
-            <div className="flex justify-between gap-6 mb-3">
-                <FormControl isRequired>
-                    <FormLabel>Shop Name</FormLabel>
-                    <Input
-                        type="text"
-                        name="shopName"
-                        placeholder="Shop Name"
-                        focusBorderColor="primary.500"
-                        defaultValue="maurf shop"
-                    />
-                </FormControl>
-                <FormControl
-                    isInvalid={
-                        actionData?.fieldErrors?.shopEmail?.length
-                            ? true
-                            : false
-                    }
-                    isRequired
-                >
-                    <FormLabel>Shop Email</FormLabel>
-                    <Input
-                        type="email"
-                        name="shopEmail"
-                        placeholder="Email address"
-                        focusBorderColor="primary.500"
-                        // defaultValue={actionData?.fields?.shopEmail}
-                        aria-errormessage={
-                            actionData?.fieldErrors?.shopEmail
-                                ? 'email-error'
-                                : undefined
+            <ShopProductCatSelectProvider>
+                <SimpleGrid columns={{ base: 1, md: 2 }} spacing="4">
+                    <FormControl isRequired>
+                        <FormLabel>Shop Name</FormLabel>
+                        <Input
+                            type="text"
+                            name="shopName"
+                            placeholder="Shop Name"
+                            focusBorderColor="primary.500"
+                        />
+                    </FormControl>
+                    <FormControl
+                        isInvalid={
+                            actionData?.fieldErrors?.shopEmail?.length
+                                ? true
+                                : false
                         }
-                        defaultValue="marufah76@gmail.com"
-                    />
-                    <FormErrorMessage>
-                        {actionData?.fieldErrors?.shopEmail ? (
-                            <>{actionData.fieldErrors.shopEmail}</>
-                        ) : null}
-                    </FormErrorMessage>
-                </FormControl>
-            </div>
-            <div className="flex justify-between gap-6 mb-3">
+                        isRequired
+                    >
+                        <FormLabel>Shop Email</FormLabel>
+                        <Input
+                            type="email"
+                            name="shopEmail"
+                            placeholder="Email address"
+                            focusBorderColor="primary.500"
+                            // defaultValue={actionData?.fields?.shopEmail}
+                            aria-errormessage={
+                                actionData?.fieldErrors?.shopEmail
+                                    ? 'email-error'
+                                    : undefined
+                            }
+                        />
+                        <FormErrorMessage>
+                            {actionData?.fieldErrors?.shopEmail ? (
+                                <>{actionData.fieldErrors.shopEmail}</>
+                            ) : null}
+                        </FormErrorMessage>
+                    </FormControl>
+                    <FormControl isRequired>
+                        <FormLabel>Shop Address</FormLabel>
+                        <Input
+                            type="text"
+                            name="shopAddress"
+                            placeholder="Shop Address"
+                            focusBorderColor="primary.500"
+                        />
+                    </FormControl>
+                    <FormControl isRequired>
+                        <FormLabel>Product Type</FormLabel>
+                        <ShopProductParentCategoriesSelect
+                            placeholder="Choose product type"
+                            name="productType"
+                        />
+                    </FormControl>
+                    <FormControl isRequired>
+                        <FormLabel>Product Sub Category Type</FormLabel>
+                        <ShopProductChildCategoriesSelect
+                            placeholder="Choose sub Category type"
+                            name="subProductType"
+                        />
+                    </FormControl>
+                </SimpleGrid>
+            </ShopProductCatSelectProvider>
+
+            <Text className="text-gray-700 font-bold mt-6">
+                Pickup Information
+            </Text>
+            <Text as="small" className="text-gray-700 mb-5 block">
+                If you have more thant one pickup location, aditional pickup can
+                be created later
+            </Text>
+
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing="4">
                 <FormControl isRequired>
-                    <FormLabel>Shop Address</FormLabel>
+                    <FormLabel>Pickup Address</FormLabel>
                     <Input
                         type="text"
-                        name="shopAddress"
-                        placeholder="Shop Address"
+                        name="pickupAddress"
+                        placeholder="Pickup Address"
                         focusBorderColor="primary.500"
-                        defaultValue="Sector #10, Uttara, Dhaka"
                     />
                 </FormControl>
-
                 <FormControl isRequired>
-                    <FormLabel>Product Type</FormLabel>
-                    <Select
-                        placeholder="Choose product type"
-                        name="productType"
-                        focusBorderColor="primary.500"
-                        defaultValue="book"
-                    >
-                        <option value="book">Book</option>
-                        <option value="electronics">Electronics</option>
-                    </Select>
+                    <FormLabel>Pickup Area</FormLabel>
+                    <SearchableAreaSelect name="pickupArea" />
                 </FormControl>
-            </div>
-
-            <div className="flex justify-between gap-6 mb-3">
                 <FormControl isRequired>
-                    <FormLabel>Product Sub Category Type</FormLabel>
-                    <Select
-                        placeholder="Choose sub Category type"
-                        name="subProductType"
+                    <FormLabel>Pickup Phone Number</FormLabel>
+                    <Input
+                        type="tel"
+                        name="pickupPhone"
+                        placeholder="+8801234678910"
                         focusBorderColor="primary.500"
-                        defaultValue="history"
-                    >
-                        <option value="history">History</option>
-                        <option value="computers">Computers</option>
-                    </Select>
+                    />
                 </FormControl>
-            </div>
+            </SimpleGrid>
 
-            <p className="text-gray-700 font-bold mt-6 mb-3">Create Password</p>
-            <div className="flex justify-between gap-6 mb-3">
+            <Text className="text-gray-700 font-bold mt-6 mb-3">
+                Create Password
+            </Text>
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing="4">
                 <FormControl
                     isInvalid={
                         actionData?.fieldErrors?.password?.length ? true : false
@@ -328,7 +350,7 @@ function RegisterForm({
                         ) : null}
                     </FormErrorMessage>
                 </FormControl>
-            </div>
+            </SimpleGrid>
 
             {/* <!-- You should use a button here, as the anchor is only used for the example  --> */}
             <Button

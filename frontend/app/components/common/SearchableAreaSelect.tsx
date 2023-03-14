@@ -4,18 +4,16 @@ import type { SearchableSelectOptionsType } from './SearchableSelectInput'
 import SearchableSelect from './SearchableSelectInput'
 
 function SearchableAreaSelect({
-    access_token,
     name,
     defaultValue,
 }: {
-    access_token: string
     name: string
     defaultValue?: SearchableSelectOptionsType
 }) {
     // Service area
     const { data: serviceArea, isLoading } = useQuery({
         queryKey: 'serviceArea',
-        queryFn: () => getServiceAreaTree(access_token),
+        queryFn: () => getServiceAreaTree(),
     })
 
     const pickupAreaOptions = [] as Array<SearchableSelectOptionsType>

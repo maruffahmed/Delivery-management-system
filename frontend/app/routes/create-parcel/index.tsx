@@ -20,14 +20,17 @@ import {
     Textarea,
 } from '@chakra-ui/react'
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
+import SearchableAreaSelect from '~/components/common/SearchableAreaSelect'
 import Layout from '~/components/Layout'
 import { requireUserId } from '~/utils/session.server'
 
 export const meta: MetaFunction = () => ({
     title: 'Create new parcel',
 })
+
 export const loader: LoaderFunction = async ({ request }) => {
-    return await requireUserId(request)
+    await requireUserId(request)
+    return null
 }
 
 function CreateParcel() {
@@ -99,12 +102,7 @@ function CreateParcel() {
                             </FormControl>
                             <FormControl isRequired>
                                 <FormLabel>Delivery area</FormLabel>
-                                <Input
-                                    type="text"
-                                    name="deliveryArea"
-                                    placeholder="Dhaka"
-                                    focusBorderColor="primary.500"
-                                />
+                                <SearchableAreaSelect name="deliveryArea" />
                             </FormControl>
                             <FormControl isRequired>
                                 <FormLabel>Cash collection ammount</FormLabel>
