@@ -11,13 +11,14 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
   name     String
   phone    String
   password String
   roles    Roles[]
   shops    Shops[]
+  Parcel   Parcel[]
 }
 
 model Roles {
@@ -45,17 +46,19 @@ model Shops {
   user           User           @relation(fields: [userId], references: [id])
   userId         Int
   pickUpPoints   PickUpPoints[]
+  Parcel         Parcel[]
 }
 
 model PickUpPoints {
-  id       Int     @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   name     String
   address  String
   area     String
   phone    String
-  isActive Boolean @default(false)
-  shops    Shops   @relation(fields: [shopsId], references: [id])
+  isActive Boolean  @default(false)
+  shops    Shops    @relation(fields: [shopsId], references: [id])
   shopsId  Int
+  Parcel   Parcel[]
 }
 
 model ShopProductsParentCategories {
@@ -94,6 +97,7 @@ model Areas {
   districtId Int
   zones      Zones     @relation(fields: [zonesId], references: [id])
   zonesId    Int
+  Parcel     Parcel[]
 }
 
 model Zones {
@@ -120,29 +124,36 @@ model ParcelProductCategories {
   name String @unique
 }
 
-// model Parcel {
-//   id             Int            @id @default(autoincrement())
-//   parcelNumber   String
-//   // parcelType     String
-//   // parcelSubType  String
-//   parcelStatus   String
-//   parcelWeight   Float
-//   // parcelLength   Float
-//   // parcelWidth    Float
-//   // parcelHeight   Float
-//   // parcelVolume   Float
-//   parcelValue    Float
-//   parcelCurrency String
-//   parcelPickUp   PickUpPoints   @relation(fields: [parcelPickUpId], references: [id])
-//   parcelPickUpId Int
-//   parcelDropOff  DropOffPoints  @relation(fields: [parcelDropOffId], references: [id])
-//   parcelDropOffId Int
-//   parcelShop     Shops          @relation(fields: [parcelShopId], references: [id])
-//   parcelShopId   Int
-//   parcelUser     User           @relation(fields: [parcelUserId], references: [id])
-//   parcelUserId   Int
-//   parcelDriver   Driver         @relation(fields: [parcelDriverId], references: [id])
-//   parcelDriverId Int
-//   parcelDelivery Delivery       @relation(fields: [parcelDeliveryId], references: [id])
-//   parcelDeliveryId Int
-// }
+model Parcel {
+  id                      Int          @id @default(autoincrement())
+  parcelNumber            String
+  customerName            String
+  customerPhone           String
+  customerAddress         String
+  customerParcelInvoiceId String
+  parcelProductType       String
+  parcelProductCategory   String
+  parcelExtraInformation  String
+  // parcelSubType  String
+  parcelStatus            ParcelStatus @relation(fields: [parcelStatusId], references: [id])
+  parcelStatusId          Int
+  parcelWeight            Int
+  parcelCashCollection    Float
+  parcelPrice             Float
+  parcelCharge            Float
+  shop                    Shops        @relation(fields: [shopsId], references: [id])
+  shopsId                 Int
+  parcelPickUp            PickUpPoints @relation(fields: [parcelPickUpId], references: [id])
+  parcelPickUpId          Int
+  parcelDeliveryArea      Areas        @relation(fields: [parcelDeliveryAreaId], references: [id])
+  parcelDeliveryAreaId    Int
+  parcelUser              User         @relation(fields: [parcelUserId], references: [id])
+  parcelUserId            Int
+}
+
+model ParcelStatus {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  Parcel      Parcel[]
+}
