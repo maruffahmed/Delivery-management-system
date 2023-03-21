@@ -33,36 +33,20 @@ export const OrderSummary = [
         id: 2,
         labelText: 'Orders delivered',
         value: 8,
-        tooltipText:
-            'Total sum of parcels that have been created and picked up by REDX',
+        tooltipText: 'Total sum of parcels that have been delivered',
     },
     {
         id: 3,
         labelText: 'Orders in transit',
         value: 0,
         tooltipText:
-            'Total sum of parcels that have been created and picked up by REDX',
-    },
-    {
-        id: 4,
-        labelText: 'Orders returned',
-        value: 2,
-        tooltipText:
-            'Total sum of parcels that have been created and picked up by REDX',
+            'Total number of parcels that are going to be delivered soon',
     },
     {
         id: 5,
         labelText: 'Successful Delivery',
         value: '90%',
-        tooltipText:
-            'Total sum of parcels that have been created and picked up by REDX',
-    },
-    {
-        id: 6,
-        labelText: 'Orders to be returned',
-        value: 0,
-        tooltipText:
-            'Total sum of parcels that have been created and picked up by REDX',
+        tooltipText: 'The percentage of sucessful deliveries',
     },
 ]
 
@@ -72,28 +56,26 @@ export const PaymentSummary = [
         labelText: 'Total sales using REDX',
         value: 'Tk. 13219.00',
         tooltipText:
-            'Total sum of parcels that have been created and picked up by REDX',
+            'Sum of all the cash collection amount of the parcels that have been picked up by REDX',
     },
     {
         id: 2,
         labelText: 'Total delivery fees paid',
         value: 'Tk. 2996.80',
         tooltipText:
-            'Total sum of parcels that have been created and picked up by REDX',
+            'Total delivery charge of all the parcels that have been picked up by REDX',
     },
     {
         id: 3,
         labelText: 'Payment Processing',
         value: 'Tk. 0',
-        tooltipText:
-            'Total sum of parcels that have been created and picked up by REDX',
+        tooltipText: 'Total invoiced amount after delivery completion',
     },
     {
         id: 4,
         labelText: 'Paid amount',
         value: 'Tk. 10353.50',
-        tooltipText:
-            'Total sum of parcels that have been created and picked up by REDX',
+        tooltipText: 'Total amount that have been disbursed to the merchant',
     },
 ]
 
@@ -184,18 +166,18 @@ function Dashboard() {
                         </SimpleGrid>
                     </Box>
                     <Text>
-                        কল করুন @{' '}
+                        Call us{' '}
                         <Text as="span" fontWeight="bold" color="primary.500">
-                            ০৯৬১০০০৭৩৩৯
-                        </Text>{' '}
-                        | কোন প্রশ্ন আছে?{' '}
+                            01234567891{' '}
+                        </Text>
+                        | any question?{' '}
                         <Link
                             as={RemixLink}
                             to="/"
                             fontWeight="bold"
                             color="primary.500"
                         >
-                            FAQ দেখে নিন
+                            FAQ
                         </Link>
                     </Text>
                 </Container>

@@ -25,6 +25,8 @@ export class CreatePickUpPointsDto implements PickUpPoints {
   isActive: boolean;
 
   shopsId: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export class UpdatePickUpPointsDto implements Prisma.PickUpPointsUpdateInput {

@@ -6,19 +6,21 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
-  name     String
-  phone    String
-  password String
-  roles    Roles[]
-  shops    Shops[]
-  Parcel   Parcel[]
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  phone     String
+  password  String
+  roles     Roles[]
+  shops     Shops[]
+  Parcel    Parcel[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Roles {
@@ -27,6 +29,8 @@ model Roles {
   userId            Int
   role              RoleDescription @relation(fields: [roleDescriptionId], references: [id])
   roleDescriptionId Int
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
 }
 
 model RoleDescription {
@@ -47,18 +51,22 @@ model Shops {
   userId         Int
   pickUpPoints   PickUpPoints[]
   Parcel         Parcel[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 }
 
 model PickUpPoints {
-  id       Int      @id @default(autoincrement())
-  name     String
-  address  String
-  area     String
-  phone    String
-  isActive Boolean  @default(false)
-  shops    Shops    @relation(fields: [shopsId], references: [id])
-  shopsId  Int
-  Parcel   Parcel[]
+  id        Int      @id @default(autoincrement())
+  name      String
+  address   String
+  area      String
+  phone     String
+  isActive  Boolean  @default(false)
+  shops     Shops    @relation(fields: [shopsId], references: [id])
+  shopsId   Int
+  Parcel    Parcel[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ShopProductsParentCategories {
@@ -126,7 +134,7 @@ model ParcelProductCategories {
 
 model Parcel {
   id                      Int          @id @default(autoincrement())
-  parcelNumber            String
+  parcelNumber            String       @default(uuid())
   customerName            String
   customerPhone           String
   customerAddress         String
@@ -149,6 +157,8 @@ model Parcel {
   parcelDeliveryAreaId    Int
   parcelUser              User         @relation(fields: [parcelUserId], references: [id])
   parcelUserId            Int
+  createdAt               DateTime     @default(now())
+  updatedAt               DateTime     @updatedAt
 }
 
 model ParcelStatus {

@@ -26,6 +26,8 @@ export class CreateShopsDto implements Shops {
   productSubType: string;
 
   userId: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export class UpdateShopsDto implements Prisma.ShopsUpdateInput {

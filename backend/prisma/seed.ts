@@ -2,10 +2,6 @@ import { PrismaClient } from '@prisma/client';
 import ProductTypes from './data/ProductTypes';
 const prisma = new PrismaClient();
 
-function delay(time) {
-  return new Promise((resolve) => setTimeout(resolve, time));
-}
-
 async function main() {
   // Users
   const admin = await prisma.user.upsert({
@@ -83,7 +79,7 @@ async function main() {
         description: parentCat.DESCRIPTION,
       },
     });
-    await delay(100);
+    // await delay(100);
     // console.log('Parent Category ', parentCat.NAME);
 
     for (const child of childCat) {
@@ -101,7 +97,7 @@ async function main() {
         },
       });
       // delay
-      await delay(100);
+      // await delay(100);
     }
   }
 

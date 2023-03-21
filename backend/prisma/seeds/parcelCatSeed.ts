@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import ParentParcelCat from '../data/ParentParcelCat';
-import { delay } from '../utils';
+// import { delay } from '../utils';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -15,7 +15,7 @@ async function main() {
       },
     });
     //delay
-    await delay(100);
+    // await delay(100);
   }
 }
 main()

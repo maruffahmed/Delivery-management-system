@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { delay } from '../utils';
+// import { delay } from '../utils';
 import Locations from '../data/AreaTree';
 import AreaPrice from '../data/AreaPrice';
 const prisma = new PrismaClient();
@@ -77,7 +77,7 @@ async function main() {
       },
     });
     // delay
-    await delay(100);
+    // await delay(100);
 
     const district = division.Districts;
     for (const d of district) {
@@ -94,7 +94,7 @@ async function main() {
         },
       });
       // delay
-      await delay(100);
+      // await delay(100);
 
       const area = d.Areas;
       for (const a of area) {
@@ -123,7 +123,7 @@ async function main() {
           },
         });
         // delay
-        await delay(100);
+        // await delay(100);
       }
     }
   }

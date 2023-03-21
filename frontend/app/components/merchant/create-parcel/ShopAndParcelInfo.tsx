@@ -17,12 +17,17 @@ import {
     Stack,
     Text,
 } from '@chakra-ui/react'
+import type { PickupPoints } from '~/types'
 
 interface ShopAndParcelInfoProps {
     actionData: CreateParcelActionData | undefined
+    pickupPoints: PickupPoints
 }
 
-const ShopAndParcelInfo: FC<ShopAndParcelInfoProps> = ({ actionData }) => {
+const ShopAndParcelInfo: FC<ShopAndParcelInfoProps> = ({
+    actionData,
+    pickupPoints,
+}) => {
     return (
         <GridItem colSpan={{ base: 6, lg: 2 }}>
             <Stack bg="whitesmoke" px={5} py={10} spacing={5}>
@@ -43,11 +48,20 @@ const ShopAndParcelInfo: FC<ShopAndParcelInfoProps> = ({ actionData }) => {
                     <FormLabel>Pickup point</FormLabel>
                     <Select
                         placeholder="Choose pickup point"
-                        name="pickupPoint"
+                        name="parcelPickUpId"
                         focusBorderColor="primary.500"
                         bg="white"
                     >
-                        <option value="book">Uttara Sector - 10</option>
+                        {pickupPoints.data.length
+                            ? pickupPoints.data.map((pickupPoint) => (
+                                  <option
+                                      key={pickupPoint.id}
+                                      value={pickupPoint.id}
+                                  >
+                                      {pickupPoint.name}
+                                  </option>
+                              ))
+                            : null}
                     </Select>
                 </FormControl>
                 <Text fontWeight="bold" fontSize="lg">

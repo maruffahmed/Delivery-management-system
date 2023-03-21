@@ -15,6 +15,8 @@ import {
     Stack,
     Textarea,
     Select,
+    RadioGroup,
+    Radio,
 } from '@chakra-ui/react'
 import type { FC } from 'react'
 import React from 'react'
@@ -128,7 +130,7 @@ const ParcelInfoInputs: FC<ParcelInfoInputsProps> = ({
                 <Box>
                     <FormControl isRequired>
                         <FormLabel>Select percel product type</FormLabel>
-                        <Stack spacing={5} direction="row">
+                        {/* <Stack spacing={5} direction="row">
                             <Checkbox
                                 colorScheme="primary"
                                 name="parcelProductType"
@@ -141,7 +143,13 @@ const ParcelInfoInputs: FC<ParcelInfoInputsProps> = ({
                             >
                                 Liquid
                             </Checkbox>
-                        </Stack>
+                        </Stack> */}
+                        <RadioGroup name="parcelProductType">
+                            <Stack direction="row">
+                                <Radio value="fragile">Fragile</Radio>
+                                <Radio value="liquid">Liquid</Radio>
+                            </Stack>
+                        </RadioGroup>
                     </FormControl>
                 </Box>
 

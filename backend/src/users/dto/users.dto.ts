@@ -54,4 +54,7 @@ export class CreateUserDto implements User {
   @IsNotEmpty()
   @IsString({ message: "'pickupPhone' be a string" })
   pickupPhone: string;
+
+  createdAt: Date;
+  updatedAt: Date;
 }
