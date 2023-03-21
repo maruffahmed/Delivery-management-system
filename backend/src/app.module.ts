@@ -7,6 +7,7 @@ import { ShopsModule } from './shops/shops.module';
 import { ShopPickupPointsModule } from './shop-pickup-points/shop-pickup-points.module';
 import { ShopProductCategoriesModule } from './shop-product-categories/shop-product-categories.module';
 import { ServiceAreaModule } from './service-area/service-area.module';
+import { ParcelsModule } from './parcels/parcels.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ServiceAreaModule } from './service-area/service-area.module';
     ShopPickupPointsModule,
     ShopProductCategoriesModule,
     ServiceAreaModule,
+    ParcelsModule,
   ],
   controllers: [],
   providers: [PrismaService],

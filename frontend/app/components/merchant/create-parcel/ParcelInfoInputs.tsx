@@ -90,7 +90,7 @@ const ParcelInfoInputs: FC<ParcelInfoInputsProps> = ({
                 <FormControl isRequired>
                     <FormLabel>Percel weight (gm)</FormLabel>
                     <NumberInput
-                        name="percelWeight"
+                        name="parcelWeight"
                         defaultValue="500"
                         min={500}
                         max={20000}
@@ -106,7 +106,7 @@ const ParcelInfoInputs: FC<ParcelInfoInputsProps> = ({
                 </FormControl>
                 <FormControl isRequired>
                     <FormLabel>Delivery area</FormLabel>
-                    <SearchableAreaSelect name="parcelDeliveryArea" />
+                    <SearchableAreaSelect name="parcelDeliveryAreaId" />
                 </FormControl>
                 <FormControl isRequired>
                     <FormLabel>Cash collection ammount</FormLabel>
@@ -121,7 +121,7 @@ const ParcelInfoInputs: FC<ParcelInfoInputsProps> = ({
                     <FormLabel>Percel product price</FormLabel>
                     <Input
                         type="text"
-                        name="percelPrice"
+                        name="parcelPrice"
                         placeholder="Percel price"
                         focusBorderColor="primary.500"
                     />
@@ -157,12 +157,12 @@ const ParcelInfoInputs: FC<ParcelInfoInputsProps> = ({
                     <FormLabel>Product category</FormLabel>
                     <Select
                         placeholder="Choose product category"
-                        name="parcelProductCategory"
+                        name="parcelProductCategoriesId"
                         focusBorderColor="primary.500"
                     >
                         {parcelProductParentCat?.data.length
                             ? parcelProductParentCat?.data.map((cat) => (
-                                  <option key={cat.id} value={cat.name}>
+                                  <option key={cat.id} value={cat.id}>
                                       {cat.name}
                                   </option>
                               ))

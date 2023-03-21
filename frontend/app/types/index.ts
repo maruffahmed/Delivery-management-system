@@ -121,6 +121,22 @@ export interface ServiceArea {
     }
 }
 
+// Parcel
+export interface Parcel {}
+export interface ParcelCreateBody {
+    customerName: string
+    customerPhone: string
+    customerAddress: string
+    parcelWeight: number
+    parcelDeliveryAreaId: number
+    parcelCashCollection: number
+    parcelPrice: number
+    parcelProductType: string
+    parcelProductCategoriesId: number
+    parcelPickUpId: number
+    parcelCharge: number
+}
+
 // API responce
 export interface LoginResponse {
     access_token: string

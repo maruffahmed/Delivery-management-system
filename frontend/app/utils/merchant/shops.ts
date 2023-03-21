@@ -128,7 +128,7 @@ export const getShops = async (
 // export const getShop = async (id: string) => {}
 
 // Utils : Get shop ID from cookie
-const getShopIdFromCookie = (request: Request): string | null => {
+export const getShopIdFromCookie = (request: Request): string | null => {
     const coockies = request.headers.get('cookie')
     // console.log('coockies, ', coockies)
     if (coockies) {

@@ -19,6 +19,7 @@ import ShopAndParcelInfo from '~/components/merchant/create-parcel/ShopAndParcel
 import type { ApiErrorResponse, PickupPoints } from '~/types'
 import { badRequest } from '~/utils'
 import { getParcelProductParentCateogires } from '~/utils/merchant/CSR_API'
+import { addParcel } from '~/utils/merchant/parcels'
 import { getShopPickUpPoints } from '~/utils/merchant/shops'
 import { requireUserId } from '~/utils/session.server'
 
@@ -59,14 +60,14 @@ export type CreateParcelActionData = {
         customerPhone?: string
         customerAddress?: string
         customerParcelInvoiceId?: string
-        percelWeight?: string
-        parcelDeliveryArea?: string
+        parcelWeight?: number
+        parcelDeliveryAreaId?: number
         parcelCashCollection?: string
-        percelPrice?: string
+        parcelPrice?: number
         parcelProductType?: string
-        parcelProductCategory?: string
+        parcelProductCategoriesId?: number
         parcelExtraInformation?: string
-        parcelPickUpId?: string
+        parcelPickUpId?: number
     }
 }
 
@@ -78,26 +79,32 @@ export const action: ActionFunction = async ({ request }) => {
     const customerPhone = form.get('customerPhone')
     const customerAddress = form.get('customerAddress')
     const customerParcelInvoiceId = form.get('customerParcelInvoiceId')
-    const percelWeight = form.get('percelWeight')
-    const parcelDeliveryArea = form.get('parcelDeliveryArea')
+    const parcelWeight = form.get('parcelWeight')
+    const parcelDeliveryAreaId = form.get('parcelDeliveryAreaId')
     const parcelCashCollection = form.get('parcelCashCollection')
-    const percelPrice = form.get('percelPrice')
+    const parcelPrice = form.get('parcelPrice')
     const parcelProductType = form.get('parcelProductType')
-    const parcelProductCategory = form.get('parcelProductCategory')
+    const parcelProductCategoriesId = form.get('parcelProductCategoriesId')
     const parcelExtraInformation = form.get('parcelExtraInformation')
     const parcelPickUpId = form.get('parcelPickUpId')
+
+    //more
+    // const parcelStatusId = form.get('parcelStatusId')
+    // const parcelCharge = form.get('parcelCharge')
+    // const shopId = form.get('shopId')
+    // const parcelUserId = form.get('parcelUserId')
 
     if (
         typeof customerName !== 'string' ||
         typeof customerPhone !== 'string' ||
         typeof customerAddress !== 'string' ||
         typeof customerParcelInvoiceId !== 'string' ||
-        typeof percelWeight !== 'string' ||
-        typeof parcelDeliveryArea !== 'string' ||
+        typeof parcelWeight !== 'string' ||
+        typeof parcelDeliveryAreaId !== 'string' ||
         typeof parcelCashCollection !== 'string' ||
-        typeof percelPrice !== 'string' ||
+        typeof parcelPrice !== 'string' ||
         typeof parcelProductType !== 'string' ||
-        typeof parcelProductCategory !== 'string' ||
+        typeof parcelProductCategoriesId !== 'string' ||
         typeof parcelExtraInformation !== 'string' ||
         typeof parcelPickUpId !== 'string'
     ) {
@@ -111,32 +118,32 @@ export const action: ActionFunction = async ({ request }) => {
         customerPhone,
         customerAddress,
         customerParcelInvoiceId,
-        percelWeight,
-        parcelDeliveryArea,
-        parcelCashCollection,
-        percelPrice,
+        parcelWeight: Number(parcelWeight),
+        parcelDeliveryAreaId: Number(parcelDeliveryAreaId),
+        parcelCashCollection: Number(parcelCashCollection),
+        parcelPrice: Number(parcelPrice),
         parcelProductType,
-        parcelProductCategory,
+        parcelProductCategoriesId: Number(parcelProductCategoriesId),
         parcelExtraInformation,
-        parcelPickUpId,
+        parcelPickUpId: Number(parcelPickUpId),
     }
     const fieldErrors = {}
     if (Object.values(fieldErrors).some(Boolean))
         return badRequest({ fieldErrors, fields })
 
-    // const shop = await addShop(request, fields)
-    // if (shop && (shop as ApiErrorResponse).message) {
-    //     return badRequest({
-    //         formError: (shop as ApiErrorResponse).message,
-    //     })
-    // } else if (!shop) {
-    //     return badRequest({
-    //         formError: `Something went wrong. Please try again.`,
-    //     })
-    // }
+    const newParcel = await addParcel(request, { ...fields, parcelCharge: 0 })
+    if (newParcel && (newParcel as ApiErrorResponse).message) {
+        return badRequest({
+            formError: (newParcel as ApiErrorResponse).message,
+        })
+    } else if (!newParcel) {
+        return badRequest({
+            formError: `Something went wrong. Please try again.`,
+        })
+    }
 
     return json({
-        formSuccess: { message: 'Shop created successful' },
+        formSuccess: { message: 'Parcel created successful' },
         data: fields,
     })
 }
@@ -150,11 +157,19 @@ function CreateParcel() {
     })
     const [checkCondition, setCheckCondition] = React.useState<boolean>(false)
 
-    console.log('actionData', actionData)
+    const formRef = React.useRef<HTMLFormElement>(null)
+
+    React.useEffect(() => {
+        if (!formRef.current) return
+        if (actionData?.formSuccess) {
+            formRef.current.reset()
+        }
+    }, [actionData?.formSuccess])
+
     return (
         <Layout>
             <Container maxW="container.xl" py="8">
-                <Form method="post">
+                <Form method="post" ref={formRef}>
                     <Grid templateColumns="repeat(6, 1fr)" gap={5}>
                         {/* Percel input form */}
                         <ParcelInfoInputs

@@ -24,7 +24,7 @@ function SearchableAreaSelect({
                 dis?.areas?.forEach((area) => {
                     pickupAreaOptions.push({
                         label: div.name + ' - ' + dis.name + ' - ' + area.name,
-                        value: div.name + ' - ' + dis.name + ' - ' + area.name,
+                        value: area.id.toString(),
                     })
                 })
             })

@@ -54,6 +54,7 @@ const SearchableSelect = ({
             focusBorderColor="primary.500"
             name={name}
             defaultValue={defaultValue}
+            isRequired={true}
         />
     )
 }

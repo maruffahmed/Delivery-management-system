@@ -6,6 +6,7 @@ import { User, Prisma } from '@prisma/client';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
+  // Get a single user
   async user(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
     options?: Prisma.UserArgs,
@@ -16,6 +17,7 @@ export class UsersService {
     });
   }
 
+  // Get all users
   async users(
     params: {
       skip?: number;
@@ -37,12 +39,14 @@ export class UsersService {
     });
   }
 
+  // Create a single user
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
     return this.prisma.user.create({
       data,
     });
   }
 
+  // Update a single user
   async updateUser(params: {
     where: Prisma.UserWhereUniqueInput;
     data: Prisma.UserUpdateInput;
@@ -54,6 +58,7 @@ export class UsersService {
     });
   }
 
+  // Delete a single user
   async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
     return this.prisma.user.delete({
       where,

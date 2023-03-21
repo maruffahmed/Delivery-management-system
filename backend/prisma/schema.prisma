@@ -128,37 +128,38 @@ model ParcelPricing {
 }
 
 model ParcelProductCategories {
-  id   Int    @id @default(autoincrement())
-  name String @unique
+  id     Int      @id @default(autoincrement())
+  name   String   @unique
+  Parcel Parcel[]
 }
 
 model Parcel {
-  id                      Int          @id @default(autoincrement())
-  parcelNumber            String       @default(uuid())
-  customerName            String
-  customerPhone           String
-  customerAddress         String
-  customerParcelInvoiceId String
-  parcelProductType       String
-  parcelProductCategory   String
-  parcelExtraInformation  String
-  // parcelSubType  String
-  parcelStatus            ParcelStatus @relation(fields: [parcelStatusId], references: [id])
-  parcelStatusId          Int
-  parcelWeight            Int
-  parcelCashCollection    Float
-  parcelPrice             Float
-  parcelCharge            Float
-  shop                    Shops        @relation(fields: [shopsId], references: [id])
-  shopsId                 Int
-  parcelPickUp            PickUpPoints @relation(fields: [parcelPickUpId], references: [id])
-  parcelPickUpId          Int
-  parcelDeliveryArea      Areas        @relation(fields: [parcelDeliveryAreaId], references: [id])
-  parcelDeliveryAreaId    Int
-  parcelUser              User         @relation(fields: [parcelUserId], references: [id])
-  parcelUserId            Int
-  createdAt               DateTime     @default(now())
-  updatedAt               DateTime     @updatedAt
+  id                        Int                     @id @default(autoincrement())
+  parcelNumber              String                  @default(uuid())
+  customerName              String
+  customerPhone             String
+  customerAddress           String
+  customerParcelInvoiceId   String?
+  parcelProductType         String
+  parcelProductCategory     ParcelProductCategories @relation(fields: [parcelProductCategoriesId], references: [id])
+  parcelProductCategoriesId Int
+  parcelExtraInformation    String?
+  parcelStatus              ParcelStatus            @relation(fields: [parcelStatusId], references: [id])
+  parcelStatusId            Int
+  parcelWeight              Int
+  parcelCashCollection      Float
+  parcelPrice               Float
+  parcelCharge              Float
+  shop                      Shops                   @relation(fields: [shopsId], references: [id])
+  shopsId                   Int
+  parcelPickUp              PickUpPoints            @relation(fields: [parcelPickUpId], references: [id])
+  parcelPickUpId            Int
+  parcelDeliveryArea        Areas                   @relation(fields: [parcelDeliveryAreaId], references: [id])
+  parcelDeliveryAreaId      Int
+  parcelUser                User                    @relation(fields: [parcelUserId], references: [id])
+  parcelUserId              Int
+  createdAt                 DateTime                @default(now())
+  updatedAt                 DateTime                @updatedAt
 }
 
 model ParcelStatus {
