@@ -18,6 +18,8 @@ import {
     Text,
 } from '@chakra-ui/react'
 import type { PickupPoints } from '~/types'
+import { useShopProvider } from '~/context/ShopProvider'
+import { Link as RemixLink } from '@remix-run/react'
 
 interface ShopAndParcelInfoProps {
     actionData: CreateParcelActionData | undefined
@@ -28,15 +30,18 @@ const ShopAndParcelInfo: FC<ShopAndParcelInfoProps> = ({
     actionData,
     pickupPoints,
 }) => {
+    const { activeShop } = useShopProvider()
     return (
         <GridItem colSpan={{ base: 6, lg: 2 }}>
             <Stack bg="whitesmoke" px={5} py={10} spacing={5}>
                 <Flex>
                     <Text fontWeight="bold" fontSize="lg">
-                        Maruf Fasion
+                        {activeShop?.name}
                     </Text>
                     <Spacer />
                     <Link
+                        as={RemixLink}
+                        to="/shop-list"
                         color="primary.500"
                         _hover={{ textDecoration: 'none' }}
                         fontWeight="bold"

@@ -2,13 +2,11 @@ import {
   Body,
   Controller,
   Get,
-  Param,
   Post,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { UserShopGuard } from 'src/shops/guard/userShop.guard';
 import { CreateParcelDto } from './dto/parcels.dto';
 import { ParcelsService } from './parcels.service';
 
