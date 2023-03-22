@@ -1,5 +1,10 @@
-import type { ApiErrorResponse, Parcel, ParcelCreateBody } from '~/types'
-import { getUserSession, getUserToken } from '../session.server'
+import type {
+    ApiErrorResponse,
+    Parcel,
+    ParcelCreateBody,
+    Parcels,
+} from '~/types'
+import { getUserToken } from '../session.server'
 import axios from '~/utils/axios.server'
 import { AxiosError } from 'axios'
 import { getShopIdFromCookie } from './shops'
@@ -25,9 +30,6 @@ export const addParcel = async (
         const shopsId = getShopIdFromCookie(request)
         if (!shopsId) return null
 
-        const session = await getUserSession(request)
-        const userId = session.get('userId')
-
         const access_token = await getUserToken(request)
         const createParcelRes = await axios.post(
             '/parcels',
@@ -45,7 +47,6 @@ export const addParcel = async (
                 parcelStatusId: 1,
                 parcelCharge,
                 shopsId,
-                parcelUserId: userId,
             },
             {
                 headers: {
@@ -55,6 +56,30 @@ export const addParcel = async (
         )
         const parcel: Parcel = createParcelRes.data
         return parcel
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            return error.response?.data
+        }
+        return null
+    }
+}
+
+// Get all parcels
+export const getParcels = async (
+    request: Request,
+): Promise<Parcels | ApiErrorResponse | null> => {
+    try {
+        const access_token = await getUserToken(request)
+        const parcelsRes = await axios.get(
+            '/parcels?pickup=true&shop=true&deliveryArea=true',
+            {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            },
+        )
+        const parcels = parcelsRes.data
+        return parcels
     } catch (error) {
         if (error instanceof AxiosError) {
             return error.response?.data

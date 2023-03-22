@@ -22,6 +22,7 @@
         "chakra-react-select": "^4.6.0",
         "framer-motion": "^6.5.1",
         "isbot": "^3.6.5",
+        "moment": "^2.29.4",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-icons": "^4.7.1",

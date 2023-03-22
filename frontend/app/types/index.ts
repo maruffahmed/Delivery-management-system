@@ -21,6 +21,8 @@ export interface Shop {
     productType: string
     productSubType: string
     userId: number
+    createdAt: string
+    updatedAt: string
 }
 
 export interface ShopCreateBody {
@@ -53,6 +55,8 @@ export interface PickupPoint {
     phone: string
     isActive: boolean
     shopId: number
+    createdAt: string
+    updatedAt: string
 }
 
 export interface PickupPoints {
@@ -121,8 +125,47 @@ export interface ServiceArea {
     }
 }
 
+// Parcel status
+export interface ParcelStatus {
+    id: number
+    name: 'pending' | 'canceled' | 'picked-up' | 'delivered'
+    description: string
+}
+
 // Parcel
-export interface Parcel {}
+export interface Parcel {
+    id: number
+    parcelNumber: string
+    customerName: string
+    customerPhone: string
+    customerAddress: string
+    customerParcelInvoiceId: string | null
+    parcelProductType: string
+    parcelProductCategoriesId: number
+    parcelExtraInformation: string | null
+    parcelStatusId: number
+    parcelWeight: number
+    parcelCashCollection: number
+    parcelPrice: number
+    parcelCharge: number
+    shopsId: number
+    parcelPickUpId: number
+    parcelDeliveryAreaId: number
+    parcelUserId: number
+    createdAt: string
+    updatedAt: string
+    parcelStatus: ParcelStatus
+    parcelPickUp?: PickupPoint
+    shop?: Shop
+    parcelDeliveryArea?: Area & {
+        district: District & {
+            division: Division
+        }
+    }
+}
+export interface Parcels {
+    data: Parcel[]
+}
 export interface ParcelCreateBody {
     customerName: string
     customerPhone: string

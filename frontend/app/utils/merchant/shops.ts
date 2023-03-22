@@ -49,7 +49,7 @@ export const addShop = async (
         const pickupPointRes = await axios.post(
             `/shops/${shop.id}/pickup-points`,
             {
-                name: pickupArea,
+                name: pickupAddress,
                 address: pickupAddress,
                 area: pickupArea,
                 phone: pickupPhone,

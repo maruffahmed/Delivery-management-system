@@ -135,7 +135,7 @@ model ParcelProductCategories {
 
 model Parcel {
   id                        Int                     @id @default(autoincrement())
-  parcelNumber              String                  @default(uuid())
+  parcelNumber              String                  @default(cuid())
   customerName              String
   customerPhone             String
   customerAddress           String

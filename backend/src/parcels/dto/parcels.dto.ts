@@ -43,10 +43,8 @@ export class CreateParcelDto implements Parcel {
   @IsNotEmpty()
   @IsNumber({}, { message: "'parcelDeliveryAreaId' must be a number" })
   parcelDeliveryAreaId: number;
-  @IsNotEmpty()
-  @IsNumber({}, { message: "'parcelUserId' must be a number" })
-  parcelUserId: number;
 
+  parcelUserId: number;
   parcelExtraInformation: string;
   customerParcelInvoiceId: string;
   parcelNumber: string;
