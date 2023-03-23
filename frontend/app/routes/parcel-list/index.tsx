@@ -133,7 +133,9 @@ export function ParcelTableTr({ parcel }: { parcel: Parcel }) {
             <Td>{parcel.parcelPickUp?.name}</Td>
             <Td>
                 <Stack>
-                    <Text>ID: {parcel.parcelNumber.toUpperCase()}</Text>
+                    <Text>
+                        ID: <b>{parcel.parcelNumber.toUpperCase()}</b>
+                    </Text>
                     <Text>Invoice: {parcel.customerParcelInvoiceId}</Text>
                 </Stack>
             </Td>

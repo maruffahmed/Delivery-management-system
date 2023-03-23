@@ -11,26 +11,26 @@ import {
     FormControl,
     FormLabel,
     GridItem,
+    Input,
     Link,
     Select,
     Spacer,
     Stack,
     Text,
+    VStack,
 } from '@chakra-ui/react'
-import type { PickupPoints } from '~/types'
 import { useShopProvider } from '~/context/ShopProvider'
 import { Link as RemixLink } from '@remix-run/react'
+import { useCreateParcelContext } from '~/context/CreateParcelContext'
 
 interface ShopAndParcelInfoProps {
     actionData: CreateParcelActionData | undefined
-    pickupPoints: PickupPoints
 }
 
-const ShopAndParcelInfo: FC<ShopAndParcelInfoProps> = ({
-    actionData,
-    pickupPoints,
-}) => {
+const ShopAndParcelInfo: FC<ShopAndParcelInfoProps> = ({ actionData }) => {
     const { activeShop } = useShopProvider()
+    const { pickupPoints, deliveryCharge, COD_CHARGE, totalCharge } =
+        useCreateParcelContext()
     return (
         <GridItem colSpan={{ base: 6, lg: 2 }}>
             <Stack bg="whitesmoke" px={5} py={10} spacing={5}>
@@ -73,20 +73,20 @@ const ShopAndParcelInfo: FC<ShopAndParcelInfoProps> = ({
                     Delivery charge
                 </Text>
                 <Stack spacing={5}>
-                    <Flex>
+                    {/* <Flex>
                         <Text>Cash collection</Text>
                         <Spacer />
                         <Text>50tk</Text>
-                    </Flex>
+                    </Flex> */}
                     <Flex>
                         <Text>Delivery charge</Text>
                         <Spacer />
-                        <Text>50tk</Text>
+                        <Text>{deliveryCharge} TK</Text>
                     </Flex>
                     <Flex>
                         <Text>COD charge</Text>
                         <Spacer />
-                        <Text>50tk</Text>
+                        <Text>{COD_CHARGE} Tk</Text>
                     </Flex>
                 </Stack>
                 <Divider borderColor="gray.500" />
@@ -95,7 +95,17 @@ const ShopAndParcelInfo: FC<ShopAndParcelInfoProps> = ({
                         Total
                     </Text>
                     <Spacer />
-                    <Text>150tk</Text>
+                    {/* <Text>{totalCharge} Tk</Text> */}
+                    <Flex alignItems="center" gap={1}>
+                        <Input
+                            name="parcelCharge"
+                            value={totalCharge}
+                            variant="unstyled"
+                            textAlign="right"
+                            readOnly
+                        />
+                        <Text>Tk</Text>
+                    </Flex>
                 </Flex>
             </Stack>
             <Box my="5">

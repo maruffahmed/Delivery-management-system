@@ -10,16 +10,16 @@ import {
     Link as RemixLink,
     useActionData,
     useLoaderData,
+    useTransition,
 } from '@remix-run/react'
 import React from 'react'
-import { useQuery } from 'react-query'
 import Layout from '~/components/Layout'
 import ParcelInfoInputs from '~/components/merchant/create-parcel/ParcelInfoInputs'
 import ShopAndParcelInfo from '~/components/merchant/create-parcel/ShopAndParcelInfo'
-import type { ApiErrorResponse, PickupPoints } from '~/types'
+import { CreateParcelProvider } from '~/context/CreateParcelContext'
+import type { ApiErrorResponse, ParcelPrices, PickupPoints } from '~/types'
 import { badRequest } from '~/utils'
-import { getParcelProductParentCateogires } from '~/utils/merchant/CSR_API'
-import { addParcel } from '~/utils/merchant/parcels'
+import { addParcel, getParcelPricing } from '~/utils/merchant/parcels'
 import { getShopPickUpPoints } from '~/utils/merchant/shops'
 import { requireUserId } from '~/utils/session.server'
 
@@ -29,24 +29,29 @@ export const meta: MetaFunction = () => ({
 
 export type LoaderData = {
     pickupPoints: PickupPoints
+    parcelPrices: ParcelPrices
     error?: string
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
     await requireUserId(request)
     const pickupPoints = await getShopPickUpPoints(request)
+    const parcelPrices = await getParcelPricing(request)
     if (pickupPoints && (pickupPoints as ApiErrorResponse).message) {
         return {
             error: (pickupPoints as ApiErrorResponse).message,
             pickupPoints: { data: [] },
+            parcelPrices,
         }
     } else if (!pickupPoints) {
         return {
             error: 'Something is wrong. Please reload the browser.',
             pickupPoints: { data: [] },
+            parcelPrices,
         }
     }
-    return { pickupPoints }
+
+    return { pickupPoints, parcelPrices }
 }
 
 export type CreateParcelActionData = {
@@ -68,6 +73,7 @@ export type CreateParcelActionData = {
         parcelProductCategoriesId?: number
         parcelExtraInformation?: string
         parcelPickUpId?: number
+        parcelCharge?: number
     }
 }
 
@@ -87,6 +93,7 @@ export const action: ActionFunction = async ({ request }) => {
     const parcelProductCategoriesId = form.get('parcelProductCategoriesId')
     const parcelExtraInformation = form.get('parcelExtraInformation')
     const parcelPickUpId = form.get('parcelPickUpId')
+    const parcelCharge = form.get('parcelCharge')
 
     //more
     // const parcelStatusId = form.get('parcelStatusId')
@@ -106,7 +113,8 @@ export const action: ActionFunction = async ({ request }) => {
         typeof parcelProductType !== 'string' ||
         typeof parcelProductCategoriesId !== 'string' ||
         typeof parcelExtraInformation !== 'string' ||
-        typeof parcelPickUpId !== 'string'
+        typeof parcelPickUpId !== 'string' ||
+        typeof parcelCharge !== 'string'
     ) {
         return badRequest({
             formError: `Form not submitted correctly.`,
@@ -126,12 +134,13 @@ export const action: ActionFunction = async ({ request }) => {
         parcelProductCategoriesId: Number(parcelProductCategoriesId),
         parcelExtraInformation,
         parcelPickUpId: Number(parcelPickUpId),
+        parcelCharge: Number(parcelCharge),
     }
     const fieldErrors = {}
     if (Object.values(fieldErrors).some(Boolean))
         return badRequest({ fieldErrors, fields })
 
-    const newParcel = await addParcel(request, { ...fields, parcelCharge: 0 })
+    const newParcel = await addParcel(request, { ...fields })
     if (newParcel && (newParcel as ApiErrorResponse).message) {
         return badRequest({
             formError: (newParcel as ApiErrorResponse).message,
@@ -149,68 +158,73 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 function CreateParcel() {
-    const { pickupPoints } = useLoaderData<LoaderData>()
+    const { pickupPoints, parcelPrices } = useLoaderData<LoaderData>()
     const actionData = useActionData<CreateParcelActionData>()
-    const { data: parcelProductParentCat } = useQuery({
-        queryKey: 'parcelProductParentCategories',
-        queryFn: () => getParcelProductParentCateogires(),
-    })
-    const [checkCondition, setCheckCondition] = React.useState<boolean>(false)
-
+    // Select form ref
     const formRef = React.useRef<HTMLFormElement>(null)
-
+    // Reset form after success
     React.useEffect(() => {
         if (!formRef.current) return
         if (actionData?.formSuccess) {
             formRef.current.reset()
         }
     }, [actionData?.formSuccess])
+    const [checkCondition, setCheckCondition] = React.useState<boolean>(false)
+
+    const transition = useTransition()
+    const createButtonLoading =
+        transition.state === 'submitting' &&
+        transition.submission?.formData.get('_action') === 'creatingParcel'
 
     return (
-        <Layout>
-            <Container maxW="container.xl" py="8">
-                <Form method="post" ref={formRef}>
-                    <Grid templateColumns="repeat(6, 1fr)" gap={5}>
-                        {/* Percel input form */}
-                        <ParcelInfoInputs
-                            parcelProductParentCat={parcelProductParentCat}
-                            setCheckCondition={setCheckCondition}
-                        />
+        <CreateParcelProvider
+            pickupPoints={pickupPoints}
+            parcelPrices={parcelPrices}
+        >
+            <Layout>
+                <Container maxW="container.xl" py="8">
+                    <Form method="post" ref={formRef}>
+                        <Grid templateColumns="repeat(6, 1fr)" gap={5}>
+                            {/* Percel input form */}
+                            <ParcelInfoInputs
+                                setCheckCondition={setCheckCondition}
+                            />
 
-                        {/* Shops and percel information */}
-                        <ShopAndParcelInfo
-                            actionData={actionData}
-                            pickupPoints={pickupPoints}
-                        />
-                        {/* Action buttons */}
-                        <GridItem
-                            colSpan={{ base: 6, lg: 4 }}
-                            display="flex"
-                            py={5}
-                        >
-                            <Button
-                                colorScheme="primary"
-                                variant="outline"
-                                size="lg"
-                                as={RemixLink}
-                                to="/"
+                            {/* Shops and percel information */}
+                            <ShopAndParcelInfo actionData={actionData} />
+                            {/* Action buttons */}
+                            <GridItem
+                                colSpan={{ base: 6, lg: 4 }}
+                                display="flex"
+                                py={5}
                             >
-                                Cancel
-                            </Button>
-                            <Spacer />
-                            <Button
-                                colorScheme="primary"
-                                size="lg"
-                                isDisabled={!checkCondition}
-                                type="submit"
-                            >
-                                Submit
-                            </Button>
-                        </GridItem>
-                    </Grid>
-                </Form>
-            </Container>
-        </Layout>
+                                <Button
+                                    colorScheme="primary"
+                                    variant="outline"
+                                    size="lg"
+                                    as={RemixLink}
+                                    to="/"
+                                >
+                                    Cancel
+                                </Button>
+                                <Spacer />
+                                <Button
+                                    colorScheme="primary"
+                                    size="lg"
+                                    isDisabled={!checkCondition}
+                                    type="submit"
+                                    name="_action"
+                                    value="creatingParcel"
+                                    isLoading={createButtonLoading}
+                                >
+                                    Submit
+                                </Button>
+                            </GridItem>
+                        </Grid>
+                    </Form>
+                </Container>
+            </Layout>
+        </CreateParcelProvider>
     )
 }
 

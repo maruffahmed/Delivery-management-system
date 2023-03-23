@@ -21,17 +21,19 @@ import {
 import type { FC } from 'react'
 import React from 'react'
 import SearchableAreaSelect from '~/components/common/SearchableAreaSelect'
-import type { ParcelProductParentCategories } from '~/types'
+import { useCreateParcelContext } from '~/context/CreateParcelContext'
 
 interface ParcelInfoInputsProps {
-    parcelProductParentCat: ParcelProductParentCategories | undefined
     setCheckCondition: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const ParcelInfoInputs: FC<ParcelInfoInputsProps> = ({
-    parcelProductParentCat,
-    setCheckCondition,
-}) => {
+const ParcelInfoInputs: FC<ParcelInfoInputsProps> = ({ setCheckCondition }) => {
+    const {
+        parcelProductParentCat,
+        setSelectedArea,
+        setWeight,
+        setCashCollectionAmount,
+    } = useCreateParcelContext()
     return (
         <GridItem colSpan={{ base: 6, lg: 4 }}>
             <Heading size="lg" mb={5}>
@@ -96,6 +98,7 @@ const ParcelInfoInputs: FC<ParcelInfoInputsProps> = ({
                         max={20000}
                         step={500}
                         focusBorderColor="primary.500"
+                        onChange={(_, valueNumber) => setWeight(valueNumber)}
                     >
                         <NumberInputField placeholder="500gm" prefix="gm" />
                         <NumberInputStepper>
@@ -106,16 +109,26 @@ const ParcelInfoInputs: FC<ParcelInfoInputsProps> = ({
                 </FormControl>
                 <FormControl isRequired>
                     <FormLabel>Delivery area</FormLabel>
-                    <SearchableAreaSelect name="parcelDeliveryAreaId" />
+                    <SearchableAreaSelect
+                        name="parcelDeliveryAreaId"
+                        onChange={(e) =>
+                            setSelectedArea({
+                                area: e?.area!,
+                                zoneId: e?.zoneId!,
+                            })
+                        }
+                    />
                 </FormControl>
                 <FormControl isRequired>
                     <FormLabel>Cash collection ammount</FormLabel>
-                    <Input
-                        type="text"
+                    <NumberInput
                         name="parcelCashCollection"
-                        placeholder="Cash collection ammount"
                         focusBorderColor="primary.500"
-                    />
+                        min={0}
+                        onChange={(_, value) => setCashCollectionAmount(value)}
+                    >
+                        <NumberInputField placeholder="Cash collection ammount" />
+                    </NumberInput>
                 </FormControl>
                 <FormControl isRequired>
                     <FormLabel>Percel product price</FormLabel>

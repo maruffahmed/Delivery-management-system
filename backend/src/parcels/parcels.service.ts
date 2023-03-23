@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Parcel, Prisma } from '@prisma/client';
+import { Parcel, Prisma, Zones } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -62,6 +62,28 @@ export class ParcelsService {
   async deleteUser(where: Prisma.ParcelWhereUniqueInput): Promise<Parcel> {
     return this.prisma.parcel.delete({
       where,
+    });
+  }
+
+  // Get parcel pricing
+  async parcelPricing(
+    params: {
+      skip?: number;
+      take?: number;
+      cursor?: Prisma.ZonesWhereUniqueInput;
+      where?: Prisma.ZonesWhereInput;
+      orderBy?: Prisma.ZonesOrderByWithRelationInput;
+    },
+    options?: Prisma.ZonesArgs,
+  ): Promise<Zones[]> {
+    const { skip, take, cursor, where, orderBy } = params;
+    return this.prisma.zones.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+      ...options,
     });
   }
 }

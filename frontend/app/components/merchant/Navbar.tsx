@@ -35,7 +35,6 @@ const Links = [
     { title: 'Dashboard', href: '/dashboard' },
     { title: 'Parcels', href: '/parcel-list' },
     { title: 'Payments', href: '/payments-list' },
-    { title: 'Coupon', href: '/coupon-list' },
 ]
 
 const NavLink = ({ children, href }: { children: ReactNode; href: string }) => (

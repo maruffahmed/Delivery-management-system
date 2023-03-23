@@ -2,6 +2,7 @@ import type {
     ApiErrorResponse,
     Parcel,
     ParcelCreateBody,
+    ParcelPrices,
     Parcels,
 } from '~/types'
 import { getUserToken } from '../session.server'
@@ -24,6 +25,8 @@ export const addParcel = async (
         parcelPickUpId,
         parcelProductCategoriesId,
         parcelProductType,
+        customerParcelInvoiceId,
+        parcelExtraInformation,
     }: ParcelCreateBody,
 ): Promise<Parcel | ApiErrorResponse | null> => {
     try {
@@ -47,6 +50,8 @@ export const addParcel = async (
                 parcelStatusId: 1,
                 parcelCharge,
                 shopsId,
+                customerParcelInvoiceId,
+                parcelExtraInformation,
             },
             {
                 headers: {
@@ -80,6 +85,26 @@ export const getParcels = async (
         )
         const parcels = parcelsRes.data
         return parcels
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            return error.response?.data
+        }
+        return null
+    }
+}
+
+export const getParcelPricing = async (
+    request: Request,
+): Promise<ParcelPrices | ApiErrorResponse | null> => {
+    try {
+        const access_token = await getUserToken(request)
+        const parcelPricingRes = await axios.get('/parcels/pricing', {
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+            },
+        })
+        const parcelPricing: ParcelPrices = parcelPricingRes.data
+        return parcelPricing
     } catch (error) {
         if (error instanceof AxiosError) {
             return error.response?.data

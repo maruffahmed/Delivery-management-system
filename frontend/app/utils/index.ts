@@ -1,5 +1,6 @@
 import { json } from '@remix-run/node'
 import validator from 'validator'
+import type { ParcelPrices } from '~/types'
 
 export const classNames = (...classes: (string | undefined | null)[]) => {
     return classes.filter(Boolean).join(' ')
@@ -33,3 +34,24 @@ export function validatePassword(password: unknown) {
 }
 
 export const badRequest = (data: any) => json(data, { status: 400 })
+
+export const calculateDeliveryCharge = ({
+    weight,
+    zone,
+    parcelPrices,
+}: {
+    weight: number
+    zone: number
+    parcelPrices: ParcelPrices
+}) => {
+    if (!zone) return 0
+    const charge = parcelPrices.data.find((item) => item.id === zone)
+    if (!charge) return 0
+    if (weight <= 500) return charge.pricing.KG05_PRICE
+    if (weight <= 1000) return charge.pricing.KG1_PRICE
+    if (weight <= 2000) return charge.pricing.KG2_PRICE
+    if (weight <= 3000) return charge.pricing.KG3_PRICE
+    if (weight <= 4000) return charge.pricing.KG4_PRICE
+    if (weight <= 5000) return charge.pricing.KG5_PRICE
+    return Math.round((charge.pricing.KG5_PRICE / 5000) * weight)
+}

@@ -114,4 +114,26 @@ export class ParcelsController {
       data: newParcel,
     };
   }
+
+  // GET /parcels/pricing
+  @Get('pricing')
+  async parcelPricing(
+    @Query('district', new DefaultValuePipe(false), ParseBoolPipe)
+    district: boolean,
+  ) {
+    const prices = await this.parcelsService.parcelPricing(
+      {},
+      {
+        include: {
+          areas: {
+            include: {
+              district,
+            },
+          },
+          pricing: true,
+        },
+      },
+    );
+    return { data: prices };
+  }
 }

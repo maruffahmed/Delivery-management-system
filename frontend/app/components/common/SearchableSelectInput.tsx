@@ -1,3 +1,4 @@
+import type { SingleValue } from 'chakra-react-select'
 import { createFilter, Select } from 'chakra-react-select'
 import { FixedSizeList as List } from 'react-window'
 
@@ -24,17 +25,18 @@ function MenuList(props: any) {
 export interface SearchableSelectOptionsType {
     label: string
     value: string
+    area: string
+    zoneId: number
 }
 
-const SearchableSelect = ({
-    options,
-    name,
-    defaultValue,
-}: {
+interface Props {
     options: Array<SearchableSelectOptionsType>
-    name: string
+    name: string | undefined
     defaultValue?: SearchableSelectOptionsType
-}) => {
+    onChange?: (e: SingleValue<SearchableSelectOptionsType>) => void
+}
+
+const SearchableSelect = ({ options, name, defaultValue, onChange }: Props) => {
     return (
         <Select
             filterOption={createFilter({
@@ -55,6 +57,7 @@ const SearchableSelect = ({
             name={name}
             defaultValue={defaultValue}
             isRequired={true}
+            onChange={onChange}
         />
     )
 }

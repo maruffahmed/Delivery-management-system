@@ -125,14 +125,21 @@ export interface ServiceArea {
     }
 }
 
-// Parcel status
+export interface ServiceZone {
+    id: number
+    name: string
+    parcelPricingId: number
+    area: Area[]
+    pricing: ParcelPrice
+}
+
+// Parcel
 export interface ParcelStatus {
     id: number
     name: 'pending' | 'canceled' | 'picked-up' | 'delivered'
     description: string
 }
 
-// Parcel
 export interface Parcel {
     id: number
     parcelNumber: string
@@ -178,6 +185,23 @@ export interface ParcelCreateBody {
     parcelProductCategoriesId: number
     parcelPickUpId: number
     parcelCharge: number
+    customerParcelInvoiceId?: string
+    parcelExtraInformation?: string
+}
+
+// Parcel pricing
+export interface ParcelPrice {
+    id: number
+    KG05_PRICE: number
+    KG1_PRICE: number
+    KG2_PRICE: number
+    KG3_PRICE: number
+    KG4_PRICE: number
+    KG5_PRICE: number
+}
+
+export interface ParcelPrices {
+    data: ServiceZone[]
 }
 
 // API responce
