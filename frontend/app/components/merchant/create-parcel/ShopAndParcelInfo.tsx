@@ -17,7 +17,6 @@ import {
     Spacer,
     Stack,
     Text,
-    VStack,
 } from '@chakra-ui/react'
 import { useShopProvider } from '~/context/ShopProvider'
 import { Link as RemixLink } from '@remix-run/react'

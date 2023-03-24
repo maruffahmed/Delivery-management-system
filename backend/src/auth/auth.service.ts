@@ -138,11 +138,15 @@ export class AuthService {
         },
       });
       // TODO : Create a new shop pickup point
-      const { pickupAddress, pickupArea, pickupPhone } = data;
+      const { pickupAddress, pickupAreaId, pickupPhone } = data;
       await this.shopPickupPointsService.createPickUpPoint({
         name: pickupAddress,
         address: pickupAddress,
-        area: pickupArea,
+        area: {
+          connect: {
+            id: pickupAreaId,
+          },
+        },
         phone: pickupPhone,
         isActive: true,
         shops: {

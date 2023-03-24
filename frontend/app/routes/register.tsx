@@ -126,7 +126,7 @@ export const action: ActionFunction = async ({ request }) => {
         shopProductType,
         shopSubProductType,
         pickupAddress,
-        pickupArea,
+        pickupAreaId: Number(pickupArea),
         pickupPhone,
     })
     if (user && (user as ApiErrorResponse).message) {

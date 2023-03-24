@@ -40,7 +40,7 @@ type RegistrationForm = {
     shopProductType: string
     shopSubProductType: string
     pickupAddress: string
-    pickupArea: string
+    pickupAreaId: number
     pickupPhone: string
 }
 export async function register(
@@ -57,7 +57,7 @@ export async function register(
         shopProductType,
         shopSubProductType,
         pickupAddress,
-        pickupArea,
+        pickupAreaId,
         pickupPhone,
     } = regFormData
     try {
@@ -72,7 +72,7 @@ export async function register(
             shopProductType,
             shopSubProductType,
             pickupAddress,
-            pickupArea,
+            pickupAreaId,
             pickupPhone,
         })
         return user.data

@@ -47,6 +47,12 @@ function EditPickupPointDrawer({
     }, [actionData, onClose])
 
     const { pickupPoint } = usePickupPoint()
+
+    const defaultArea = {
+        label: `${pickupPoint?.area?.district?.division?.name} - ${pickupPoint?.area?.district?.name} - ${pickupPoint?.area?.name}`,
+        value: pickupPoint?.areaId.toString()!,
+    }
+
     return (
         <Drawer placement="right" size="lg" onClose={onClose} isOpen={isOpen}>
             <DrawerOverlay />
@@ -90,14 +96,7 @@ function EditPickupPointDrawer({
                                 <FormLabel>Pickup area</FormLabel>
                                 <SearchableAreaSelect
                                     name="pickupArea"
-                                    defaultValue={
-                                        pickupPoint?.area
-                                            ? {
-                                                  label: pickupPoint?.area,
-                                                  value: pickupPoint?.area,
-                                              }
-                                            : undefined
-                                    }
+                                    defaultValue={defaultArea}
                                 />
                             </FormControl>
                             <FormControl isRequired>

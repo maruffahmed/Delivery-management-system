@@ -51,12 +51,17 @@ export interface PickupPoint {
     id: number
     name: string
     address: string
-    area: string
+    areaId: number
     phone: string
     isActive: boolean
     shopId: number
     createdAt: string
     updatedAt: string
+    area?: Area & {
+        district: District & {
+            division: Division
+        }
+    }
 }
 
 export interface PickupPoints {

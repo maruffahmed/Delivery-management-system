@@ -1,5 +1,11 @@
 import { Prisma, PickUpPoints } from '@prisma/client';
-import { IsString, IsNotEmpty, IsOptional, IsBoolean } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsBoolean,
+  IsNumber,
+} from 'class-validator';
 
 export class CreatePickUpPointsDto implements PickUpPoints {
   id: number;
@@ -13,8 +19,8 @@ export class CreatePickUpPointsDto implements PickUpPoints {
   address: string;
 
   @IsNotEmpty()
-  @IsString({ message: 'Area must be a string' })
-  area: string;
+  @IsNumber({}, { message: 'areaId must be a number' })
+  areaId: number;
 
   @IsNotEmpty()
   @IsString({ message: 'Phone number must be a string' })
@@ -40,8 +46,8 @@ export class UpdatePickUpPointsDto implements Prisma.PickUpPointsUpdateInput {
   address: string;
 
   @IsOptional()
-  @IsString({ message: 'Area must be a string' })
-  area: string;
+  @IsNumber({}, { message: 'Area must be a string' })
+  areaId: number;
 
   @IsOptional()
   @IsString({ message: 'Phone number must be a string' })

@@ -51,7 +51,7 @@ export const addShop = async (
             {
                 name: pickupAddress,
                 address: pickupAddress,
-                area: pickupArea,
+                areaId: Number(pickupArea),
                 phone: pickupPhone,
                 isActive: true,
             },
@@ -155,12 +155,16 @@ export const getShopPickUpPoints = async (
         if (!shopId) return null
 
         const access_token = await getUserToken(request)
-        const res = await axios.get(`/shops/${shopId}/pickup-points`, {
-            headers: {
-                Authorization: `Bearer ${access_token}`,
+        const res = await axios.get(
+            `/shops/${shopId}/pickup-points?areaTree=true`,
+            {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
             },
-        })
+        )
         const pickupPoints: PickupPoints = res.data
+        // console.log('pickupPoints', pickupPoints)
         return pickupPoints
     } catch (error) {
         if (error instanceof AxiosError) {
@@ -190,7 +194,7 @@ export const addShopPickUpPoint = async (
             {
                 name: pickupName,
                 address: pickupAddress,
-                area: pickupArea,
+                areaId: Number(pickupArea),
                 phone: pickupPhone,
                 isActive: true,
             },
@@ -242,7 +246,7 @@ export const updateShopPickUpPoint = async (
             {
                 name: pickupName,
                 address: pickupAddress,
-                area: pickupArea,
+                areaId: Number(pickupArea),
                 phone: pickupPhone,
                 isActive: pickupStatus === 'active' ? true : false,
             },

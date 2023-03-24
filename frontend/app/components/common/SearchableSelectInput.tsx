@@ -25,8 +25,8 @@ function MenuList(props: any) {
 export interface SearchableSelectOptionsType {
     label: string
     value: string
-    area: string
-    zoneId: number
+    area?: string
+    zoneId?: number
 }
 
 interface Props {

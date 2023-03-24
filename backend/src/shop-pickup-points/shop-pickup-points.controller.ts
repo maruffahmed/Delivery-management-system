@@ -8,6 +8,9 @@ import {
   Get,
   Patch,
   ParseIntPipe,
+  Query,
+  DefaultValuePipe,
+  ParseBoolPipe,
 } from '@nestjs/common';
 import { PickUpPoints } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -27,12 +30,29 @@ export class ShopPickupPointsController {
   @UseGuards(JwtAuthGuard, UserShopGuard)
   async getPickUpPoints(
     @Param('shopId', ParseIntPipe) shopId: number,
+    @Query('areaTree', new DefaultValuePipe(false), ParseBoolPipe)
+    areaTree: boolean,
   ): Promise<{ data: PickUpPoints[] }> {
-    const pickupPoints = await this.shopPickupPointsService.pickUpPoints({
-      where: {
-        shopsId: shopId,
+    const pickupPoints = await this.shopPickupPointsService.pickUpPoints(
+      {
+        where: {
+          shopsId: shopId,
+        },
       },
-    });
+      {
+        include: {
+          area: areaTree && {
+            include: {
+              district: {
+                include: {
+                  division: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    );
     return { data: pickupPoints };
   }
 
@@ -42,8 +62,26 @@ export class ShopPickupPointsController {
   async getPickUpPoint(
     @Param('shopId', ParseIntPipe) shopId: number,
     @Param('pickupPointId', ParseIntPipe) id: number,
+    @Query('areaTree', new DefaultValuePipe(false), ParseBoolPipe)
+    areaTree: boolean,
   ): Promise<PickUpPoints> {
-    return this.shopPickupPointsService.pickUpPoint(shopId, { id });
+    return this.shopPickupPointsService.pickUpPoint(
+      shopId,
+      { id },
+      {
+        include: {
+          area: areaTree && {
+            include: {
+              district: {
+                include: {
+                  division: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    );
   }
 
   // POST /shops/1/pickup-points
@@ -53,9 +91,15 @@ export class ShopPickupPointsController {
     @Body(ValidationPipe) createPickUpPointsDto: CreatePickUpPointsDto,
     @Param('shopId', ParseIntPipe) shopId: number,
   ): Promise<PickUpPoints> {
+    const { areaId, ...data } = createPickUpPointsDto;
     return this.shopPickupPointsService.createPickUpPoint(
       {
-        ...createPickUpPointsDto,
+        ...data,
+        area: {
+          connect: {
+            id: areaId,
+          },
+        },
         shops: {
           connect: {
             id: shopId,

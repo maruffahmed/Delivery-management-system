@@ -53,7 +53,7 @@ async function main() {
             create: {
               name: 'Maruf Ahmed',
               address: 'House #22, Road #9, Sector #10, Uttara, Dhaka',
-              area: 'Sector 10, Uttara, Dhaka',
+              areaId: 1,
               phone: '01789393745',
               isActive: true,
             },

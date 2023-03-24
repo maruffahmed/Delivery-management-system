@@ -59,7 +59,8 @@ model PickUpPoints {
   id        Int      @id @default(autoincrement())
   name      String
   address   String
-  area      String
+  area      Areas    @relation(fields: [areaId], references: [id])
+  areaId    Int
   phone     String
   isActive  Boolean  @default(false)
   shops     Shops    @relation(fields: [shopsId], references: [id])
@@ -99,13 +100,14 @@ model Districts {
 }
 
 model Areas {
-  id         Int       @id @default(autoincrement())
-  name       String    @unique
-  district   Districts @relation(fields: [districtId], references: [id])
-  districtId Int
-  zones      Zones     @relation(fields: [zonesId], references: [id])
-  zonesId    Int
-  Parcel     Parcel[]
+  id           Int            @id @default(autoincrement())
+  name         String         @unique
+  district     Districts      @relation(fields: [districtId], references: [id])
+  districtId   Int
+  zones        Zones          @relation(fields: [zonesId], references: [id])
+  zonesId      Int
+  Parcel       Parcel[]
+  PickUpPoints PickUpPoints[]
 }
 
 model Zones {

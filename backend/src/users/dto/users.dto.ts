@@ -1,5 +1,11 @@
 import { User } from '@prisma/client';
-import { IsString, Length, IsEmail, IsNotEmpty } from 'class-validator';
+import {
+  IsString,
+  Length,
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+} from 'class-validator';
 
 export class CreateUserDto implements User {
   id: number;
@@ -23,36 +29,36 @@ export class CreateUserDto implements User {
   password: string;
 
   @IsNotEmpty()
-  @IsString({ message: "'shopName' be a string" })
+  @IsString({ message: "'shopName' must be a string" })
   shopName: string;
 
   @IsNotEmpty()
-  @IsString({ message: "'shopEmail' be a string" })
+  @IsString({ message: "'shopEmail' must be a string" })
   @IsEmail({}, { message: 'Invalid shop email address' })
   shopEmail: string;
 
   @IsNotEmpty()
-  @IsString({ message: "'shopAddress' be a string" })
+  @IsString({ message: "'shopAddress' must be a string" })
   shopAddress: string;
 
   @IsNotEmpty()
-  @IsString({ message: "'shopProductType' be a string" })
+  @IsString({ message: "'shopProductType' must be a string" })
   shopProductType: string;
 
   @IsNotEmpty()
-  @IsString({ message: "'shopSubProductType' be a string" })
+  @IsString({ message: "'shopSubProductType' must be a string" })
   shopSubProductType: string;
 
   @IsNotEmpty()
-  @IsString({ message: "'pickupAddress' be a string" })
+  @IsString({ message: "'pickupAddress' must be a string" })
   pickupAddress: string;
 
   @IsNotEmpty()
-  @IsString({ message: "'pickupArea' be a string" })
-  pickupArea: string;
+  @IsNumber({}, { message: "'pickupAreaId' must be a number" })
+  pickupAreaId: number;
 
   @IsNotEmpty()
-  @IsString({ message: "'pickupPhone' be a string" })
+  @IsString({ message: "'pickupPhone' must be a string" })
   pickupPhone: string;
 
   createdAt: Date;
