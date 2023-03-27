@@ -32,11 +32,14 @@ export class ShopPickupPointsController {
     @Param('shopId', ParseIntPipe) shopId: number,
     @Query('areaTree', new DefaultValuePipe(false), ParseBoolPipe)
     areaTree: boolean,
+    @Query('activeOnly', new DefaultValuePipe(false), ParseBoolPipe)
+    activeOnly: boolean,
   ): Promise<{ data: PickUpPoints[] }> {
     const pickupPoints = await this.shopPickupPointsService.pickUpPoints(
       {
         where: {
           shopsId: shopId,
+          OR: [{ isActive: activeOnly }, { isActive: true }],
         },
       },
       {

@@ -140,7 +140,7 @@ export const action: ActionFunction = async ({ request }) => {
                 pickupStatus,
             }
             const pickupPoint = await updateShopPickUpPoint(request, fields)
-            console.log('pickupPoint', pickupPoint)
+            // console.log('pickupPoint', pickupPoint)
             if (pickupPoint && (pickupPoint as ApiErrorResponse).message) {
                 return badRequest({
                     formError: (pickupPoint as ApiErrorResponse).message,

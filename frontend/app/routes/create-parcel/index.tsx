@@ -35,7 +35,9 @@ export type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request }) => {
     await requireUserId(request)
-    const pickupPoints = await getShopPickUpPoints(request)
+    const pickupPoints = await getShopPickUpPoints(request, {
+        activeOnly: true,
+    })
     const parcelPrices = await getParcelPricing(request)
     if (pickupPoints && (pickupPoints as ApiErrorResponse).message) {
         return {

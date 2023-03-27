@@ -149,14 +149,20 @@ export const getShopIdFromCookie = (request: Request): string | null => {
 // Get shops pickup points by shop ID
 export const getShopPickUpPoints = async (
     request: Request,
+    extendOptions?: { areaTree?: boolean; activeOnly?: boolean },
 ): Promise<PickupPoints | ApiErrorResponse | null> => {
+    const options = {
+        areaTree: true,
+        activeOnly: false,
+        ...extendOptions,
+    }
     try {
         const shopId = getShopIdFromCookie(request)
         if (!shopId) return null
 
         const access_token = await getUserToken(request)
         const res = await axios.get(
-            `/shops/${shopId}/pickup-points?areaTree=true`,
+            `/shops/${shopId}/pickup-points?areaTree=${options?.areaTree}&activeOnly=${options?.activeOnly}`,
             {
                 headers: {
                     Authorization: `Bearer ${access_token}`,
@@ -230,16 +236,6 @@ export const updateShopPickUpPoint = async (
         const shopId = getShopIdFromCookie(request)
         if (!shopId) return null
 
-        console.log(`/shops/${shopId}/pickup-points/${pickupId}`, {
-            shopId,
-            pickupId,
-            pickupName,
-            pickupAddress,
-            pickupArea,
-            pickupPhone,
-            pickupStatus,
-        })
-
         const access_token = await getUserToken(request)
         const res = await axios.patch(
             `/shops/${shopId}/pickup-points/${pickupId}`,
@@ -260,7 +256,7 @@ export const updateShopPickUpPoint = async (
         return pickupPoint
     } catch (error) {
         if (error instanceof AxiosError) {
-            console.log('pickupPoint', error.response?.data)
+            // console.log('pickupPoint', error.response?.data)
             return error.response?.data
         }
         return null
