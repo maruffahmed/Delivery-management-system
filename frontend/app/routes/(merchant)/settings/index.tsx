@@ -1,5 +1,5 @@
 import React from 'react'
-import type { MetaFunction } from '@remix-run/node'
+import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import {
     Box,
     Container,
@@ -25,10 +25,15 @@ import {
 } from '@chakra-ui/react'
 import Layout from '~/components/Layout'
 import { Form } from '@remix-run/react'
+import { requireUserId } from '~/utils/session.server'
 
 export const meta: MetaFunction = () => ({
-    title: 'Dashboard',
+    title: 'Settings',
 })
+
+export const loader: LoaderFunction = async ({ request }) => {
+    return await requireUserId(request)
+}
 
 function Settings() {
     const [show, setShow] = React.useState(false)
