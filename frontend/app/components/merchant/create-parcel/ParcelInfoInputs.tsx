@@ -143,20 +143,6 @@ const ParcelInfoInputs: FC<ParcelInfoInputsProps> = ({ setCheckCondition }) => {
                 <Box>
                     <FormControl isRequired>
                         <FormLabel>Select percel product type</FormLabel>
-                        {/* <Stack spacing={5} direction="row">
-                            <Checkbox
-                                colorScheme="primary"
-                                name="parcelProductType"
-                            >
-                                Fragile
-                            </Checkbox>
-                            <Checkbox
-                                colorScheme="primary"
-                                name="parcelProductType"
-                            >
-                                Liquid
-                            </Checkbox>
-                        </Stack> */}
                         <RadioGroup name="parcelProductType">
                             <Stack direction="row">
                                 <Radio value="fragile">Fragile</Radio>

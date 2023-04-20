@@ -72,7 +72,7 @@ export const CreateParcelProvider = ({
     const deliveryCharge = React.useMemo(() => {
         return calculateDeliveryCharge({
             weight,
-            zone: selectedArea?.zoneId!,
+            zoneId: selectedArea?.zoneId!,
             parcelPrices,
         })
     }, [parcelPrices, selectedArea?.zoneId, weight])

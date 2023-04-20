@@ -1,4 +1,4 @@
-import type { ActionData } from '~/routes/register'
+import type { ActionData } from '~/routes/(merchant)/register'
 import type { Transition } from '@remix-run/react/dist/transition'
 import React from 'react'
 import {

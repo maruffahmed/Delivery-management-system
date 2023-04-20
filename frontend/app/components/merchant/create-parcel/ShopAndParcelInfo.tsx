@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import type { CreateParcelActionData } from '~/routes/create-parcel'
+import type { CreateParcelActionData } from '~/routes/(merchant)/create-parcel'
 import {
     Alert,
     AlertDescription,
@@ -72,11 +72,6 @@ const ShopAndParcelInfo: FC<ShopAndParcelInfoProps> = ({ actionData }) => {
                     Delivery charge
                 </Text>
                 <Stack spacing={5}>
-                    {/* <Flex>
-                        <Text>Cash collection</Text>
-                        <Spacer />
-                        <Text>50tk</Text>
-                    </Flex> */}
                     <Flex>
                         <Text>Delivery charge</Text>
                         <Spacer />
@@ -94,7 +89,6 @@ const ShopAndParcelInfo: FC<ShopAndParcelInfoProps> = ({ actionData }) => {
                         Total
                     </Text>
                     <Spacer />
-                    {/* <Text>{totalCharge} Tk</Text> */}
                     <Flex alignItems="center" gap={1}>
                         <Input
                             name="parcelCharge"

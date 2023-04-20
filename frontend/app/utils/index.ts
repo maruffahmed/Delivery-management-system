@@ -37,15 +37,15 @@ export const badRequest = (data: any) => json(data, { status: 400 })
 
 export const calculateDeliveryCharge = ({
     weight,
-    zone,
+    zoneId,
     parcelPrices,
 }: {
     weight: number
-    zone: number
+    zoneId: number
     parcelPrices: ParcelPrices
 }) => {
-    if (!zone) return 0
-    const charge = parcelPrices.data.find((item) => item.id === zone)
+    if (!zoneId) return 0
+    const charge = parcelPrices.data.find((item) => item.id === zoneId)
     if (!charge) return 0
     if (weight <= 500) return charge.pricing.KG05_PRICE
     if (weight <= 1000) return charge.pricing.KG1_PRICE

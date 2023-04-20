@@ -102,7 +102,7 @@ export default function MerchantNav() {
                                             mb="0"
                                             _hover={{ textDecoration: 'unset' }}
                                         >
-                                            RED
+                                            MAD
                                             <Text
                                                 color="primary.500"
                                                 display="inline"
@@ -186,6 +186,8 @@ export default function MerchantNav() {
                                             </MenuItem>
                                             <MenuItem
                                                 _focus={{ bg: 'primary.50' }}
+                                                as={RemixLink}
+                                                to="/settings"
                                             >
                                                 Shop Settings
                                             </MenuItem>
