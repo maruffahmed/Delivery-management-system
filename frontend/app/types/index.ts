@@ -209,6 +209,13 @@ export interface ParcelPrices {
     data: ServiceZone[]
 }
 
+// Settings
+export interface ChangePasswordBody {
+    oldPassword: string
+    newPassword: string
+    confirmPassword: string
+}
+
 // API responce
 export interface LoginResponse {
     access_token: string
