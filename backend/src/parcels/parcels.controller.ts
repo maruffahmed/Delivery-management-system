@@ -11,6 +11,9 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Roles } from 'src/decorator/roles.decorator';
+import { Role } from 'src/enums/role.enum';
+import { RolesGuard } from 'src/guard/roles.guard';
 import { CreateParcelDto } from './dto/parcels.dto';
 import { ParcelShopGuard } from './guard/parcelShop.guard';
 import { ParcelsService } from './parcels.service';
@@ -19,6 +22,7 @@ import { ParcelsService } from './parcels.service';
 export class ParcelsController {
   constructor(private parcelsService: ParcelsService) {}
 
+  // GET /parcels
   @Get()
   @UseGuards(JwtAuthGuard)
   async parcel(
@@ -40,6 +44,44 @@ export class ParcelsController {
         include: {
           parcelPickUp: pickup,
           shop,
+          parcelDeliveryArea: deliveryArea && {
+            include: {
+              district: {
+                include: {
+                  division: deliveryArea,
+                },
+              },
+            },
+          },
+          parcelStatus: true,
+        },
+      },
+    );
+
+    return { data: parcels };
+  }
+
+  // GET /parcels/all
+  @Get('all')
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async allParcel(
+    @Query('pickup', new DefaultValuePipe(false), ParseBoolPipe)
+    pickup: boolean,
+    @Query('shop', new DefaultValuePipe(false), ParseBoolPipe)
+    shop: boolean,
+    @Query('deliveryArea', new DefaultValuePipe(false), ParseBoolPipe)
+    deliveryArea: boolean,
+    @Query('parcelUser', new DefaultValuePipe(false), ParseBoolPipe)
+    parcelUser: boolean,
+  ) {
+    const parcels = await this.parcelsService.parcels(
+      {},
+      {
+        include: {
+          parcelPickUp: pickup,
+          shop,
+          parcelUser: parcelUser,
           parcelDeliveryArea: deliveryArea && {
             include: {
               district: {

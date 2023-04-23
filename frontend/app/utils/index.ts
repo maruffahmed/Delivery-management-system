@@ -7,14 +7,7 @@ export const classNames = (...classes: (string | undefined | null)[]) => {
 }
 
 export function validateUrl(url: string) {
-    let urls = [
-        '/dashboard',
-        '/products',
-        '/products/list',
-        '/products/add',
-        '/',
-        'https://remix.run',
-    ]
+    let urls = ['/', '/dashboard', '/admin', '/admin/dashboard']
     if (urls.includes(url)) {
         return url
     }

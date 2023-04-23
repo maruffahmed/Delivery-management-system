@@ -1,15 +1,18 @@
 // User types
+export interface UserRoles {
+    role: UserRole
+}
 export interface UserRole {
     id: number
     name: string
     description: string
-    type: string
 }
 export interface User {
     id: number
     name: string
     email: string
     phone: string
+    roles: UserRoles[]
 }
 
 // Shop

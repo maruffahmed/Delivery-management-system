@@ -55,7 +55,7 @@ function Settings() {
                             </NavLink>
                         </Flex>
                     </Box>
-
+                    {/* Render children */}
                     <Outlet />
                 </Container>
             </Box>

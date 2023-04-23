@@ -75,6 +75,7 @@ export const action: ActionFunction = async ({ request }) => {
     return createUserSession(
         (user as LoginResponse).user.id,
         (user as LoginResponse).access_token,
+        (user as LoginResponse).user.roles[0].role.name,
         redirectTo,
     )
 }

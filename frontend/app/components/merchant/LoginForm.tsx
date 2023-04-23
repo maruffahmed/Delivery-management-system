@@ -1,5 +1,5 @@
 import React from 'react'
-import type { ActionData } from '~/routes/login'
+import type { ActionData } from '~/routes/(merchant)/login'
 import type { Transition } from '@remix-run/react/dist/transition'
 import { Form, Link as RemixLink } from '@remix-run/react'
 import {

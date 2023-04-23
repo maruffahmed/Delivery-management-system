@@ -27,7 +27,7 @@ export const OrderSummary = [
         labelText: 'Orders placed',
         value: 10,
         tooltipText:
-            'Total sum of parcels that have been created and picked up by REDX',
+            'Total sum of parcels that have been created and picked up by MADX',
     },
     {
         id: 2,
@@ -53,17 +53,17 @@ export const OrderSummary = [
 export const PaymentSummary = [
     {
         id: 1,
-        labelText: 'Total sales using REDX',
+        labelText: 'Total sales using MADX',
         value: 'Tk. 13219.00',
         tooltipText:
-            'Sum of all the cash collection amount of the parcels that have been picked up by REDX',
+            'Sum of all the cash collection amount of the parcels that have been picked up by MADX',
     },
     {
         id: 2,
         labelText: 'Total delivery fees paid',
         value: 'Tk. 2996.80',
         tooltipText:
-            'Total delivery charge of all the parcels that have been picked up by REDX',
+            'Total delivery charge of all the parcels that have been picked up by MADX',
     },
     {
         id: 3,

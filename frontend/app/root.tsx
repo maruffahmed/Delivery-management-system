@@ -25,6 +25,8 @@ import { getUser } from './utils/session.server'
 import ShopProvider from './context/ShopProvider'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import TopProgressBarProvider from './context/TopProgressBarProvider'
+import ThemeProvider from './context/ThemeContext'
 
 export const links: LinksFunction = () => {
     return [{ rel: 'stylesheet', href: styles }]
@@ -126,16 +128,20 @@ export default function App() {
     const { user } = useLoaderData<LoaderData>()
     return (
         <Document>
-            <AuthProvider user={user}>
-                <QueryClientProvider client={queryClient}>
-                    <ReactQueryDevtools initialIsOpen={false} />
-                    <ShopProvider>
-                        <ChakraProvider theme={theme}>
-                            <Outlet />
-                        </ChakraProvider>
-                    </ShopProvider>
-                </QueryClientProvider>
-            </AuthProvider>
+            <TopProgressBarProvider>
+                <ThemeProvider>
+                    <AuthProvider user={user}>
+                        <QueryClientProvider client={queryClient}>
+                            <ReactQueryDevtools initialIsOpen={false} />
+                            <ShopProvider>
+                                <ChakraProvider theme={theme}>
+                                    <Outlet />
+                                </ChakraProvider>
+                            </ShopProvider>
+                        </QueryClientProvider>
+                    </AuthProvider>
+                </ThemeProvider>
+            </TopProgressBarProvider>
         </Document>
     )
 }

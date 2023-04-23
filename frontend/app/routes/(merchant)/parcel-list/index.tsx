@@ -1,7 +1,5 @@
 import {
-    Badge,
     Container,
-    Flex,
     Heading,
     Table,
     TableContainer,
@@ -22,15 +20,12 @@ import {
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import Layout from '~/components/Layout'
 import { requireUserId } from '~/utils/session.server'
-import { CiDeliveryTruck } from 'react-icons/ci'
 import { BsThreeDotsVertical } from 'react-icons/bs'
-import { MdOutlineCancel } from 'react-icons/md'
-import { CgSandClock } from 'react-icons/cg'
-import { GiCardPickup } from 'react-icons/gi'
 import { getParcels } from '~/utils/merchant/parcels'
 import type { ApiErrorResponse, Parcel, Parcels } from '~/types'
 import { useLoaderData } from '@remix-run/react'
 import moment from 'moment'
+import ParcelStatusBadge from '~/components/common/ParcelStatusBadge'
 
 export const meta: MetaFunction = () => ({
     title: 'Pracel List',
@@ -157,46 +152,6 @@ export function ParcelTableTr({ parcel }: { parcel: Parcel }) {
             {/* <Td>Regular Delivery</Td> */}
             <Td>{moment(parcel.updatedAt).format('LL')}</Td>
         </Tr>
-    )
-}
-
-export function ParcelStatusBadge({
-    status,
-}: {
-    status: 'pending' | 'canceled' | 'picked-up' | 'delivered'
-}) {
-    const colorScheme =
-        status === 'pending'
-            ? 'cyan'
-            : status === 'canceled'
-            ? 'red'
-            : status === 'picked-up'
-            ? 'green'
-            : 'green'
-    const title =
-        status === 'pending'
-            ? 'Pending'
-            : status == 'canceled'
-            ? 'Canceled'
-            : status == 'picked-up'
-            ? 'Picked up'
-            : 'Delivered'
-
-    const icon =
-        status === 'pending'
-            ? CgSandClock
-            : status === 'canceled'
-            ? MdOutlineCancel
-            : status === 'picked-up'
-            ? GiCardPickup
-            : CiDeliveryTruck
-    return (
-        <Badge colorScheme={colorScheme} variant="outline" borderRadius={5}>
-            <Flex align="center" gap={1}>
-                <Icon as={icon} fontSize="lg" />
-                <Text as="span">{title}</Text>
-            </Flex>
-        </Badge>
     )
 }
 

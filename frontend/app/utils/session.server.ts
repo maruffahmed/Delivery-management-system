@@ -29,6 +29,27 @@ export async function login({
     // return { id: user.id, username }
 }
 
+// Admin login
+export async function adminLogin({
+    email,
+    password,
+}: LoginForm): Promise<LoginResponse | ApiErrorResponse | null> {
+    try {
+        const res = await axios.post('/auth/admin/login', {
+            username: email,
+            password,
+        })
+        const user = res.data
+        return user
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            return error.response?.data
+        }
+        return null
+    }
+    // return { id: user.id, username }
+}
+
 type RegistrationForm = {
     name: string
     email: string
@@ -111,7 +132,16 @@ export function getUserSession(request: Request) {
 export async function getUserId(request: Request) {
     const session = await getUserSession(request)
     const userId = session.get('userId')
-    if (!userId || typeof userId !== 'number') return null
+    const role = session.get('role')
+    if (!userId || typeof userId !== 'number' || role != 'merchant') return null
+    return userId
+}
+// get admin id
+export async function getAdminId(request: Request) {
+    const session = await getUserSession(request)
+    const userId = session.get('userId')
+    const role = session.get('role')
+    if (!userId || typeof userId !== 'number' || role != 'admin') return null
     return userId
 }
 export async function getUserToken(request: Request) {
@@ -128,10 +158,26 @@ export async function requireUserId(
     const session = await getUserSession(request)
     // console.log("session ", session)
     const userId = session.get('userId')
+    const role = session.get('role')
     // console.log("userId ", userId)
-    if (!userId || typeof userId !== 'number') {
+    if (!userId || typeof userId !== 'number' || role !== 'merchant') {
         const searchParams = new URLSearchParams([['redirectTo', redirectTo]])
         throw redirect(`/login?${searchParams}`)
+    }
+    return userId
+}
+
+// Required admin user id
+export async function requireAdminUserId(
+    request: Request,
+    redirectTo: string = new URL(request.url).pathname,
+) {
+    const session = await getUserSession(request)
+    const userId = session.get('userId')
+    const role = session.get('role')
+    if (!userId || typeof userId !== 'number' || role !== 'admin') {
+        const searchParams = new URLSearchParams([['redirectTo', redirectTo]])
+        throw redirect(`/admin/login?${searchParams}`)
     }
     return userId
 }
@@ -154,9 +200,9 @@ export async function getUser(request: Request) {
     }
 }
 
-export async function logout(request: Request) {
+export async function logout(request: Request, redirectTo?: string) {
     const session = await getUserSession(request)
-    return redirect('/login', {
+    return redirect(redirectTo ? redirectTo : '/login', {
         headers: {
             'Set-Cookie': await storage.destroySession(session),
         },
@@ -166,11 +212,13 @@ export async function logout(request: Request) {
 export async function createUserSession(
     userId: number,
     access_token: string,
+    role: string,
     redirectTo: string,
 ) {
     const session = await storage.getSession()
     session.set('userId', userId)
     session.set(tokenName, access_token)
+    session.set('role', role)
     // console.log("session ", session)
     return redirect(redirectTo, {
         headers: {

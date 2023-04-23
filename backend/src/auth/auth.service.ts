@@ -188,4 +188,44 @@ export class AuthService {
       // console.log('error ', e);
     }
   }
+
+  // Login admin and return access token
+  async adminLogin(user: any) {
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      name: user.name,
+    };
+    try {
+      const user = (await this.usersService.user(
+        {
+          id: payload.sub,
+        },
+        {
+          include: {
+            roles: {
+              include: {
+                role: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      )) as UserWithRolesDetails;
+      const isAdmin = user.roles.some((role) => role.role.name === 'admin');
+
+      if (!isAdmin) {
+        throw new BadRequestException('User is not a admin');
+      }
+      return {
+        access_token: this.jwtService.sign(payload),
+        user,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
 }

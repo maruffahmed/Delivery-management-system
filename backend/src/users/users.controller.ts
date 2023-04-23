@@ -21,6 +21,11 @@ export class UsersController {
           email: true,
           phone: true,
           password: false,
+          roles: {
+            select: {
+              role: true,
+            },
+          },
         },
       },
     );
