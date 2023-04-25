@@ -47,6 +47,7 @@ export class CreateParcelDto implements Parcel {
   parcelUserId: number;
   parcelExtraInformation: string;
   customerParcelInvoiceId: string;
+  fieldPackageHandlerId: number;
   parcelNumber: string;
   createdAt: Date;
   updatedAt: Date;

@@ -2,6 +2,7 @@ import { Disclosure } from '@headlessui/react'
 import { NavLink } from 'react-router-dom'
 import { MdOutlineSpaceDashboard, MdPointOfSale } from 'react-icons/md'
 import { BsFileEarmarkBarGraph } from 'react-icons/bs'
+import { TbTruckDelivery } from 'react-icons/tb'
 import { classNames } from '~/utils'
 // import { useAuthProvider } from '~/context/AuthProvider'
 
@@ -26,6 +27,21 @@ export const sideBarMenus = [
         name: 'Parcel requests',
         url: '/admin/parcel-requests',
         icon: <BsFileEarmarkBarGraph size="1.2rem" />,
+    },
+    {
+        name: 'Field handlers',
+        url: '/sales/all',
+        icon: <TbTruckDelivery size="1.2rem" />,
+        children: [
+            {
+                name: 'Pickup man',
+                url: '/admin/package-handlers/pickup-man',
+            },
+            {
+                name: 'Delivery man',
+                url: '/admin/package-handlers/delivery-man',
+            },
+        ],
     },
     {
         name: 'Sales',

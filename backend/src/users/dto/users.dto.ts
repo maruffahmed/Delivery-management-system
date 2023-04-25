@@ -61,6 +61,8 @@ export class CreateUserDto implements User {
   @IsString({ message: "'pickupPhone' must be a string" })
   pickupPhone: string;
 
+  fieldPackageHandlerId: number;
+  isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

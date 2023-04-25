@@ -4,10 +4,14 @@ import MerchantNav from './merchant/Navbar'
 import Navbar from './Navbar'
 
 function Layout({ children }: { children: React.ReactNode }) {
-    const user = useAuthProvider()
+    const { id, roles } = useAuthProvider()
     return (
         <>
-            {user?.id ? <MerchantNav /> : <Navbar />}
+            {id && roles[0].role.name == 'merchant' ? (
+                <MerchantNav />
+            ) : (
+                <Navbar />
+            )}
             <main>{children}</main>
         </>
     )

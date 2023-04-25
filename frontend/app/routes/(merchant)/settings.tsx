@@ -2,7 +2,7 @@ import React from 'react'
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { Box, Container, Heading, Flex } from '@chakra-ui/react'
 import Layout from '~/components/Layout'
-import { Outlet, useNavigate } from '@remix-run/react'
+import { Outlet } from '@remix-run/react'
 import { requireUserId } from '~/utils/session.server'
 import { NavLink } from '@remix-run/react'
 

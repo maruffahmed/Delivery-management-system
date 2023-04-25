@@ -11,16 +11,18 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String
-  phone     String
-  password  String
-  roles     Roles[]
-  shops     Shops[]
-  Parcel    Parcel[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                  Int                  @id @default(autoincrement())
+  email               String               @unique
+  name                String
+  phone               String
+  password            String
+  roles               Roles[]
+  shops               Shops[]
+  Parcel              Parcel[]
+  fieldPackageHandler FieldPackageHandler?
+  isActive            Boolean              @default(true)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
 }
 
 model Roles {
@@ -38,6 +40,18 @@ model RoleDescription {
   name        String  @unique
   description String?
   roles       Roles[]
+}
+
+model FieldPackageHandler {
+  id        Int      @id @default(autoincrement())
+  address   String
+  area      Areas    @relation(fields: [areaId], references: [id])
+  areaId    Int
+  Parcel    Parcel[]
+  User      User     @relation(fields: [userId], references: [id])
+  userId    Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Shops {
@@ -100,14 +114,15 @@ model Districts {
 }
 
 model Areas {
-  id           Int            @id @default(autoincrement())
-  name         String         @unique
-  district     Districts      @relation(fields: [districtId], references: [id])
-  districtId   Int
-  zones        Zones          @relation(fields: [zonesId], references: [id])
-  zonesId      Int
-  Parcel       Parcel[]
-  PickUpPoints PickUpPoints[]
+  id                  Int                   @id @default(autoincrement())
+  name                String                @unique
+  district            Districts             @relation(fields: [districtId], references: [id])
+  districtId          Int
+  zones               Zones                 @relation(fields: [zonesId], references: [id])
+  zonesId             Int
+  Parcel              Parcel[]
+  PickUpPoints        PickUpPoints[]
+  FieldPackageHandler FieldPackageHandler[]
 }
 
 model Zones {
@@ -162,11 +177,26 @@ model Parcel {
   parcelUserId              Int
   createdAt                 DateTime                @default(now())
   updatedAt                 DateTime                @updatedAt
+  FieldPackageHandler       FieldPackageHandler?    @relation(fields: [fieldPackageHandlerId], references: [id])
+  fieldPackageHandlerId     Int?
+  ParcelTimeline            ParcelTimeline[]
 }
 
 model ParcelStatus {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  description String?
-  Parcel      Parcel[]
+  id             Int              @id @default(autoincrement())
+  name           String           @unique
+  description    String?
+  Parcel         Parcel[]
+  ParcelTimeline ParcelTimeline[]
+}
+
+model ParcelTimeline {
+  id             Int          @id @default(autoincrement())
+  Parcel         Parcel       @relation(fields: [parcelId], references: [id])
+  parcelId       Int
+  status         ParcelStatus @relation(fields: [parcelStatusId], references: [id])
+  parcelStatusId Int
+  message        String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
