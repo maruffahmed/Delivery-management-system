@@ -1,4 +1,4 @@
-import type { ActionData } from '~/routes/shop-list/index'
+import type { ActionData } from '~/routes/(merchant)/shop-list/index'
 import React from 'react'
 import {
     Alert,

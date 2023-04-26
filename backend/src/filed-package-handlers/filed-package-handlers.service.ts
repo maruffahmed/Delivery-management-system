@@ -8,7 +8,10 @@ import {
 } from './dto/packageHandlers.dto';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from 'src/users/users.service';
-import { ConflictException } from '@nestjs/common/exceptions';
+import {
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common/exceptions';
 
 @Injectable()
 export class FiledPackageHandlersService {
@@ -73,10 +76,15 @@ export class FiledPackageHandlersService {
     shopsWhereUniqueInput: Prisma.FieldPackageHandlerWhereUniqueInput,
     options?: Prisma.FieldPackageHandlerArgs,
   ): Promise<FieldPackageHandler | null> {
-    return this.prisma.fieldPackageHandler.findUnique({
-      where: shopsWhereUniqueInput,
-      ...options,
-    });
+    const fieldPackagehandler =
+      await this.prisma.fieldPackageHandler.findUnique({
+        where: shopsWhereUniqueInput,
+        ...options,
+      });
+    if (!fieldPackagehandler) {
+      throw new NotFoundException('Field package handler not found.');
+    }
+    return fieldPackagehandler;
   }
 
   // Get all field package handlers

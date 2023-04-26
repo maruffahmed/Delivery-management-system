@@ -230,3 +230,44 @@ export interface ApiErrorResponse {
     message: string
     error: string
 }
+
+// Field package handlers
+
+export interface FieldPackageHandler {
+    id: number
+    address: string
+    areaId: number
+    userId: number
+    createdAt: string
+    updatedAt: string
+    User: User
+    area: Area & {
+        district: District & {
+            division: Division
+        }
+    }
+}
+
+export interface FieldPackageHandlers {
+    data: FieldPackageHandler[]
+}
+
+export interface FieldPackageHandlerBody {
+    name: string
+    email: string
+    phone: string
+    password: string
+    address: string
+    areaId: number
+    roleId: number
+}
+
+export interface FieldPackageHandlerUpdateBody {
+    name?: string
+    email?: string
+    phone?: string
+    password?: string
+    address?: string
+    areaId?: number
+    roleId?: number
+}

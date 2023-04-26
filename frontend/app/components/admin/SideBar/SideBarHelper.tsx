@@ -34,12 +34,12 @@ export const sideBarMenus = [
         icon: <TbTruckDelivery size="1.2rem" />,
         children: [
             {
-                name: 'Pickup man',
-                url: '/admin/package-handlers/pickup-man',
+                name: 'Handler list',
+                url: '/admin/package-handlers/list',
             },
             {
-                name: 'Delivery man',
-                url: '/admin/package-handlers/delivery-man',
+                name: 'Add new',
+                url: '/admin/package-handlers/add-new',
             },
         ],
     },

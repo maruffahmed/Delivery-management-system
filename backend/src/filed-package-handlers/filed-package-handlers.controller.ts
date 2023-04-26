@@ -30,22 +30,28 @@ export class FiledPackageHandlersController {
   @Roles(Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
   async filedPackageHandlers() {
-    return this.filedPackageHandlersService.fieldPackageHandlers(
+    const data = await this.filedPackageHandlersService.fieldPackageHandlers(
       {},
       {
         include: {
+          area: true,
           User: {
             select: {
               id: true,
               name: true,
               email: true,
               phone: true,
-              roles: true,
+              roles: {
+                include: {
+                  role: true,
+                },
+              },
             },
           },
         },
       },
     );
+    return { data };
   }
 
   // GET /filed-package-handlers/1
@@ -57,13 +63,26 @@ export class FiledPackageHandlersController {
       { id },
       {
         include: {
+          area: {
+            include: {
+              district: {
+                include: {
+                  division: true,
+                },
+              },
+            },
+          },
           User: {
             select: {
               id: true,
               name: true,
               email: true,
               phone: true,
-              roles: true,
+              roles: {
+                include: {
+                  role: true,
+                },
+              },
             },
           },
         },

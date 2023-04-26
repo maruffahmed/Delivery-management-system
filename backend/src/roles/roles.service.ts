@@ -6,12 +6,29 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class RolesService {
   constructor(private prismaService: PrismaService) {}
 
-  async createRoleDetails(data: Prisma.RoleDescriptionCreateInput) {
-    return this.prismaService.roleDescription.create({
-      data,
+  // Get all role details
+  async roleDetails(
+    params: {
+      skip?: number;
+      take?: number;
+      cursor?: Prisma.RoleDescriptionWhereUniqueInput;
+      where?: Prisma.RoleDescriptionWhereInput;
+      orderBy?: Prisma.RoleDescriptionOrderByWithRelationInput;
+    },
+    options?: Prisma.RoleDescriptionArgs,
+  ) {
+    const { skip, take, cursor, where, orderBy } = params;
+    return this.prismaService.roleDescription.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+      ...options,
     });
   }
 
+  // Get single role details
   async roleDetail(
     roleDescriptionWhereUniqueInput: Prisma.RoleDescriptionWhereUniqueInput,
   ) {
@@ -20,6 +37,14 @@ export class RolesService {
     });
   }
 
+  // create role details
+  async createRoleDetails(data: Prisma.RoleDescriptionCreateInput) {
+    return this.prismaService.roleDescription.create({
+      data,
+    });
+  }
+
+  // create role
   async createRole(data: Prisma.RolesCreateInput) {
     return this.prismaService.roles.create({
       data,

@@ -1,4 +1,4 @@
-import type { PickupPointActionData } from '~/routes/pickup-list'
+import type { PickupPointActionData } from '~/routes/(merchant)/pickup-list'
 import React from 'react'
 import {
     Alert,
