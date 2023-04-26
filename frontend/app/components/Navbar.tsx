@@ -90,7 +90,7 @@ export default function Navbar() {
                                             mb="0"
                                             _hover={{ textDecoration: 'unset' }}
                                         >
-                                            RED
+                                            MAD
                                             <Text
                                                 color="primary.500"
                                                 display="inline"

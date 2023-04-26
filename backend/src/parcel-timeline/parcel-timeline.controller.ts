@@ -11,7 +11,13 @@ export class ParcelTimelineController {
     const parcelTimeline = await this.parcelTimelineService.parcelTimeline(
       { parcelNumber },
       {
-        include: {
+        select: {
+          id: true,
+          parcelNumber: true,
+          customerName: true,
+          createdAt: true,
+          updatedAt: true,
+          parcelDeliveryArea: true,
           ParcelTimeline: {
             include: {
               parcelStatus: true,

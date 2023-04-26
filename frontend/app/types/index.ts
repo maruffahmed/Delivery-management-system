@@ -196,6 +196,18 @@ export interface ParcelCreateBody {
     customerParcelInvoiceId?: string
     parcelExtraInformation?: string
 }
+export interface ParcelTimelineItem {
+    id: number
+    parcelId: number
+    parcelStatusId: number
+    message: string
+    createdAt: string
+    updatedAt: string
+    parcelStatus: ParcelStatus
+}
+export interface ParcelTimeline extends Parcel {
+    ParcelTimeline: ParcelTimelineItem[]
+}
 
 // Parcel pricing
 export interface ParcelPrice {
