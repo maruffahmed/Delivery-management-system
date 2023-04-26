@@ -150,6 +150,12 @@ export class ParcelsController {
           id: parcelDeliveryAreaId,
         },
       },
+      ParcelTimeline: {
+        create: {
+          message: 'Parcel Created',
+          parcelStatusId: parcelStatusId,
+        },
+      },
     });
 
     return {

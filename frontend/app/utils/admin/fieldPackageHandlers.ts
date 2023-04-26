@@ -3,7 +3,6 @@ import type {
     FieldPackageHandler,
     FieldPackageHandlerBody,
     FieldPackageHandlers,
-    FieldPackageHandlerUpdateBody,
 } from '~/types'
 import { getUserToken } from '../session.server'
 import axios from '~/utils/axios.server'

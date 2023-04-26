@@ -6,6 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class ShopsService {
   constructor(private prisma: PrismaService) {}
 
+  // get a shop by id
   async shop(
     shopsWhereUniqueInput: Prisma.ShopsWhereUniqueInput,
     options?: Prisma.ShopsArgs,
@@ -16,6 +17,7 @@ export class ShopsService {
     });
   }
 
+  // get all shops
   async shops(
     params: {
       skip?: number;
@@ -37,12 +39,14 @@ export class ShopsService {
     });
   }
 
+  // create new shop
   async createShop(data: Prisma.ShopsCreateInput): Promise<Shops> {
     return this.prisma.shops.create({
       data,
     });
   }
 
+  // update a shop by id
   async updateShop(params: {
     where: Prisma.ShopsWhereUniqueInput;
     data: Prisma.ShopsUpdateInput;

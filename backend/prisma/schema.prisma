@@ -152,7 +152,7 @@ model ParcelProductCategories {
 
 model Parcel {
   id                        Int                     @id @default(autoincrement())
-  parcelNumber              String                  @default(cuid())
+  parcelNumber              String                  @unique @default(cuid())
   customerName              String
   customerPhone             String
   customerAddress           String
@@ -194,7 +194,7 @@ model ParcelTimeline {
   id             Int          @id @default(autoincrement())
   Parcel         Parcel       @relation(fields: [parcelId], references: [id])
   parcelId       Int
-  status         ParcelStatus @relation(fields: [parcelStatusId], references: [id])
+  parcelStatus   ParcelStatus @relation(fields: [parcelStatusId], references: [id])
   parcelStatusId Int
   message        String
   createdAt      DateTime     @default(now())

@@ -1,13 +1,11 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { FieldPackageHandler, Prisma, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { RolesService } from 'src/roles/roles.service';
 import {
   CreateFieldPackageHandlerDto,
   UpdateFieldPackageHandlerDto,
 } from './dto/packageHandlers.dto';
 import * as bcrypt from 'bcrypt';
-import { UsersService } from 'src/users/users.service';
 import {
   ConflictException,
   NotFoundException,
@@ -16,11 +14,7 @@ import {
 @Injectable()
 export class FiledPackageHandlersService {
   readonly saltRounds = process.env.BCRYPT_SALT_OR_ROUNDS;
-  constructor(
-    private prisma: PrismaService,
-    private rolesService: RolesService,
-    private usersService: UsersService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   // Add new field package handler
   async createFieldPackageHandler(

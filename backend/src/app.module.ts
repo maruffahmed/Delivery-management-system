@@ -10,6 +10,7 @@ import { ServiceAreaModule } from './service-area/service-area.module';
 import { ParcelsModule } from './parcels/parcels.module';
 import { ChangePasswordModule } from './change-password/change-password.module';
 import { FiledPackageHandlersModule } from './filed-package-handlers/filed-package-handlers.module';
+import { ParcelTimelineModule } from './parcel-timeline/parcel-timeline.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { FiledPackageHandlersModule } from './filed-package-handlers/filed-packa
     ParcelsModule,
     ChangePasswordModule,
     FiledPackageHandlersModule,
+    ParcelTimelineModule,
   ],
   controllers: [],
   providers: [PrismaService],

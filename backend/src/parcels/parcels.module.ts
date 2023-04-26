@@ -4,7 +4,8 @@ import { ParcelsController } from './parcels.controller';
 import { ParcelsService } from './parcels.service';
 
 @Module({
-  controllers: [ParcelsController],
   providers: [ParcelsService, PrismaService],
+  controllers: [ParcelsController],
+  exports: [ParcelsService],
 })
 export class ParcelsModule {}
