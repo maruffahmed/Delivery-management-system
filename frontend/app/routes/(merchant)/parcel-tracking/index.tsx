@@ -10,7 +10,7 @@ import {
     Text,
     VStack,
 } from '@chakra-ui/react'
-import type { LoaderFunction } from '@remix-run/node'
+import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import moment from 'moment'
 import Layout from '~/components/Layout'
@@ -41,6 +41,21 @@ export const loader: LoaderFunction = async ({ request }) => {
         } as LoaderData
     }
     return { parcelTimeline }
+}
+
+export const meta: MetaFunction = ({
+    data,
+}: {
+    data: LoaderData | undefined
+}) => {
+    if (!data) {
+        return {
+            title: 'Wrong path',
+        }
+    }
+    return {
+        title: `Parcel timeline - ${data.parcelTimeline?.parcelNumber}}`,
+    }
 }
 
 function ParcelTracking() {

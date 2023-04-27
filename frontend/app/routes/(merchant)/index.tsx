@@ -13,6 +13,12 @@ import { Form } from '@remix-run/react'
 import Layout from '~/components/Layout'
 import { getUserId } from '~/utils/session.server'
 
+export const meta: MetaFunction = () => {
+    return {
+        title: 'Home',
+    }
+}
+
 export const loader: LoaderFunction = async ({ request }) => {
     const userId = await getUserId(request)
     if (userId) {
