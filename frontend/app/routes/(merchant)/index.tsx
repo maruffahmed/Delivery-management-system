@@ -7,7 +7,7 @@ import {
     Input,
     Text,
 } from '@chakra-ui/react'
-import type { LoaderFunction } from '@remix-run/node'
+import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { redirect } from '@remix-run/node'
 import { Form } from '@remix-run/react'
 import Layout from '~/components/Layout'
