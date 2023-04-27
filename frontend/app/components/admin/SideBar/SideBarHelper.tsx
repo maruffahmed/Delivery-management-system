@@ -1,6 +1,6 @@
 import { Disclosure } from '@headlessui/react'
 import { NavLink } from 'react-router-dom'
-import { MdOutlineSpaceDashboard, MdPointOfSale } from 'react-icons/md'
+import { MdOutlineSpaceDashboard, MdPendingActions } from 'react-icons/md'
 import { BsFileEarmarkBarGraph } from 'react-icons/bs'
 import { TbTruckDelivery } from 'react-icons/tb'
 import { classNames } from '~/utils'
@@ -29,6 +29,17 @@ export const sideBarMenus = [
         icon: <BsFileEarmarkBarGraph size="1.2rem" />,
     },
     {
+        name: 'Parcel action',
+        url: '/',
+        icon: <MdPendingActions size="1.2rem" />,
+        children: [
+            {
+                name: 'Receive parcel',
+                url: '/admin/parcel-action/receive',
+            },
+        ],
+    },
+    {
         name: 'Field handlers',
         url: '/sales/all',
         icon: <TbTruckDelivery size="1.2rem" />,
@@ -40,21 +51,6 @@ export const sideBarMenus = [
             {
                 name: 'Add new',
                 url: '/admin/package-handlers/add-new',
-            },
-        ],
-    },
-    {
-        name: 'Sales',
-        url: '/sales/all',
-        icon: <MdPointOfSale size="1.2rem" />,
-        children: [
-            {
-                name: 'Sales list',
-                url: '/sales/all',
-            },
-            {
-                name: 'Add new sale',
-                url: '/sales/add',
             },
         ],
     },

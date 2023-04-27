@@ -59,7 +59,7 @@ const columns = [
         id: 'parcelNumber',
         cell: (info) => (
             <Link
-                to={`/admin/parcel/${info.getValue()}`}
+                to={`/admin/parcel-requests/${info.getValue()}`}
                 className="text-purple-700 underline underline-offset-2"
             >
                 {info.getValue()}
@@ -86,6 +86,18 @@ const columns = [
     columnHelper.accessor('parcelDeliveryArea', {
         cell: (info) => info.renderValue()?.name,
         header: () => 'Delivery Area',
+        footer: (info) => info.column.id,
+    }),
+    columnHelper.accessor('parcelNumber', {
+        cell: (info) => (
+            <Link
+                to={`/admin/parcel-action/assign/${info.renderValue()}`}
+                className="text-purple-700 underline underline-offset-2"
+            >
+                Action
+            </Link>
+        ),
+        header: () => 'Action',
         footer: (info) => info.column.id,
     }),
 ]

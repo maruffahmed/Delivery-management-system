@@ -15,7 +15,7 @@ import { useLoaderData } from '@remix-run/react'
 import moment from 'moment'
 import Layout from '~/components/Layout'
 import type { ApiErrorResponse, ParcelTimeline } from '~/types'
-import { getParcelTimelineByParcelNumber } from '~/utils/admin/parcels'
+import { getParcelTimelineByParcelNumber } from '~/utils/merchant/parcels'
 
 export type LoaderData = {
     parcelTimeline: ParcelTimeline | null

@@ -26,9 +26,10 @@ import {
     DrawerBody,
     Link,
     MenuGroup,
+    Input,
 } from '@chakra-ui/react'
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
-import { Link as RemixLink } from '@remix-run/react'
+import { Form, Link as RemixLink } from '@remix-run/react'
 import { useShopProvider } from '~/context/ShopProvider'
 
 const Links = [
@@ -92,7 +93,7 @@ export default function MerchantNav() {
                                     display={{ md: 'none' }}
                                     onClick={isOpen ? onClose : onOpen}
                                 />
-                                <HStack alignItems={'center'}>
+                                <HStack alignItems={'center'} spacing="4">
                                     <Box>
                                         <Link
                                             as={RemixLink}
@@ -111,6 +112,33 @@ export default function MerchantNav() {
                                             </Text>
                                         </Link>
                                     </Box>
+                                    <Form
+                                        method="get"
+                                        action="/parcel-tracking"
+                                    >
+                                        <Flex>
+                                            <Input
+                                                type="text"
+                                                name="parcelNumber"
+                                                placeholder="Parcel Number"
+                                                roundedRight="none"
+                                                bgColor="white"
+                                                size="md"
+                                                required
+                                            />
+                                            <Button
+                                                type="submit"
+                                                name="_action"
+                                                value="track"
+                                                colorScheme="primary"
+                                                roundedLeft="none"
+                                                size="md"
+                                                px="8"
+                                            >
+                                                Track
+                                            </Button>
+                                        </Flex>
+                                    </Form>
                                 </HStack>
                             </Stack>
                         </Flex>

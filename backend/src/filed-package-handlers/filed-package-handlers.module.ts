@@ -13,5 +13,6 @@ import { UsersService } from 'src/users/users.service';
     UsersService,
   ],
   controllers: [FiledPackageHandlersController],
+  exports: [FiledPackageHandlersService],
 })
 export class FiledPackageHandlersModule {}

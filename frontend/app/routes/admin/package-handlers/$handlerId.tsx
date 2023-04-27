@@ -203,7 +203,7 @@ function SingleFieldPackageHandler() {
             <main className="h-full overflow-y-auto">
                 <div className="container px-5 mx-auto grid">
                     <h2 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                        Add new package handler
+                        Modify {fieldPackageHandler?.User.name}'s information
                     </h2>
 
                     <Box id="form-error-message" mb="5">

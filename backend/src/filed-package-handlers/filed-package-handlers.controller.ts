@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   Patch,
+  Query,
 } from '@nestjs/common/decorators';
 import { ValidationPipe } from '@nestjs/common/pipes';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -29,9 +30,31 @@ export class FiledPackageHandlersController {
   @Get()
   @Roles(Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  async filedPackageHandlers() {
+  async filedPackageHandlers(
+    @Query('areaId') areaId?: number,
+    @Query('roleName') roleName?: string,
+  ) {
     const data = await this.filedPackageHandlersService.fieldPackageHandlers(
-      {},
+      {
+        where: {
+          AND: [
+            {
+              areaId: areaId ? Number(areaId) : undefined,
+            },
+            {
+              User: {
+                roles: {
+                  every: {
+                    role: {
+                      name: roleName,
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        },
+      },
       {
         include: {
           area: true,

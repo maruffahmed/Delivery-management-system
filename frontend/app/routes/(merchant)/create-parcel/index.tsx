@@ -161,6 +161,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 function CreateParcel() {
     const { pickupPoints, parcelPrices } = useLoaderData<LoaderData>()
+    console.log('parcelPrices', parcelPrices)
     const actionData = useActionData<CreateParcelActionData>()
     // Select form ref
     const formRef = React.useRef<HTMLFormElement>(null)

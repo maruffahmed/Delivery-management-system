@@ -1,5 +1,5 @@
-import { Parcel } from '@prisma/client';
-import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import { Parcel, Prisma } from '@prisma/client';
+import { IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateParcelDto implements Parcel {
   id: number;
@@ -51,4 +51,16 @@ export class CreateParcelDto implements Parcel {
   parcelNumber: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export class UpdateParcelDto implements Prisma.ParcelUpdateInput {
+  @IsOptional()
+  @IsString({ message: "'customerName' must be a string" })
+  customerName: string;
+  @IsOptional()
+  @IsString({ message: "'customerPhone' must be a string" })
+  customerPhone: string;
+  @IsOptional()
+  @IsString({ message: "'customerAddress' must be a string" })
+  customerAddress: string;
 }

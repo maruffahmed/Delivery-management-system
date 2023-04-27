@@ -6,6 +6,7 @@ export interface UserRole {
     id: number
     name: string
     description: string
+    User?: User
 }
 export interface User {
     id: number
@@ -144,8 +145,20 @@ export interface ServiceZone {
 // Parcel
 export interface ParcelStatus {
     id: number
-    name: 'pending' | 'canceled' | 'picked-up' | 'delivered'
+    name:
+        | 'pending'
+        | 'canceled'
+        | 'picking-up'
+        | 'delivered'
+        | 'in-transit'
+        | 'processing'
     description: string
+}
+
+export interface ParcelDeliveryArea extends Area {
+    district: District & {
+        division: Division
+    }
 }
 
 export interface Parcel {
@@ -172,11 +185,7 @@ export interface Parcel {
     parcelStatus: ParcelStatus
     parcelPickUp?: PickupPoint
     shop?: Shop
-    parcelDeliveryArea?: Area & {
-        district: District & {
-            division: Division
-        }
-    }
+    parcelDeliveryArea?: ParcelDeliveryArea
 }
 export interface Parcels {
     data: Parcel[]
@@ -195,6 +204,18 @@ export interface ParcelCreateBody {
     parcelCharge: number
     customerParcelInvoiceId?: string
     parcelExtraInformation?: string
+}
+export interface ParcelUpadteBody {
+    customerName?: string
+    customerPhone?: string
+    customerAddress?: string
+    customerParcelInvoiceId?: string
+    parcelExtraInformation?: string
+}
+export interface ParcelAsssignPackageHandlerBody {
+    parcelNumber: string
+    handlerType: string
+    handlerId: number
 }
 export interface ParcelTimelineItem {
     id: number

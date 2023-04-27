@@ -2,19 +2,26 @@ import { Badge, Flex, Text, Icon } from '@chakra-ui/react'
 import { CiDeliveryTruck } from 'react-icons/ci'
 import { MdOutlineCancel } from 'react-icons/md'
 import { CgSandClock } from 'react-icons/cg'
-import { GiCardPickup } from 'react-icons/gi'
+import { GiCardPickup, GiSandsOfTime } from 'react-icons/gi'
+import { AiOutlineFieldTime } from 'react-icons/ai'
 
 export default function ParcelStatusBadge({
     status,
 }: {
-    status: 'pending' | 'canceled' | 'picked-up' | 'delivered'
+    status:
+        | 'pending'
+        | 'canceled'
+        | 'picking-up'
+        | 'delivered'
+        | 'in-transit'
+        | 'processing'
 }) {
     const colorScheme =
         status === 'pending'
             ? 'cyan'
             : status === 'canceled'
             ? 'red'
-            : status === 'picked-up'
+            : status === 'picking-up'
             ? 'green'
             : 'green'
     const title =
@@ -22,8 +29,12 @@ export default function ParcelStatusBadge({
             ? 'Pending'
             : status == 'canceled'
             ? 'Canceled'
-            : status == 'picked-up'
-            ? 'Picked up'
+            : status == 'picking-up'
+            ? 'Picking up'
+            : status == 'in-transit'
+            ? 'In transit'
+            : status == 'processing'
+            ? 'Processing'
             : 'Delivered'
 
     const icon =
@@ -31,8 +42,12 @@ export default function ParcelStatusBadge({
             ? CgSandClock
             : status === 'canceled'
             ? MdOutlineCancel
-            : status === 'picked-up'
+            : status === 'picking-up'
             ? GiCardPickup
+            : status === 'in-transit'
+            ? AiOutlineFieldTime
+            : status === 'processing'
+            ? GiSandsOfTime
             : CiDeliveryTruck
     return (
         <Badge

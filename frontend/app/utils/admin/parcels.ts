@@ -1,4 +1,10 @@
-import type { ApiErrorResponse, Parcels, ParcelTimeline } from '~/types'
+import type {
+    ApiErrorResponse,
+    Parcel,
+    ParcelAsssignPackageHandlerBody,
+    Parcels,
+    ParcelUpadteBody,
+} from '~/types'
 import { getUserToken } from '../session.server'
 import axios from '~/utils/axios.server'
 import { AxiosError } from 'axios'
@@ -27,23 +33,73 @@ export const getParcelsForAdmin = async (
     }
 }
 
-// Get parcel timeline by parcel number
-export const getParcelTimelineByParcelNumber = async (
+// Get all parcel by parcel number
+export const getParcelsForAdminByParcelNumber = async (
     request: Request,
-    parcelNumber: string | null,
-): Promise<ParcelTimeline | ApiErrorResponse | null> => {
+    parcelNumber: string | undefined,
+): Promise<Parcel | ApiErrorResponse | null> => {
     try {
         const access_token = await getUserToken(request)
-        const parcelTimelineRes = await axios.get(
-            `/parcel-timeline/${parcelNumber}`,
+        const response = await axios.get(
+            `/parcels/${parcelNumber}?deliveryArea=true`,
             {
                 headers: {
                     Authorization: `Bearer ${access_token}`,
                 },
             },
         )
-        const parcelTimeline = parcelTimelineRes.data
-        return parcelTimeline
+        const resData = response.data
+        return resData
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            return error.response?.data
+        }
+        return null
+    }
+}
+
+// Update a single parcel by parcel number
+export const updateParcelForAdminByParcelNumber = async (
+    request: Request,
+    parcelNumber: string | undefined,
+    data: ParcelUpadteBody,
+): Promise<Parcel | ApiErrorResponse | null> => {
+    try {
+        const access_token = await getUserToken(request)
+        const response = await axios.patch(`/parcels/${parcelNumber}`, data, {
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+            },
+        })
+        const resData = response.data
+        return resData
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            return error.response?.data
+        }
+        return null
+    }
+}
+
+// Assing field package handler to a parcel
+export const assignFieldPackageHandlerToParcel = async (
+    request: Request,
+    data: ParcelAsssignPackageHandlerBody,
+): Promise<Parcel | ApiErrorResponse | null> => {
+    const { parcelNumber, handlerType, handlerId } = data
+    try {
+        const access_token = await getUserToken(request)
+        const response = await axios.patch(
+            `/parcels?parcelNumber=${parcelNumber}&handlerType=${handlerType}&handlerId=${handlerId}`,
+            data,
+            {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            },
+        )
+        const resData = response.data
+        return resData
     } catch (error) {
         if (error instanceof AxiosError) {
             return error.response?.data
