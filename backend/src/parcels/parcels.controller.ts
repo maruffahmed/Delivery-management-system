@@ -109,6 +109,7 @@ export class ParcelsController {
   }
 
   // GET /parcels/pricing
+  // Get all parcel pricing
   @Get('pricing')
   async parcelPricing(
     @Query('district', new DefaultValuePipe(false), ParseBoolPipe)
@@ -176,6 +177,7 @@ export class ParcelsController {
   }
 
   // POST /parcels
+  // Create parcel
   @Post()
   @UseGuards(JwtAuthGuard, ParcelShopGuard)
   async createParcel(
@@ -240,6 +242,7 @@ export class ParcelsController {
   }
 
   // PATCH /parcels/1
+  // Update parcel
   @Patch(':parcelNumber')
   @Roles(Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -260,6 +263,8 @@ export class ParcelsController {
     }
   }
 
+  // PATCH /parcels?parcelNumber=1&handlerType=deliveryman&handlerId=1
+  // Assign parcel to a field package handler
   @Patch()
   @Roles(Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -317,6 +322,41 @@ export class ParcelsController {
                   : handlerType === 'pickupman'
                   ? 'picking-up'
                   : 'pending',
+            },
+          },
+        },
+      });
+      return result;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  // PATCH /parcels/admin/receive
+  // Receive parcel
+  @Patch('admin/receive/:parcelNumber')
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async receiveParcel(@Param('parcelNumber') parcelNumber: string) {
+    try {
+      const result = await this.parcelsService.updateParcel({
+        where: {
+          parcelNumber,
+        },
+        data: {
+          ParcelTimeline: {
+            create: {
+              message: 'Parcel has been received by the admin',
+              parcelStatus: {
+                connect: {
+                  name: 'processing',
+                },
+              },
+            },
+          },
+          parcelStatus: {
+            connect: {
+              name: 'processing',
             },
           },
         },

@@ -107,3 +107,29 @@ export const assignFieldPackageHandlerToParcel = async (
         return null
     }
 }
+
+// receive parcel by admin using parcel number
+export const receiveParcelByAdmin = async (
+    request: Request,
+    parcelNumber: string | undefined,
+): Promise<Parcel | ApiErrorResponse | null> => {
+    try {
+        const access_token = await getUserToken(request)
+        const response = await axios.patch(
+            `/parcels/admin/receive/${parcelNumber}`,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            },
+        )
+        const resData = response.data
+        return resData
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            return error.response?.data
+        }
+        return null
+    }
+}
