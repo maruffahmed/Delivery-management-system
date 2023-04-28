@@ -7,7 +7,14 @@ export const classNames = (...classes: (string | undefined | null)[]) => {
 }
 
 export function validateUrl(url: string) {
-    let urls = ['/', '/dashboard', '/admin', '/admin/dashboard']
+    let urls = [
+        '/',
+        '/dashboard',
+        '/admin',
+        '/admin/dashboard',
+        '/packagehandler',
+        '/packagehandler/dashboard',
+    ]
     if (urls.includes(url)) {
         return url
     }

@@ -180,6 +180,7 @@ export interface Parcel {
     parcelPickUpId: number
     parcelDeliveryAreaId: number
     parcelUserId: number
+    parcelUser?: User
     createdAt: string
     updatedAt: string
     parcelStatus: ParcelStatus

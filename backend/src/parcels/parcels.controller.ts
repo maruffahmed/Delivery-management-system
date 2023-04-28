@@ -88,7 +88,11 @@ export class ParcelsController {
       {},
       {
         include: {
-          parcelPickUp: pickup,
+          parcelPickUp: pickup && {
+            include: {
+              area: true,
+            },
+          },
           shop,
           parcelUser: parcelUser,
           parcelDeliveryArea: deliveryArea && {
@@ -150,7 +154,11 @@ export class ParcelsController {
       { parcelNumber },
       {
         include: {
-          parcelPickUp: pickup,
+          parcelPickUp: pickup && {
+            include: {
+              area: true,
+            },
+          },
           shop,
           parcelUser,
           parcelDeliveryArea: deliveryArea && {
@@ -346,7 +354,8 @@ export class ParcelsController {
         data: {
           ParcelTimeline: {
             create: {
-              message: 'Parcel has been received by the admin',
+              message:
+                'Parcel has been received by the us. We are processing it.',
               parcelStatus: {
                 connect: {
                   name: 'processing',
@@ -358,6 +367,174 @@ export class ParcelsController {
             connect: {
               name: 'processing',
             },
+          },
+          FieldPackageHandler: {
+            disconnect: true,
+          },
+        },
+      });
+      return result;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  // GET /parcels/packagehandler/to-pickup
+  // Get parcels assigned to a pickupman
+  @Get('packagehandler/to-pickup')
+  @UseGuards(JwtAuthGuard)
+  async parcelsAssignedToPickupman(
+    @Request() req,
+    @Query('pickup', new DefaultValuePipe(false), ParseBoolPipe)
+    pickup: boolean,
+    @Query('shop', new DefaultValuePipe(false), ParseBoolPipe)
+    shop: boolean,
+    @Query('deliveryArea', new DefaultValuePipe(false), ParseBoolPipe)
+    deliveryArea: boolean,
+    @Query('parcelUser', new DefaultValuePipe(false), ParseBoolPipe)
+    parcelUser: boolean,
+  ) {
+    try {
+      const pickupmanId = req.user.id;
+      console.log(pickupmanId);
+      const parcels = await this.parcelsService.parcels(
+        {
+          where: {
+            AND: [
+              {
+                FieldPackageHandler: {
+                  userId: pickupmanId,
+                },
+              },
+              {
+                parcelStatus: {
+                  name: 'picking-up',
+                },
+              },
+            ],
+          },
+        },
+        {
+          include: {
+            parcelPickUp: pickup && {
+              include: {
+                area: true,
+              },
+            },
+            shop,
+            parcelUser: parcelUser,
+            parcelDeliveryArea: deliveryArea && {
+              include: {
+                district: {
+                  include: {
+                    division: deliveryArea,
+                  },
+                },
+              },
+            },
+            parcelStatus: true,
+          },
+        },
+      );
+      return { data: parcels };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  // GET /parcels/packagehandler/to-deliver
+  // Get parcels assigned to a deliveryman
+  @Get('packagehandler/to-deliver')
+  @UseGuards(JwtAuthGuard)
+  async parcelsAssignedToDeliveryman(
+    @Request() req,
+    @Query('pickup', new DefaultValuePipe(false), ParseBoolPipe)
+    pickup: boolean,
+    @Query('shop', new DefaultValuePipe(false), ParseBoolPipe)
+    shop: boolean,
+    @Query('deliveryArea', new DefaultValuePipe(false), ParseBoolPipe)
+    deliveryArea: boolean,
+    @Query('parcelUser', new DefaultValuePipe(false), ParseBoolPipe)
+    parcelUser: boolean,
+  ) {
+    try {
+      const deliverymanId = req.user.id;
+      const parcels = await this.parcelsService.parcels(
+        {
+          where: {
+            AND: [
+              {
+                FieldPackageHandler: {
+                  userId: deliverymanId,
+                },
+              },
+              {
+                parcelStatus: {
+                  name: 'in-transit',
+                },
+              },
+            ],
+          },
+        },
+        {
+          include: {
+            parcelPickUp: pickup && {
+              include: {
+                area: true,
+              },
+            },
+            shop,
+            parcelUser: parcelUser,
+            parcelDeliveryArea: deliveryArea && {
+              include: {
+                district: {
+                  include: {
+                    division: deliveryArea,
+                  },
+                },
+              },
+            },
+            parcelStatus: true,
+          },
+        },
+      );
+      return { data: parcels };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  // GET /parcels/packagehandler/delivered
+  // Get parcels delivered by a deliveryman
+  @Patch('packagehandler/delivered/:parcelNumber')
+  @UseGuards(JwtAuthGuard)
+  async parcelsDeliveredByDeliveryman(
+    @Param('parcelNumber') parcelNumber: string,
+  ) {
+    try {
+      const result = await this.parcelsService.updateParcel({
+        where: {
+          parcelNumber,
+        },
+        data: {
+          ParcelTimeline: {
+            create: {
+              message:
+                'Parcel has been delivered. Thank you for using our service.',
+              parcelStatus: {
+                connect: {
+                  name: 'delivered',
+                },
+              },
+            },
+          },
+          parcelStatus: {
+            connect: {
+              name: 'delivered',
+            },
+          },
+          FieldPackageHandler: {
+            disconnect: true,
           },
         },
       });

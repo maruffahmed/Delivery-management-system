@@ -1,6 +1,10 @@
 import React from 'react'
 import AdminLayout from '~/components/admin/AdminLayout'
-import type { ActionFunction, MetaFunction } from '@remix-run/node'
+import type {
+    ActionFunction,
+    LoaderFunction,
+    MetaFunction,
+} from '@remix-run/node'
 import { Form, useActionData, useTransition } from '@remix-run/react'
 import { badRequest } from '~/utils'
 import { requireAdminUserId } from '~/utils/session.server'
@@ -34,8 +38,6 @@ export type ActionData = {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-    await requireAdminUserId(request)
-
     const form = await request.formData()
     const parcelNumber = form.get('parcelNumber')
 
@@ -77,6 +79,10 @@ export const action: ActionFunction = async ({ request }) => {
             formError: error,
         })
     }
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+    return await requireAdminUserId(request)
 }
 
 const ParcelActionReceive = () => {
@@ -125,7 +131,7 @@ const ParcelActionReceive = () => {
                     ) : null}
                     <Form
                         method="post"
-                        className="flex flex-col lg:flex-row gap-5"
+                        className="flex flex-col gap-5"
                         ref={formRef}
                     >
                         <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800 w-full">

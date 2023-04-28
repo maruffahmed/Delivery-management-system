@@ -22,6 +22,9 @@ export class ParcelTimelineController {
             include: {
               parcelStatus: true,
             },
+            orderBy: {
+              createdAt: 'desc',
+            },
           },
         },
       },

@@ -16,7 +16,7 @@ export const getParcelsForAdmin = async (
     try {
         const access_token = await getUserToken(request)
         const parcelsRes = await axios.get(
-            '/parcels/all?shop=true&deliveryArea=true',
+            '/parcels/all?shop=true&deliveryArea=true&pickup=true',
             {
                 headers: {
                     Authorization: `Bearer ${access_token}`,
@@ -41,7 +41,7 @@ export const getParcelsForAdminByParcelNumber = async (
     try {
         const access_token = await getUserToken(request)
         const response = await axios.get(
-            `/parcels/${parcelNumber}?deliveryArea=true`,
+            `/parcels/${parcelNumber}?deliveryArea=true&pickup=true`,
             {
                 headers: {
                     Authorization: `Bearer ${access_token}`,

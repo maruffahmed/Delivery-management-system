@@ -78,9 +78,9 @@ const columns = [
         header: () => 'Shop',
         footer: (info) => info.column.id,
     }),
-    columnHelper.accessor('parcelDeliveryArea', {
-        cell: (info) => info.renderValue()?.district.division.name,
-        header: () => 'Delivery Division',
+    columnHelper.accessor('parcelPickUp.area', {
+        cell: (info) => info.renderValue()?.name,
+        header: () => 'Pickup Area',
         footer: (info) => info.column.id,
     }),
     columnHelper.accessor('parcelDeliveryArea', {

@@ -49,8 +49,6 @@ export type ActionData = {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-    await requireAdminUserId(request)
-
     const form = await request.formData()
     const parcelNumber = form.get('parcelNumber')
     const handlerType = form.get('handlerType')
@@ -149,7 +147,9 @@ const ParcelActionAssign = () => {
         queryKey: ['userRoles', parcel?.parcelDeliveryArea?.id, handlerType],
         queryFn: () =>
             getUserRolesClient(
-                parcel?.parcelDeliveryArea?.id,
+                handlerType === 'deliveryman'
+                    ? parcel?.parcelDeliveryAreaId
+                    : parcel?.parcelPickUp?.area?.id,
                 handlerType,
                 userToken,
             ),
@@ -182,10 +182,7 @@ const ParcelActionAssign = () => {
                         </Alert>
                     )}
 
-                    <Form
-                        method="post"
-                        className="flex flex-col lg:flex-row gap-5"
-                    >
+                    <Form method="post" className="flex flex-col gap-5">
                         <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800 w-full">
                             <FormControl isRequired isReadOnly={true} mb="4">
                                 <FormLabel className="dark:text-white">

@@ -13,7 +13,11 @@ import {
     InputGroup,
     InputRightElement,
 } from '@chakra-ui/react'
-import type { ActionFunction, LoaderFunction } from '@remix-run/node'
+import type {
+    ActionFunction,
+    LoaderFunction,
+    MetaFunction,
+} from '@remix-run/node'
 import { redirect } from '@remix-run/node'
 import {
     Form,
@@ -29,10 +33,17 @@ import {
     validateUrl,
 } from '~/utils'
 import {
-    adminLogin,
     createUserSession,
-    getAdminId,
+    getPackageHandlerId,
+    packageHandlerLogin,
 } from '~/utils/session.server'
+
+export const meta: MetaFunction = () => {
+    return {
+        title: 'Login',
+        description: 'Login to your account',
+    }
+}
 
 export type ActionData = {
     formError?: string
@@ -51,7 +62,7 @@ export const action: ActionFunction = async ({ request }) => {
     const email = form.get('email')
     const password = form.get('password')
     const redirectTo = validateUrl(
-        (form.get('redirectTo') as string) || '/admin/dashboard',
+        (form.get('redirectTo') as string) || '/packagehandler/dashboard',
     )
     if (
         typeof email !== 'string' ||
@@ -71,7 +82,7 @@ export const action: ActionFunction = async ({ request }) => {
     if (Object.values(fieldErrors).some(Boolean))
         return badRequest({ fieldErrors, fields })
 
-    const user = await adminLogin({ email, password })
+    const user = await packageHandlerLogin({ email, password })
     if (user && (user as ApiErrorResponse).message) {
         return badRequest({
             fields,
@@ -92,9 +103,10 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-    const userId = await getAdminId(request)
+    const userId = await getPackageHandlerId(request)
+    console.log('userId', userId)
     if (userId) {
-        return redirect('/admin/dashboard')
+        return redirect('/packagehandler/dashboard')
     }
     return null
 }

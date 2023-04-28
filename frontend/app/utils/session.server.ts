@@ -50,6 +50,27 @@ export async function adminLogin({
     // return { id: user.id, username }
 }
 
+// Admin login
+export async function packageHandlerLogin({
+    email,
+    password,
+}: LoginForm): Promise<LoginResponse | ApiErrorResponse | null> {
+    try {
+        const res = await axios.post('/auth/packageHandler/login', {
+            username: email,
+            password,
+        })
+        const user = res.data
+        return user
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            return error.response?.data
+        }
+        return null
+    }
+    // return { id: user.id, username }
+}
+
 type RegistrationForm = {
     name: string
     email: string
@@ -144,6 +165,21 @@ export async function getAdminId(request: Request) {
     if (!userId || typeof userId !== 'number' || role != 'admin') return null
     return userId
 }
+// get field package handler id
+export async function getPackageHandlerId(request: Request) {
+    const session = await getUserSession(request)
+    const userId = session.get('userId')
+    const role = session.get('role')
+    console.log('role', role)
+    console.log('userId', userId)
+    if (
+        !userId ||
+        typeof userId !== 'number' ||
+        (role != 'pickupman' && role != 'deliveryman')
+    )
+        return null
+    return userId
+}
 export async function getUserToken(request: Request) {
     const session = await getUserSession(request)
     const access_token = session.get(tokenName)
@@ -178,6 +214,25 @@ export async function requireAdminUserId(
     if (!userId || typeof userId !== 'number' || role !== 'admin') {
         const searchParams = new URLSearchParams([['redirectTo', redirectTo]])
         throw redirect(`/admin/login?${searchParams}`)
+    }
+    return userId
+}
+
+// Required field package handler user id
+export async function requirePackageHandlerUserId(
+    request: Request,
+    redirectTo: string = new URL(request.url).pathname,
+) {
+    const session = await getUserSession(request)
+    const userId = session.get('userId')
+    const role = session.get('role')
+    if (
+        !userId ||
+        typeof userId !== 'number' ||
+        (role !== 'pickupman' && role !== 'deliveryman')
+    ) {
+        const searchParams = new URLSearchParams([['redirectTo', redirectTo]])
+        throw redirect(`/packagehandler/login?${searchParams}`)
     }
     return userId
 }

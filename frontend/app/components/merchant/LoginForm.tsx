@@ -10,7 +10,6 @@ import {
     InputRightElement,
     Button,
     InputGroup,
-    Text,
     Link,
     Box,
     Spinner,
@@ -18,6 +17,7 @@ import {
     AlertIcon,
     AlertTitle,
     AlertDescription,
+    Text,
 } from '@chakra-ui/react'
 
 function LoginForm({
@@ -139,16 +139,16 @@ function LoginForm({
 
             <hr className="my-8" />
 
-            <Text className="mt-4">
+            {/* <Text className="mt-4">
                 <Link as={RemixLink} to="/" color="primary.700">
                     Forgot your password?
                 </Link>
-            </Text>
-            <p className="mt-1">
+            </Text> */}
+            <Text className="mt-1">
                 <Link as={RemixLink} to="/register" color="primary.700">
                     Create account
                 </Link>
-            </p>
+            </Text>
         </Form>
     )
 }

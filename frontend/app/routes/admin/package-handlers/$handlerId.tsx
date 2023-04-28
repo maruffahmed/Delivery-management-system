@@ -58,8 +58,6 @@ export type ActionData = {
 }
 
 export const action: ActionFunction = async ({ request, params }) => {
-    await requireAdminUserId(request)
-
     const form = await request.formData()
     const name = form.get('name')
     const email = form.get('email')
@@ -217,10 +215,7 @@ function SingleFieldPackageHandler() {
                             </Alert>
                         ) : null}
                     </Box>
-                    <Form
-                        method="post"
-                        className="flex flex-col lg:flex-row gap-5"
-                    >
+                    <Form method="post" className="flex flex-col gap-5">
                         <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800 w-full">
                             <FormControl isRequired mb="4">
                                 <FormLabel className="dark:text-white">

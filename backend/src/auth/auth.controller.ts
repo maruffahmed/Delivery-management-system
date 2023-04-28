@@ -33,4 +33,11 @@ export class AuthController {
   async adminLogin(@Request() req) {
     return this.authService.adminLogin(req.user);
   }
+
+  // POST /auth/packageHandler/login
+  @UseGuards(LocalAuthGuard)
+  @Post('packageHandler/login')
+  async packagehandlerLogin(@Request() req) {
+    return this.authService.packageHandlerLogin(req.user);
+  }
 }

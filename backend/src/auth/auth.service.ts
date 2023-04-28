@@ -228,4 +228,47 @@ export class AuthService {
       throw error;
     }
   }
+
+  // Login field package handler and return access token
+  async packageHandlerLogin(user: any) {
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      name: user.name,
+    };
+    try {
+      const user = (await this.usersService.user(
+        {
+          id: payload.sub,
+        },
+        {
+          include: {
+            roles: {
+              include: {
+                role: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      )) as UserWithRolesDetails;
+      const isPackageHandler = user.roles.some(
+        (role) =>
+          role.role.name === 'deliveryman' || role.role.name === 'pickupman',
+      );
+
+      if (!isPackageHandler) {
+        throw new BadRequestException('User is not a package handler');
+      }
+      return {
+        access_token: this.jwtService.sign(payload),
+        user,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
 }
