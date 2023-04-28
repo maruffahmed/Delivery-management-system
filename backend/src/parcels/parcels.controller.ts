@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   DefaultValuePipe,
+  Delete,
   Get,
   NotFoundException,
   Param,
@@ -12,6 +13,7 @@ import {
   Post,
   Query,
   Request,
+  UnauthorizedException,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
@@ -264,6 +266,56 @@ export class ParcelsController {
           parcelNumber,
         },
         data: updateParcelDto,
+      });
+      return updatedParcel;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  // DELETE /parcels/1
+  // Cancel parcel
+  @Delete(':parcelNumber')
+  @UseGuards(JwtAuthGuard)
+  async cancelParcel(
+    @Request() req,
+    @Param('parcelNumber') parcelNumber: string,
+  ) {
+    try {
+      const parcel = await this.parcelsService.parcel({
+        parcelNumber,
+      });
+      if (!parcel) {
+        throw new NotFoundException(
+          `Parcel with number ${parcelNumber} not found`,
+        );
+      }
+      if (parcel.parcelUserId !== req.user.id) {
+        throw new UnauthorizedException(
+          `You are not authorized to cancel this parcel`,
+        );
+      }
+      const updatedParcel = await this.parcelsService.updateParcel({
+        where: {
+          parcelNumber,
+        },
+        data: {
+          parcelStatus: {
+            connect: {
+              name: 'canceled',
+            },
+          },
+          ParcelTimeline: {
+            create: {
+              message: 'Parcel has been canceled',
+              parcelStatus: {
+                connect: {
+                  name: 'canceled',
+                },
+              },
+            },
+          },
+        },
       });
       return updatedParcel;
     } catch (error) {

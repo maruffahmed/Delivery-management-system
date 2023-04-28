@@ -138,3 +138,25 @@ export const getParcelTimelineByParcelNumber = async (
         return null
     }
 }
+
+// cancel a parcel by parcel number
+export const cancelParcelByParcelNumber = async (
+    request: Request,
+    parcelNumber: string | null,
+): Promise<Parcel | ApiErrorResponse | null> => {
+    try {
+        const access_token = await getUserToken(request)
+        const cancelParcelRes = await axios.delete(`/parcels/${parcelNumber}`, {
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+            },
+        })
+        const parcel = cancelParcelRes.data
+        return parcel
+    } catch (error) {
+        if (error instanceof AxiosError) {
+            return error.response?.data
+        }
+        return null
+    }
+}
