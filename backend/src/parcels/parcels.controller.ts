@@ -238,7 +238,7 @@ export class ParcelsController {
       },
       ParcelTimeline: {
         create: {
-          message: 'Parcel Created',
+          message: 'The merchant has requested the parcel to be picked up',
           parcelStatusId: parcelStatusId,
         },
       },

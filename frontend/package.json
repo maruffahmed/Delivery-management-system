@@ -33,6 +33,7 @@
         "react-dom": "^18.2.0",
         "react-icons": "^4.7.1",
         "react-query": "^3.39.3",
+        "react-to-print": "^2.14.12",
         "react-top-loading-bar": "^2.3.1",
         "react-window": "^1.8.8",
         "validator": "^13.9.0"

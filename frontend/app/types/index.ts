@@ -305,3 +305,15 @@ export interface FieldPackageHandlerUpdateBody {
     areaId?: number
     roleId?: number
 }
+
+// Parcel payments
+export interface ParcelPayment {
+    id: number
+    invoiseId: string
+    cashCollection: number
+    deliveryCharge: number
+    codCharge: number
+    totalPaid: number
+    createdAt: string
+    updatedAt: string
+}

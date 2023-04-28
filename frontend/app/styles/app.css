@@ -866,6 +866,11 @@ html {
     margin-bottom: 2rem;
 }
 
+.mx-0 {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
 .-ml-1 {
     margin-left: -0.25rem;
 }
@@ -938,6 +943,18 @@ html {
     margin-top: 2rem;
 }
 
+.mt-0 {
+    margin-top: 0px;
+}
+
+.mt-0\.5 {
+    margin-top: 0.125rem;
+}
+
+.mt-48 {
+    margin-top: 12rem;
+}
+
 .block {
     display: block;
 }
@@ -1002,6 +1019,10 @@ html {
     height: 100vh;
 }
 
+.h-12 {
+    height: 3rem;
+}
+
 .min-h-screen {
     min-height: 100vh;
 }
@@ -1050,8 +1071,16 @@ html {
     width: 100%;
 }
 
+.min-w-full {
+    min-width: 100%;
+}
+
 .max-w-4xl {
     max-width: 56rem;
+}
+
+.max-w-5xl {
+    max-width: 64rem;
 }
 
 .flex-1 {
@@ -1064,6 +1093,10 @@ html {
 
 .cursor-pointer {
     cursor: pointer;
+}
+
+.grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .flex-col {
@@ -1098,6 +1131,10 @@ html {
     gap: 1.5rem;
 }
 
+.gap-12 {
+    gap: 3rem;
+}
+
 .space-x-6 > :not([hidden]) ~ :not([hidden]) {
     --tw-space-x-reverse: 0;
     margin-right: calc(1.5rem * var(--tw-space-x-reverse));
@@ -1108,6 +1145,18 @@ html {
     --tw-space-y-reverse: 0;
     margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
     margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
+}
+
+.space-y-6 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
+}
+
+.divide-y > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-y-reverse: 0;
+    border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
+    border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
 }
 
 .overflow-hidden {
@@ -1134,6 +1183,11 @@ html {
     border-radius: 0.375rem;
 }
 
+.rounded-b-md {
+    border-bottom-right-radius: 0.375rem;
+    border-bottom-left-radius: 0.375rem;
+}
+
 .rounded-br-lg {
     border-bottom-right-radius: 0.5rem;
 }
@@ -1152,6 +1206,14 @@ html {
 
 .border-t-8 {
     border-top-width: 8px;
+}
+
+.border-b {
+    border-bottom-width: 1px;
+}
+
+.border-t {
+    border-top-width: 1px;
 }
 
 .border-gray-100 {
@@ -1212,6 +1274,11 @@ html {
     background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.bg-\[white\] {
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
 .bg-opacity-50 {
     --tw-bg-opacity: 0.5;
 }
@@ -1243,6 +1310,10 @@ html {
 
 .p-6 {
     padding: 1.5rem;
+}
+
+.p-9 {
+    padding: 2.25rem;
 }
 
 .px-2 {
@@ -1290,8 +1361,68 @@ html {
     padding-bottom: 1rem;
 }
 
+.px-3 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.py-16 {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+
+.py-20 {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+.py-3\.5 {
+    padding-top: 0.875rem;
+    padding-bottom: 0.875rem;
+}
+
+.pl-3 {
+    padding-left: 0.75rem;
+}
+
+.pl-4 {
+    padding-left: 1rem;
+}
+
+.pl-6 {
+    padding-left: 1.5rem;
+}
+
+.pr-3 {
+    padding-right: 0.75rem;
+}
+
+.pr-4 {
+    padding-right: 1rem;
+}
+
+.pt-4 {
+    padding-top: 1rem;
+}
+
+.pt-6 {
+    padding-top: 1.5rem;
+}
+
+.pt-9 {
+    padding-top: 2.25rem;
+}
+
+.text-left {
+    text-align: left;
+}
+
 .text-center {
     text-align: center;
+}
+
+.text-right {
+    text-align: right;
 }
 
 .align-middle {
@@ -1342,8 +1473,28 @@ html {
     font-weight: 600;
 }
 
+.font-extrabold {
+    font-weight: 800;
+}
+
+.font-light {
+    font-weight: 300;
+}
+
+.font-normal {
+    font-weight: 400;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
 .leading-5 {
     line-height: 1.25rem;
+}
+
+.tracking-tight {
+    letter-spacing: -0.025em;
 }
 
 .text-blue-500 {
@@ -1620,6 +1771,14 @@ html {
 }
 
 @media (min-width: 640px) {
+    .sm\:table-cell {
+        display: table-cell;
+    }
+
+    .sm\:hidden {
+        display: none;
+    }
+
     .sm\:items-center {
         align-items: center;
     }
@@ -1630,6 +1789,14 @@ html {
 
     .sm\:p-12 {
         padding: 3rem;
+    }
+
+    .sm\:pl-6 {
+        padding-left: 1.5rem;
+    }
+
+    .sm\:pr-6 {
+        padding-right: 1.5rem;
     }
 }
 
@@ -1660,6 +1827,14 @@ html {
 
     .md\:flex-row {
         flex-direction: row;
+    }
+
+    .md\:pl-0 {
+        padding-left: 0px;
+    }
+
+    .md\:pr-0 {
+        padding-right: 0px;
     }
 }
 
