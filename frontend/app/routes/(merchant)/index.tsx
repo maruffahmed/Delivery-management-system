@@ -56,7 +56,7 @@ function Home() {
                             <Box>
                                 <Heading color="white" lineHeight="base">
                                     দেশজুড়ে দ্রুততম ডেলিভারি <br /> সেবা পেতে
-                                    MADX <br /> কুরিয়ারের সাথে থাকুন!
+                                    DPDMS <br /> কুরিয়ারের সাথে থাকুন!
                                 </Heading>
                             </Box>
                         </Flex>

@@ -42,12 +42,12 @@ function InvoicePage() {
                                                     textDecoration: 'unset',
                                                 }}
                                             >
-                                                MAD
+                                                DPDM
                                                 <Text
                                                     color="primary.500"
                                                     display="inline"
                                                 >
-                                                    X
+                                                    S
                                                 </Text>
                                             </Text>
                                         </Box>
@@ -135,40 +135,39 @@ function InvoicePage() {
                                                 <tr className="border-b border-slate-200">
                                                     <td className="py-4 pl-4 pr-3 text-sm sm:pl-6 md:pl-0">
                                                         <div className="font-medium text-slate-700">
-                                                            Tesla Truck
+                                                            Delivery charge
                                                         </div>
                                                         <div className="mt-0.5 text-slate-500 sm:hidden">
-                                                            1 unit at $0.00
+                                                            1 unit at 200.00 Tk
                                                         </div>
                                                     </td>
                                                     <td className="hidden px-3 py-4 text-sm text-right text-slate-500 sm:table-cell">
-                                                        48
+                                                        1
                                                     </td>
                                                     <td className="hidden px-3 py-4 text-sm text-right text-slate-500 sm:table-cell">
-                                                        $0.00
+                                                        200.00 Tk
                                                     </td>
                                                     <td className="py-4 pl-3 pr-4 text-sm text-right text-slate-500 sm:pr-6 md:pr-0">
-                                                        $0.00
+                                                        200.00 Tk
                                                     </td>
                                                 </tr>
                                                 <tr className="border-b border-slate-200">
                                                     <td className="py-4 pl-4 pr-3 text-sm sm:pl-6 md:pl-0">
                                                         <div className="font-medium text-slate-700">
-                                                            Tesla Charging
-                                                            Station
+                                                            COD Charge
                                                         </div>
                                                         <div className="mt-0.5 text-slate-500 sm:hidden">
-                                                            1 unit at $75.00
+                                                            1 unit at $.00
                                                         </div>
                                                     </td>
                                                     <td className="hidden px-3 py-4 text-sm text-right text-slate-500 sm:table-cell">
-                                                        4
+                                                        1
                                                     </td>
                                                     <td className="hidden px-3 py-4 text-sm text-right text-slate-500 sm:table-cell">
-                                                        $0.00
+                                                        2.00 Tk
                                                     </td>
                                                     <td className="py-4 pl-3 pr-4 text-sm text-right text-slate-500 sm:pr-6 md:pr-0">
-                                                        $0.00
+                                                        2.00 Tk
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -188,7 +187,7 @@ function InvoicePage() {
                                                         Subtotal
                                                     </th>
                                                     <td className="pt-6 pl-3 pr-4 text-sm text-right text-slate-500 sm:pr-6 md:pr-0">
-                                                        $0.00
+                                                        200.00 Tk
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -206,7 +205,7 @@ function InvoicePage() {
                                                         Discount
                                                     </th>
                                                     <td className="pt-6 pl-3 pr-4 text-sm text-right text-slate-500 sm:pr-6 md:pr-0">
-                                                        $0.00
+                                                        0.00 Tk
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -224,7 +223,7 @@ function InvoicePage() {
                                                         Tax
                                                     </th>
                                                     <td className="pt-4 pl-3 pr-4 text-sm text-right text-slate-500 sm:pr-6 md:pr-0">
-                                                        $0.00
+                                                        0.00 Tk
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -242,7 +241,7 @@ function InvoicePage() {
                                                         Total
                                                     </th>
                                                     <td className="pt-4 pl-3 pr-4 text-sm font-normal text-right text-slate-700 sm:pr-6 md:pr-0">
-                                                        $0.00
+                                                        200.00 Tk
                                                     </td>
                                                 </tr>
                                             </tfoot>

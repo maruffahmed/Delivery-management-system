@@ -26,7 +26,7 @@ function PaymentMethodSettings() {
             <Heading as="h4" fontSize="2xl" pb="6" display="inline-block">
                 Manage your payment method.
             </Heading>
-            <Text>Update your bkash account to receive payment from Madx</Text>
+            <Text>Update your bkash account to receive payment from DPDMS</Text>
             <Form>
                 <SimpleGrid
                     columns={{ sm: 3 }}

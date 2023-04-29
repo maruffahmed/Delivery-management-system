@@ -24,8 +24,8 @@ function AdminLayout({ children }: { children: React.ReactNode }) {
                     isSideMenuOpen ? 'overflow-hidden' : null,
                 )}
             >
-                <DesktopSidebar title="MADX-Admin" menus={sideBarMenus} />
-                <MobileSidebar title="MADX-Admin" menus={sideBarMenus} />
+                <DesktopSidebar title="DPDNS-Admin" menus={sideBarMenus} />
+                <MobileSidebar title="DPDMS-Admin" menus={sideBarMenus} />
                 <div className="flex flex-col flex-1 w-full">
                     <Header
                         isDarkMode={isDarkMode}

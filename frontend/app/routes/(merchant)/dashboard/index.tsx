@@ -27,7 +27,7 @@ export const OrderSummary = [
         labelText: 'Orders placed',
         value: 3,
         tooltipText:
-            'Total sum of parcels that have been created and picked up by MADX',
+            'Total sum of parcels that have been created and picked up by DPDMS',
     },
     {
         id: 2,
@@ -42,28 +42,28 @@ export const OrderSummary = [
         tooltipText:
             'Total number of parcels that are going to be delivered soon',
     },
-    // {
-    //     id: 5,
-    //     labelText: 'Successful Delivery',
-    //     value: '90%',
-    //     tooltipText: 'The percentage of sucessful deliveries',
-    // },
+    {
+        id: 5,
+        labelText: 'Successful Delivery',
+        value: '90%',
+        tooltipText: 'The percentage of sucessful deliveries',
+    },
 ]
 
 export const PaymentSummary = [
     {
         id: 1,
-        labelText: 'Total sales using MADX',
+        labelText: 'Total sales using DPDMS',
         value: 'Tk. 13219.00',
         tooltipText:
-            'Sum of all the cash collection amount of the parcels that have been picked up by MADX',
+            'Sum of all the cash collection amount of the parcels that have been picked up by DPDMS',
     },
     {
         id: 2,
         labelText: 'Total delivery fees paid',
         value: 'Tk. 2996.80',
         tooltipText:
-            'Total delivery charge of all the parcels that have been picked up by MADX',
+            'Total delivery charge of all the parcels that have been picked up by DPDMS',
     },
     {
         id: 3,
@@ -145,7 +145,7 @@ function Dashboard() {
                                 : null}
                         </SimpleGrid>
                     </Box>
-                    {/* <Box my="10">
+                    <Box my="10">
                         <Text as="small" fontSize="sm" color="gray.600">
                             Overview of your payment summary
                         </Text>
@@ -164,7 +164,7 @@ function Dashboard() {
                                   ))
                                 : null}
                         </SimpleGrid>
-                    </Box> */}
+                    </Box>
                     <Text>
                         Call us{' '}
                         <Text as="span" fontWeight="bold" color="primary.500">
