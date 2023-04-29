@@ -4,6 +4,8 @@ import { MdOutlineSpaceDashboard, MdPendingActions } from 'react-icons/md'
 import { BsFileEarmarkBarGraph } from 'react-icons/bs'
 import { TbTruckDelivery } from 'react-icons/tb'
 import { classNames } from '~/utils'
+import { CiShop } from 'react-icons/ci'
+import { FiUsers } from 'react-icons/fi'
 // import { useAuthProvider } from '~/context/AuthProvider'
 
 export interface SideBarMenuChildType {
@@ -22,6 +24,16 @@ export const sideBarMenus = [
         name: 'Dashboard',
         url: '/admin/dashboard',
         icon: <MdOutlineSpaceDashboard size="1.2rem" />,
+    },
+    {
+        name: 'Merchant list',
+        url: '/admin/merchant-list',
+        icon: <FiUsers size="1.2rem" />,
+    },
+    {
+        name: 'Shop list',
+        url: '/admin/shop-list',
+        icon: <CiShop size="1.2rem" />,
     },
     {
         name: 'Parcel requests',

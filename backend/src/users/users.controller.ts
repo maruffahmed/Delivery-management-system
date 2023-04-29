@@ -53,4 +53,33 @@ export class UsersController {
       },
     );
   }
+
+  @Get('merchant')
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async merchant() {
+    return this.usersService.users(
+      {
+        where: {
+          roles: {
+            some: {
+              role: {
+                name: 'merchant',
+              },
+            },
+          },
+        },
+      },
+      {
+        select: {
+          name: true,
+          email: true,
+          phone: true,
+          isActive: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+    );
+  }
 }

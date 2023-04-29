@@ -13,6 +13,7 @@ export interface User {
     name: string
     email: string
     phone: string
+    isActive: boolean
     roles: UserRoles[]
 }
 
@@ -25,6 +26,7 @@ export interface Shop {
     productType: string
     productSubType: string
     userId: number
+    user?: User
     createdAt: string
     updatedAt: string
 }

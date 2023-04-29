@@ -12,6 +12,9 @@ import {
 import { ParseIntPipe } from '@nestjs/common/pipes';
 import { Shops } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Roles } from 'src/decorator/roles.decorator';
+import { Role } from 'src/enums/role.enum';
+import { RolesGuard } from 'src/guard/roles.guard';
 import { UserShopGuard } from 'src/shops/guard/userShop.guard';
 import { CreateShopsDto, UpdateShopsDto } from './dto/shops.dto';
 import { ShopsService } from './shops.service';
@@ -19,6 +22,22 @@ import { ShopsService } from './shops.service';
 @Controller('shops')
 export class ShopsController {
   constructor(private shopsService: ShopsService) {}
+
+  // GET /shops
+  @Get('all')
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async getAllShops(): Promise<{ data: Shops[] }> {
+    const shops = await this.shopsService.shops(
+      {},
+      {
+        include: {
+          user: true,
+        },
+      },
+    );
+    return { data: shops };
+  }
 
   // GET /shops
   @Get()
