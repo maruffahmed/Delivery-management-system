@@ -1,13 +1,33 @@
 import React from 'react'
-import type { LoaderFunction } from '@remix-run/node'
+import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import AdminLayout from '~/components/admin/AdminLayout'
 import { requireAdminUserId } from '~/utils/session.server'
+import { CiShop } from 'react-icons/ci'
+import { MdOutlinePendingActions } from 'react-icons/md'
+import type { AdminStatistics } from '~/types'
+import { getAdminStatistics } from '~/utils/admin/statistics'
+import { useLoaderData } from '@remix-run/react'
+
+export const meta: MetaFunction = () => {
+    return {
+        title: 'Dashboard',
+        description: 'Dashboard',
+    }
+}
+
+type LoaderData = {
+    error?: string
+    adminStatistics: AdminStatistics | null
+}
 
 export const loader: LoaderFunction = async ({ request }) => {
-    return await requireAdminUserId(request)
+    await requireAdminUserId(request)
+    const adminStatistics = await getAdminStatistics(request)
+    return { adminStatistics }
 }
 
 function Home() {
+    const { adminStatistics } = useLoaderData<LoaderData>()
     return (
         <AdminLayout>
             <main className="h-full overflow-y-auto">
@@ -32,34 +52,24 @@ function Home() {
                             </div>
                             <div>
                                 <p className="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                                    Total clients
+                                    Total merchant
                                 </p>
                                 <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                                    6389
+                                    {adminStatistics?.merchants}
                                 </p>
                             </div>
                         </div>
                         {/* <!-- Card --> */}
                         <div className="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
                             <div className="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
-                                <svg
-                                    className="w-5 h-5"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
-                                        clipRule="evenodd"
-                                    ></path>
-                                </svg>
+                                <CiShop />
                             </div>
                             <div>
                                 <p className="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                                    Account balance
+                                    Total Shops
                                 </p>
                                 <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                                    $ 46,760.89
+                                    {adminStatistics?.shops}
                                 </p>
                             </div>
                         </div>
@@ -76,34 +86,24 @@ function Home() {
                             </div>
                             <div>
                                 <p className="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                                    New sales
+                                    Total parcel request
                                 </p>
                                 <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                                    376
+                                    {adminStatistics?.parcels}
                                 </p>
                             </div>
                         </div>
                         {/* <!-- Card --> */}
                         <div className="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
                             <div className="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
-                                <svg
-                                    className="w-5 h-5"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
-                                        clipRule="evenodd"
-                                    ></path>
-                                </svg>
+                                <MdOutlinePendingActions />
                             </div>
                             <div>
                                 <p className="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                                    Pending contacts
+                                    Pending parcel request
                                 </p>
                                 <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                                    35
+                                    {adminStatistics?.pendingParcels}
                                 </p>
                             </div>
                         </div>

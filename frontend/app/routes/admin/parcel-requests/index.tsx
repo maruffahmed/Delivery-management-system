@@ -1,3 +1,4 @@
+import React from 'react'
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import AdminLayout from '~/components/admin/AdminLayout'
 import { requireAdminUserId } from '~/utils/session.server'
@@ -8,6 +9,7 @@ import type { ApiErrorResponse, Parcel, Parcels } from '~/types'
 import { Link, useLoaderData } from '@remix-run/react'
 import ParcelStatusBadge from '~/components/common/ParcelStatusBadge'
 import moment from 'moment'
+import { Flex, Input, Select } from '@chakra-ui/react'
 
 // type Person = {
 //     createAt: string
@@ -133,6 +135,18 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 function ParcelRequests() {
     const { parcels } = useLoaderData<LoaderData>()
+    const [query, setQuery] = React.useState('')
+    const [status, setStatus] = React.useState('')
+
+    const filteredData = React.useMemo(() => {
+        if (!parcels) return []
+        // if (!query) return parcels.data
+        return parcels.data.filter(
+            (parcel) =>
+                parcel.parcelNumber.includes(query) &&
+                (status !== '' ? parcel.parcelStatus.name === status : true),
+        )
+    }, [parcels, query, status])
     return (
         <AdminLayout>
             <main className="h-full overflow-y-auto">
@@ -140,8 +154,30 @@ function ParcelRequests() {
                     <h2 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
                         Parcel requests
                     </h2>
+                    {/* Search bar*/}
+                    <Flex justifyContent="space-between">
+                        <Input
+                            placeholder="Search parcel number"
+                            w="50%"
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                        />
+                        <Select
+                            placeholder="All"
+                            value={status}
+                            w="25%"
+                            onChange={(e) => setStatus(e.target.value)}
+                        >
+                            <option value="pending">Pending</option>
+                            <option value="picking-up">Picking Up</option>
+                            <option value="processing">Processing</option>
+                            <option value="in-transit">In Transit</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="canceled">Canceled</option>
+                        </Select>
+                    </Flex>
                     {/* <!-- Table --> */}
-                    <DataTable columns={columns} data={parcels?.data!} />
+                    <DataTable columns={columns} data={filteredData!} />
                 </div>
             </main>
         </AdminLayout>

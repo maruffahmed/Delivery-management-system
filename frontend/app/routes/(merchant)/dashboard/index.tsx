@@ -25,14 +25,14 @@ export const OrderSummary = [
     {
         id: 1,
         labelText: 'Orders placed',
-        value: 10,
+        value: 3,
         tooltipText:
             'Total sum of parcels that have been created and picked up by MADX',
     },
     {
         id: 2,
         labelText: 'Orders delivered',
-        value: 8,
+        value: 1,
         tooltipText: 'Total sum of parcels that have been delivered',
     },
     {
@@ -42,12 +42,12 @@ export const OrderSummary = [
         tooltipText:
             'Total number of parcels that are going to be delivered soon',
     },
-    {
-        id: 5,
-        labelText: 'Successful Delivery',
-        value: '90%',
-        tooltipText: 'The percentage of sucessful deliveries',
-    },
+    // {
+    //     id: 5,
+    //     labelText: 'Successful Delivery',
+    //     value: '90%',
+    //     tooltipText: 'The percentage of sucessful deliveries',
+    // },
 ]
 
 export const PaymentSummary = [
@@ -145,7 +145,7 @@ function Dashboard() {
                                 : null}
                         </SimpleGrid>
                     </Box>
-                    <Box my="10">
+                    {/* <Box my="10">
                         <Text as="small" fontSize="sm" color="gray.600">
                             Overview of your payment summary
                         </Text>
@@ -164,7 +164,7 @@ function Dashboard() {
                                   ))
                                 : null}
                         </SimpleGrid>
-                    </Box>
+                    </Box> */}
                     <Text>
                         Call us{' '}
                         <Text as="span" fontWeight="bold" color="primary.500">

@@ -319,3 +319,11 @@ export interface ParcelPayment {
     createdAt: string
     updatedAt: string
 }
+
+// Admin statistics
+export interface AdminStatistics {
+    merchants: number
+    shops: number
+    parcels: number
+    pendingParcels: number
+}

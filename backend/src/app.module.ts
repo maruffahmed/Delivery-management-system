@@ -11,6 +11,7 @@ import { ParcelsModule } from './parcels/parcels.module';
 import { ChangePasswordModule } from './change-password/change-password.module';
 import { FiledPackageHandlersModule } from './filed-package-handlers/filed-package-handlers.module';
 import { ParcelTimelineModule } from './parcel-timeline/parcel-timeline.module';
+import { StatisticsModule } from './statistics/statistics.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ParcelTimelineModule } from './parcel-timeline/parcel-timeline.module';
     ChangePasswordModule,
     FiledPackageHandlersModule,
     ParcelTimelineModule,
+    StatisticsModule,
   ],
   controllers: [],
   providers: [PrismaService],

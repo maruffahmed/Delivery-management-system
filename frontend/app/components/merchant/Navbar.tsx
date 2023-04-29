@@ -219,25 +219,8 @@ export default function MerchantNav() {
                                             >
                                                 Shop Settings
                                             </MenuItem>
-                                            <MenuItem
-                                                _focus={{ bg: 'primary.50' }}
-                                            >
-                                                Coverage Area
-                                            </MenuItem>
                                         </MenuGroup>
-                                        <MenuDivider />
-                                        <MenuGroup title="Help">
-                                            <MenuItem
-                                                _focus={{ bg: 'primary.50' }}
-                                            >
-                                                Tutorial
-                                            </MenuItem>
-                                            <MenuItem
-                                                _focus={{ bg: 'primary.50' }}
-                                            >
-                                                FAQ
-                                            </MenuItem>
-                                        </MenuGroup>
+
                                         <MenuDivider />
                                         <MenuGroup>
                                             <Link
