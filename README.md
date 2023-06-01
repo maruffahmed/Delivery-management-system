@@ -78,6 +78,7 @@ And frontend server will be run at http://localhost:3000
 -   [Prisma](https://nestjs.com/) - Next-generation Node.js and TypeScript ORM
 -   [Remix](https://remix.run/) - Remix is a full stack web framework
 -   [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework packed with classes
+-   [Chakra UI](https://chakra-ui.com/) - Chakra UI is a simple, modular and accessible component library
 
 ## Credit
 
