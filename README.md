@@ -1,10 +1,33 @@
+![React Js Next Js Remix Js Tailwind Css website development png](https://github.com/maruffahmed/Delivery-management-system/assets/39343312/ebec87ff-2595-4863-8146-0985301ca262)
+
 # Delivery Management System
 
-<!-- ### [Demo](https://basic-express-authentication.herokuapp.com/) -->
+### [Demo](https://dpdms.up.railway.app/)
+
+Demo credential
+
+```
+Merchant panel
+email: maruffamd@gmail.com
+password: 123456
+
+Admin panel
+URLpath: /admin
+email: admin@gmail.com
+password:123456
+
+Package handler panel (Pickup man)
+URLpath: /packagehandler
+email: reyad@gmail.com
+password:123456
+
+Package handler panel (Delivery man)
+URLpath: /packagehandler
+email: tushar@gmail.com
+password:123456
+```
 
 ## Getting Started
-
-![React Js Next Js Remix Js Tailwind Css website development png](https://github.com/maruffahmed/Delivery-management-system/assets/39343312/ebec87ff-2595-4863-8146-0985301ca262)
 
 This instruction will get you a copy of this project up and running on your local machine
 
