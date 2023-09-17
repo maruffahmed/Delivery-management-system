@@ -48,6 +48,7 @@ npm run setup
 Set the following environment variable to `backend` directory. Also, an example file is given with the name of `.env.example`:
 
 ```
+PORT = 8000
 DATABASE_URL = "mysql://root:password@localhost:3306/delivery"
 JWT_SECRET = 'ANYTHING_YOU_LIKE'
 BCRYPT_SALT_OR_ROUNDS = "10"
