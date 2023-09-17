@@ -10,7 +10,7 @@ export default function ParcelStatusBadge({
 }: {
     status:
         | 'pending'
-        | 'canceled'
+        | 'cancelled'
         | 'picking-up'
         | 'delivered'
         | 'in-transit'
@@ -19,7 +19,7 @@ export default function ParcelStatusBadge({
     const colorScheme =
         status === 'pending'
             ? 'cyan'
-            : status === 'canceled'
+            : status === 'cancelled'
             ? 'red'
             : status === 'picking-up'
             ? 'green'
@@ -27,8 +27,8 @@ export default function ParcelStatusBadge({
     const title =
         status === 'pending'
             ? 'Pending'
-            : status == 'canceled'
-            ? 'Canceled'
+            : status == 'cancelled'
+            ? 'Cancelled'
             : status == 'picking-up'
             ? 'Picking up'
             : status == 'in-transit'
@@ -40,7 +40,7 @@ export default function ParcelStatusBadge({
     const icon =
         status === 'pending'
             ? CgSandClock
-            : status === 'canceled'
+            : status === 'cancelled'
             ? MdOutlineCancel
             : status === 'picking-up'
             ? GiCardPickup

@@ -86,7 +86,7 @@ export const action: ActionFunction = async ({ request }) => {
         }
         return {
             formSuccess: {
-                message: 'Parcel has been canceled successfully',
+                message: 'Parcel has been cancelled successfully',
             },
         } as ActionData
     } catch (error) {

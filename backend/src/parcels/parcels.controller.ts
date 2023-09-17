@@ -302,15 +302,15 @@ export class ParcelsController {
         data: {
           parcelStatus: {
             connect: {
-              name: 'canceled',
+              name: 'cancelled',
             },
           },
           ParcelTimeline: {
             create: {
-              message: 'Parcel has been canceled',
+              message: 'Parcel has been cancelled',
               parcelStatus: {
                 connect: {
-                  name: 'canceled',
+                  name: 'cancelled',
                 },
               },
             },

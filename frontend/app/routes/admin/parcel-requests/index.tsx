@@ -173,7 +173,7 @@ function ParcelRequests() {
                             <option value="processing">Processing</option>
                             <option value="in-transit">In Transit</option>
                             <option value="delivered">Delivered</option>
-                            <option value="canceled">Canceled</option>
+                            <option value="cancelled">Cancelled</option>
                         </Select>
                     </Flex>
                     {/* <!-- Table --> */}

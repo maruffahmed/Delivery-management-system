@@ -149,7 +149,7 @@ export interface ParcelStatus {
     id: number
     name:
         | 'pending'
-        | 'canceled'
+        | 'cancelled'
         | 'picking-up'
         | 'delivered'
         | 'in-transit'
