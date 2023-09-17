@@ -406,8 +406,7 @@ export class ParcelsController {
         data: {
           ParcelTimeline: {
             create: {
-              message:
-                'Parcel has been received by the us. We are processing it.',
+              message: 'Parcel has been received by us. We are processing it.',
               parcelStatus: {
                 connect: {
                   name: 'processing',

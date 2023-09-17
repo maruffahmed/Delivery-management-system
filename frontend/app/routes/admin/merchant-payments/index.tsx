@@ -1,42 +1,29 @@
-import {
-    Container,
-    Heading,
-    Table,
-    TableContainer,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr,
-    Button,
-} from '@chakra-ui/react'
-import type { LoaderFunction, MetaFunction } from '@remix-run/node'
-import { Link as RemixLink } from '@remix-run/react'
-import Layout from '~/components/Layout'
-import { requireUserId } from '~/utils/session.server'
+import { Button, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import type { MetaFunction } from '@remix-run/node'
 import moment from 'moment'
-import type { ParcelPayment } from '~/types'
+import AdminLayout from '~/components/admin/AdminLayout'
+import { Link as RemixLink } from '@remix-run/react'
 
-export const meta: MetaFunction = () => ({
-    title: 'Payments List',
-})
-
-export const loader: LoaderFunction = async ({ request }) => {
-    return await requireUserId(request)
+export const meta: MetaFunction = () => {
+    return {
+        title: 'Merchant payments - Dashboard',
+        description: 'Merchant payments',
+    }
 }
-
-function PaymentList() {
+function ShopList() {
     return (
-        <Layout>
-            <Container maxW="container.xl" py="8">
-                <Heading as="h2" size="lg">
-                    Your all payments
-                </Heading>
-                <TableContainer my={10}>
-                    <Table size="lg">
-                        <Thead bg="gray.100">
+        <AdminLayout>
+            <main className="h-full overflow-y-auto">
+                <div className="container px-5 mx-auto grid">
+                    <h2 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                        Merchant payments
+                    </h2>
+                    <Table variant="striped">
+                        <Thead>
                             <Tr>
                                 <Th>Invoice ID</Th>
+                                <Th>Merchant name</Th>
+                                <Th>Shop name</Th>
                                 <Th>Created At</Th>
                                 <Th>Cash Collection</Th>
                                 <Th>Delivery Charge</Th>
@@ -50,6 +37,8 @@ function PaymentList() {
                                 payment={{
                                     id: 1,
                                     invoiseId: '123456789',
+                                    merchantName: 'Md Maruf Ahmed',
+                                    shopName: 'Shop1',
                                     createdAt: new Date().toString(),
                                     updatedAt: new Date().toString(),
                                     cashCollection: 100,
@@ -62,6 +51,8 @@ function PaymentList() {
                                 payment={{
                                     id: 1,
                                     invoiseId: '454189161',
+                                    merchantName: 'Md Maruf Ahmed',
+                                    shopName: 'Shop1',
                                     createdAt: new Date().toString(),
                                     updatedAt: new Date().toString(),
                                     cashCollection: 1500,
@@ -74,6 +65,8 @@ function PaymentList() {
                                 payment={{
                                     id: 1,
                                     invoiseId: '5644812069',
+                                    merchantName: 'Md Maruf Ahmed',
+                                    shopName: 'Shop1',
                                     createdAt: new Date().toString(),
                                     updatedAt: new Date().toString(),
                                     cashCollection: 1000,
@@ -86,6 +79,8 @@ function PaymentList() {
                                 payment={{
                                     id: 1,
                                     invoiseId: '123456789',
+                                    merchantName: 'Md Maruf Ahmed',
+                                    shopName: 'Shop1',
                                     createdAt: new Date().toString(),
                                     updatedAt: new Date().toString(),
                                     cashCollection: 100,
@@ -98,6 +93,8 @@ function PaymentList() {
                                 payment={{
                                     id: 1,
                                     invoiseId: '987654321',
+                                    merchantName: 'Md Maruf Ahmed',
+                                    shopName: 'Shop1',
                                     createdAt: new Date().toString(),
                                     updatedAt: new Date().toString(),
                                     cashCollection: 1500,
@@ -110,6 +107,8 @@ function PaymentList() {
                                 payment={{
                                     id: 1,
                                     invoiseId: '123456789',
+                                    merchantName: 'Md Maruf Ahmed',
+                                    shopName: 'Shop1',
                                     createdAt: new Date().toString(),
                                     updatedAt: new Date().toString(),
                                     cashCollection: 1000,
@@ -122,6 +121,8 @@ function PaymentList() {
                                 payment={{
                                     id: 1,
                                     invoiseId: '2394984564',
+                                    merchantName: 'Md Maruf Ahmed',
+                                    shopName: 'Shop1',
                                     createdAt: new Date().toString(),
                                     updatedAt: new Date().toString(),
                                     cashCollection: 100,
@@ -132,18 +133,20 @@ function PaymentList() {
                             />
                         </Tbody>
                     </Table>
-                </TableContainer>
-            </Container>
-        </Layout>
+                </div>
+            </main>
+        </AdminLayout>
     )
 }
 
-export function PaymentsTableTr({ payment }: { payment: ParcelPayment }) {
+export function PaymentsTableTr({ payment }: { payment: any }) {
     return (
         <Tr>
             <Td>{payment.invoiseId}</Td>
+            <Td>{payment.merchantName}</Td>
+            <Td>{payment.shopName}</Td>
             <Td>{moment(payment.createdAt).format('LL')}</Td>
-            <Td>{payment.cashCollection}</Td>
+            {/* <Td>{payment.cashCollection}</Td> */}
             <Td>{payment.deliveryCharge}</Td>
             <Td>{payment.codCharge}</Td>
             <Td>{payment.totalPaid}</Td>
@@ -161,4 +164,4 @@ export function PaymentsTableTr({ payment }: { payment: ParcelPayment }) {
     )
 }
 
-export default PaymentList
+export default ShopList

@@ -1,6 +1,6 @@
 import { Box, Button, Container, Text } from '@chakra-ui/react'
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
-import { requireUserId } from '~/utils/session.server'
+// import { requireUserId } from '~/utils/session.server'
 import React, { useRef } from 'react'
 import ReactToPrint from 'react-to-print'
 
@@ -9,7 +9,8 @@ export const meta: MetaFunction = () => ({
 })
 
 export const loader: LoaderFunction = async ({ request }) => {
-    return await requireUserId(request)
+    // return await requireUserId(request)
+    return null
 }
 
 function InvoicePage() {

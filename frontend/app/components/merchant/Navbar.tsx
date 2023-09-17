@@ -215,7 +215,7 @@ export default function MerchantNav() {
                                             <MenuItem
                                                 _focus={{ bg: 'primary.50' }}
                                                 as={RemixLink}
-                                                to="/settings"
+                                                to="/settings/password"
                                             >
                                                 Shop Settings
                                             </MenuItem>

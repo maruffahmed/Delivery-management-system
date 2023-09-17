@@ -66,6 +66,21 @@ export const sideBarMenus = [
             },
         ],
     },
+    {
+        name: 'Merchant payments',
+        url: '/admin/merchant-payments',
+        icon: <BsFileEarmarkBarGraph size="1.2rem" />,
+        children: [
+            {
+                name: 'list',
+                url: '/admin/merchant-payments',
+            },
+            {
+                name: 'Add new',
+                url: '/admin/merchant-payments/add-new',
+            },
+        ],
+    },
 ]
 
 // Side bar menu item
