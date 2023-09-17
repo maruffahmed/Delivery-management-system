@@ -1,9 +1,10 @@
 import type { UserRole } from '~/types'
 import axios from 'axios'
-import config from '~/config'
 
+declare let window: any
+const baseURL = typeof window !== 'undefined' && window.ENV.API_BASE_URL
 const configAxios = axios.create({
-    baseURL: config.API_BASE_URL,
+    baseURL,
 })
 
 export const getUserRolesClient = (

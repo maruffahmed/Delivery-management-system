@@ -104,7 +104,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 export const loader: LoaderFunction = async ({ request }) => {
     const userId = await getPackageHandlerId(request)
-    console.log('userId', userId)
+    // console.log('userId', userId)
     if (userId) {
         return redirect('/packagehandler/dashboard')
     }

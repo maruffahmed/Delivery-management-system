@@ -96,7 +96,7 @@ export default function Login() {
 
     React.useEffect(() => {
         resetShopProvider()
-        console.log('resetShopProvider')
+        // console.log('resetShopProvider')
     }, [resetShopProvider])
     return (
         <Layout>

@@ -166,10 +166,10 @@ const ParcelActionAssign = () => {
                     </h2>
 
                     <Text mb="8">
-                        Current status:{' '}
+                        Current status:
                         <ParcelStatusBadge
                             status={parcel?.parcelStatus.name!}
-                        />{' '}
+                        />
                     </Text>
 
                     {actionData?.formError && (

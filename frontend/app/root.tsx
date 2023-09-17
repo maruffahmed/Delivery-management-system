@@ -1,7 +1,7 @@
 import type { User } from './types'
 import type {
+    DataFunctionArgs,
     LinksFunction,
-    LoaderFunction,
     MetaFunction,
 } from '@remix-run/node'
 import { json } from '@remix-run/node'
@@ -38,28 +38,34 @@ export const meta: MetaFunction = () => ({
     viewport: 'width=device-width,initial-scale=1',
 })
 
-type LoaderData = {
-    user: User | Object
-}
-
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: DataFunctionArgs) => {
     const res = await getUser(request)
     const user: User = res?.data
     // console.log('user', user)
-    const data: LoaderData = {
+    const data = {
         user: user ? user : {},
     }
-    return json(data)
+    return json({
+        user: data.user,
+        ENV: {
+            API_BASE_URL: process.env.API_BASE_URL,
+        },
+    })
 }
 
 interface DocumentProps {
     children: React.ReactNode
     title?: string
+    ENV?: Object
 }
 
 const Document = withEmotionCache(
     (
-        { children, title = `Remix: So great, it's funny!` }: DocumentProps,
+        {
+            children,
+            title = `Remix: So great, it's funny!`,
+            ENV,
+        }: DocumentProps,
         emotionCache,
     ) => {
         const serverStyleData = useContext(ServerStyleContext)
@@ -97,6 +103,11 @@ const Document = withEmotionCache(
                 <body>
                     {children}
                     <ScrollRestoration />
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `window.ENV = ${JSON.stringify(ENV)}`,
+                        }}
+                    />
                     <Scripts />
                     <LiveReload />
                 </body>
@@ -125,9 +136,9 @@ const queryClient = new QueryClient({
 })
 
 export default function App() {
-    const { user } = useLoaderData<LoaderData>()
+    const { user, ENV } = useLoaderData<typeof loader>()
     return (
-        <Document>
+        <Document ENV={ENV}>
             <TopProgressBarProvider>
                 <ThemeProvider>
                     <AuthProvider user={user}>

@@ -447,7 +447,7 @@ export class ParcelsController {
   ) {
     try {
       const pickupmanId = req.user.id;
-      console.log(pickupmanId);
+      // console.log(pickupmanId);
       const parcels = await this.parcelsService.parcels(
         {
           where: {

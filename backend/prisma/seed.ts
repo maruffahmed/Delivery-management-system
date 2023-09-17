@@ -1,8 +1,25 @@
 import { PrismaClient } from '@prisma/client';
+import { ParcelStatus } from './data/ParcelStatus';
 import ProductTypes from './data/ProductTypes';
+import { Roles } from './data/UsersRole';
 const prisma = new PrismaClient();
 
 async function main() {
+  // Seed user roles
+  for (const role of Roles) {
+    await prisma.roleDescription.upsert({
+      where: { name: role.name },
+      update: {},
+      create: {
+        name: role.name,
+        description: role.description,
+      },
+    });
+  }
+
+  const adminRoleId = await prisma.roleDescription.findUnique({
+    where: { name: 'admin' },
+  });
   // Users
   const admin = await prisma.user.upsert({
     where: { email: 'admin@gmail.com' },
@@ -15,9 +32,8 @@ async function main() {
       roles: {
         create: {
           role: {
-            create: {
-              name: 'admin',
-              description: 'Admin have all acess to this system',
+            connect: {
+              id: adminRoleId.id,
             },
           },
         },
@@ -25,19 +41,22 @@ async function main() {
     },
   });
 
+  const merchantRoleId = await prisma.roleDescription.findUnique({
+    where: { name: 'merchant' },
+  });
   const maruf = await prisma.user.upsert({
-    where: { email: 'maruf@gmail.com' },
+    where: { email: 'maruffamd@gmail.com' },
     update: {},
     create: {
-      email: 'maruf@gmail.com',
+      email: 'maruffamd@gmail.com',
       name: 'Maruf Ahmed',
       phone: '01789393745',
       password: '$2b$10$btodHpHti0d4gEB2zd1LdueFA1lJLISmdvNxOVuvQda5DfJDnHD1u',
       roles: {
         create: {
           role: {
-            create: {
-              name: 'merchant',
+            connect: {
+              id: merchantRoleId.id,
             },
           },
         },
@@ -45,7 +64,7 @@ async function main() {
       shops: {
         create: {
           name: 'Maruf Shop',
-          email: 'marufShop@gmail.com',
+          email: 'maruffamd@gmail.com',
           address: 'House #22, Road #9, Sector #10, Uttara, Dhaka',
           productType: 'Clothing',
           productSubType: 'Men',
@@ -53,7 +72,7 @@ async function main() {
             create: {
               name: 'Maruf Ahmed',
               address: 'House #22, Road #9, Sector #10, Uttara, Dhaka',
-              areaId: 1,
+              areaId: 1143,
               phone: '01789393745',
               isActive: true,
             },
@@ -101,7 +120,18 @@ async function main() {
     }
   }
 
-  console.log('Users ', { admin, maruf });
+  // seed Parcel Status
+
+  for (const status of ParcelStatus) {
+    await prisma.parcelStatus.upsert({
+      where: { name: status.name },
+      update: {},
+      create: {
+        name: status.name,
+        description: status.description,
+      },
+    });
+  }
 }
 main()
   .then(async () => {

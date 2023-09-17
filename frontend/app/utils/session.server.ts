@@ -170,8 +170,8 @@ export async function getPackageHandlerId(request: Request) {
     const session = await getUserSession(request)
     const userId = session.get('userId')
     const role = session.get('role')
-    console.log('role', role)
-    console.log('userId', userId)
+    // console.log('role', role)
+    // console.log('userId', userId)
     if (
         !userId ||
         typeof userId !== 'number' ||

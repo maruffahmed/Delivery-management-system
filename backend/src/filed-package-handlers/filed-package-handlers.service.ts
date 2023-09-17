@@ -133,7 +133,7 @@ export class FiledPackageHandlersService {
             },
           },
         });
-      console.log('updateFieldPackageHandler ', updateFieldPackageHandler);
+      // console.log('updateFieldPackageHandler ', updateFieldPackageHandler);
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password: pass, ...user } = await this.prisma.user.update({
