@@ -1,0 +1,14 @@
+# specify the version of docker-compose
+version: "3.8"
+
+services:
+  db:
+    image: mysql:latest
+    container_name: dpdms_database
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=dpdms
+      - MYSQL_DATABASE=dpdms
+    volumes:
+      - ./data/mysql:/var/lib/mysql
